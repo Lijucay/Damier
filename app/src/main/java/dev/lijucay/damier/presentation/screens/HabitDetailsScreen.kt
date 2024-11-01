@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,13 +44,13 @@ import dev.lijucay.damier.util.Utils.prepareLastSevenDaysData
 
 @Composable
 fun HabitDetailsScreen(
-    id: Int?,
+    title: String?,
     uiViewModel: UIViewModel,
     habitViewModel: HabitViewModel,
     trackingInfoViewModel: TrackingInfoViewModel,
 ) {
     val habitList by habitViewModel.habitList.collectAsState()
-    val habit = id?.let { habitList.find { habit -> habit.id == it } }
+    val habit = title?.let { habitList.find { habit -> habit.title == it } }
 
     val habitTitle = habit?.title
 
@@ -56,7 +60,7 @@ fun HabitDetailsScreen(
         Log.d("HabitDetailsScreen", "Habit tracking info got changed: $habitTrackingInfo")
     }
 
-    val trackingInfo = habitTrackingInfo[id]
+    val trackingInfo = habitTrackingInfo[title]
 
     LaunchedEffect(habitTitle) { uiViewModel.setCurrentTitle(habitTitle) }
 
@@ -84,72 +88,91 @@ fun HabitDetailsScreen(
                             LastSevenDaysGraph(lastSevenDaysData, habit.goal)
                         }
                         Spacer(modifier = Modifier.height(32.dp))
-                        Text(
-                            text = stringResource(id = R.string.check_ins),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
                     }
                 }
-
-                if (groupedTrackingInfo.isEmpty()) {
-                    item {
-                        Text(
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        onClick = {
+                            habitViewModel.setCurrentSelectedHabit(habitTitle)
+                            uiViewModel.setShowCheckIns(true)
+                        }
+                    ) {
+                        Row(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                            text = stringResource(R.string.no_tracking_info)
-                        )
-                    }
-                } else {
-                    groupedTrackingInfo.forEach { (yearMonth, trackingInfoList) ->
-                        var checkInCount by mutableIntStateOf(0)
-                        trackingInfoList.forEach { ti -> checkInCount += ti.count }
-
-                        item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = yearMonth.format(yearMonthFormat),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                                Text(
-                                    text = checkInCount.toString(),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                        items(trackingInfoList, key = { it.id }) { ti ->
-                            TrackingInfoCard(
-                                modifier = Modifier
-                                    .animateItem()
-                                    .padding(
-                                        top = if (trackingInfoList.first() == ti) 16.dp else 0.dp,
-                                        bottom = if (trackingInfoList.last() == ti) 0.dp else 4.dp
-                                    )
-                                    .fillMaxWidth(),
-                                shape = RoundedCornerShape(
-                                    topStart = if (trackingInfoList.first() == ti) 20.dp else 8.dp,
-                                    topEnd = if (trackingInfoList.first() == ti) 20.dp else 8.dp,
-                                    bottomEnd = if (trackingInfoList.last() == ti) 20.dp else 8.dp,
-                                    bottomStart = if (trackingInfoList.last() == ti) 20.dp else 8.dp
-                                ),
-                                trackingInfo = ti,
-                                singularUnitName = habit.singularUnitName,
-                                pluralUnitName = habit.pluralUnitName
-                            ) {
-                                trackingInfoViewModel.removeTrackingInfo(habit.id, ti)
-                            }
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(stringResource(R.string.check_in_history))
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowForwardIos,
+                                contentDescription = null
+                            )
                         }
                     }
                 }
+
+//                if (groupedTrackingInfo.isEmpty()) {
+//                    item {
+//                        Text(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(16.dp),
+//                            fontWeight = FontWeight.Bold,
+//                            textAlign = TextAlign.Center,
+//                            text = stringResource(R.string.no_tracking_info)
+//                        )
+//                    }
+//                } else {
+//                    groupedTrackingInfo.forEach { (yearMonth, trackingInfoList) ->
+//                        var checkInCount by mutableIntStateOf(0)
+//                        trackingInfoList.forEach { ti -> checkInCount += ti.count }
+//
+//                        item {
+//                            Row(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.SpaceBetween
+//                            ) {
+//                                Text(
+//                                    text = yearMonth.format(yearMonthFormat),
+//                                    style = MaterialTheme.typography.titleMedium,
+//                                    fontWeight = FontWeight.Bold,
+//                                )
+//                                Text(
+//                                    text = checkInCount.toString(),
+//                                    style = MaterialTheme.typography.titleMedium,
+//                                    fontWeight = FontWeight.Bold
+//                                )
+//                            }
+//                        }
+//                        items(trackingInfoList, key = { "${it.habitTitle}_${it.date}_${it.time}" }) { ti ->
+//                            TrackingInfoCard(
+//                                modifier = Modifier
+//                                    .animateItem()
+//                                    .padding(
+//                                        top = if (trackingInfoList.first() == ti) 16.dp else 0.dp,
+//                                        bottom = if (trackingInfoList.last() == ti) 0.dp else 4.dp
+//                                    )
+//                                    .fillMaxWidth(),
+//                                shape = RoundedCornerShape(
+//                                    topStart = if (trackingInfoList.first() == ti) 20.dp else 8.dp,
+//                                    topEnd = if (trackingInfoList.first() == ti) 20.dp else 8.dp,
+//                                    bottomEnd = if (trackingInfoList.last() == ti) 20.dp else 8.dp,
+//                                    bottomStart = if (trackingInfoList.last() == ti) 20.dp else 8.dp
+//                                ),
+//                                trackingInfo = ti,
+//                                singularUnitName = habit.singularUnitName,
+//                                pluralUnitName = habit.pluralUnitName
+//                            ) {
+//                                trackingInfoViewModel.removeTrackingInfo(habit.title, ti)
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }
