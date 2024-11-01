@@ -45,4 +45,9 @@
     <string name="app_version_info">Damier Version: %1$s (%2$d)\nMade with ❤ in Germany</string>
     <string name="no_habits_yet">No habits yet</string>
     <string name="delete_tracking_info">Delete tracking info for %1$s %2$s</string>
+    <string name="export_database">Export database</string>
+    <string name="export_database_summary">Export the current database to your downloads folder</string>
+    <string name="import_data">Importing data...</string>
+    <string name="import_data_summary">Import a backup file into Damier.</string>
+    <string name="check_in_history">Check in history</string>
 </resources>
