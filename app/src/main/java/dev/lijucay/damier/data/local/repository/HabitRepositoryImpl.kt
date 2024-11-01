@@ -16,16 +16,16 @@ class HabitRepositoryImpl @Inject constructor(
         return habitDao.insertHabit(habit)
     }
 
-    override suspend fun getHabitByID(id: Int): Habit? {
-        return habitDao.getHabitById(id)
+    override suspend fun getHabitByTitle(title: String): Habit? {
+        return habitDao.getHabitByTitle(title)
     }
 
-    override fun getCurrentHabitByID(id: Int): Flow<Habit?> {
-        return habitDao.getCurrentHabitById(id)
+    override fun getCurrentHabitByTitle(title: String): Flow<Habit?> {
+        return habitDao.getCurrentHabitByTitle(title)
     }
 
-    override suspend fun deleteHabit(id: Int): Int {
-        return habitDao.deleteHabit(id)
+    override suspend fun deleteHabit(title: String): Int {
+        return habitDao.deleteHabit(title)
     }
 
     override suspend fun updateHabit(habit: Habit): Int {
