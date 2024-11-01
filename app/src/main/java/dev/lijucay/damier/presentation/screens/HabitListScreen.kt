@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,8 +41,8 @@ fun HabitListScreen(
     uiViewModel: UIViewModel,
     habitViewModel: HabitViewModel,
     trackingInfoViewModel: TrackingInfoViewModel,
-    onHabitClicked: (Int) -> Unit, // current habit id
-    onButtonPressed: (Int) -> Unit // current habit id
+    onHabitClicked: (String) -> Unit, // current habit title
+    onButtonPressed: (String) -> Unit // current habit title
 ) {
     val context = LocalContext.current
 
@@ -83,9 +84,9 @@ fun HabitListScreen(
                 val timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME
 
                 LazyColumn(
-                    contentPadding = PaddingValues(bottom = bottomPadding())
+                    contentPadding = PaddingValues(bottom = ((bottomPadding() * 2) + 56.dp))
                 ) {
-                    items(habits, key = { it.id }) { habit ->
+                    items(habits, key = { it.title }) { habit ->
                         WaffleCardItem(
                             modifier = Modifier
                                 .animateItem()
@@ -98,11 +99,11 @@ fun HabitListScreen(
                                 ),
                             habit = habit,
                             trackingInfoViewModel = trackingInfoViewModel,
-                            onCardClicked = { onHabitClicked(habit.id) },
-                            onLongButtonPressed = { onButtonPressed(habit.id) },
+                            onCardClicked = { onHabitClicked(habit.title) },
+                            onLongButtonPressed = { onButtonPressed(habit.title) },
                             onButtonPressed = {
                                 trackingInfoViewModel.insertTrackingInfo(TrackingInfo(
-                                    habitId = habit.id,
+                                    habitTitle = habit.title,
                                     date = LocalDate.now().format(dateFormatter),
                                     time = LocalTime.now().format(timeFormatter),
                                     count = 1
@@ -114,132 +115,4 @@ fun HabitListScreen(
             }
         }
     }
-
-
-//    val habits by damierViewModel.habitList.collectAsState()
-//
-//    val habitTrackingInfoMap by damierViewModel.habitWaffleBoardInfoMap.collectAsState()
-//    val areHabitsEmpty by damierViewModel.areHabitsEmpty.collectAsState()
-//
-//    val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE
-//    val timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME
-//
-//    var showList by remember { mutableStateOf(false) }
-//
-//    LaunchedEffect(Unit) { damierViewModel.setCurrentHabitTitle(context.getString(R.string.app_name)) }
-//    LaunchedEffect(habitTrackingInfoMap) {
-//        if (habitTrackingInfoMap.isNotEmpty())
-//            showList = true
-//    }
-//
-//    AnimatedContent(
-//        targetState = showList,
-//        transitionSpec = {
-//            fadeIn(tween(durationMillis = 300)) togetherWith fadeOut(tween(durationMillis = 300))
-//        },
-//        label = "loading list animation"
-//    ) { state ->
-//        when (state) {
-//            true -> AnimatedContent(targetState = areHabitsEmpty, label = "empty list animation") { s ->
-//                when (s) {
-//                    true -> Box(
-//                        modifier = Modifier.fillMaxSize(),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Text(text = stringResource(R.string.no_habits_yet))
-//                    }
-//                    false -> LazyColumn(
-//                        contentPadding = PaddingValues(bottom = bottomPadding())
-//                    ) {
-//                        items(habits) { habit ->
-//                            WaffleCardItem(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(
-//                                        top = if (habits.indexOf(habit) != -1 && habits.indexOf(
-//                                                habit
-//                                            ) != 0
-//                                        ) 24.dp else 0.dp
-//                                    ),
-//                                habit = habit,
-//                                damierViewModel = damierViewModel,
-//                                onCardClicked = { onHabitClicked(habit.id) },
-//                                onLongButtonPressed = { onButtonPressed(habit.id) },
-//                                onButtonPressed = {
-//                                    damierViewModel.insertTrackingInfo(TrackingInfo(
-//                                        habitId = habit.id,
-//                                        date = LocalDate.now().format(dateFormatter),
-//                                        time = LocalTime.now().format(timeFormatter),
-//                                        count = 1
-//                                    ))
-//                                }
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//            false -> Box(
-//                modifier = Modifier.fillMaxSize(),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                CircularProgressIndicator()
-//            }
-//        }
-//    }
-
-//    Box {
-//        AnimatedVisibility(
-//            modifier = Modifier.zIndex(1f),
-//            visible = !showList && !areHabitsEmpty,
-//            enter = fadeIn(),
-//            exit = fadeOut()
-//        ) {
-//            Box(
-//                modifier = Modifier.fillMaxSize(),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                CircularProgressIndicator()
-//            }
-//        }
-//        AnimatedVisibility(areHabitsEmpty) {
-//            Box(
-//                modifier = Modifier.fillMaxSize(),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Text(text = stringResource(R.string.no_habits_yet))
-//            }
-//        }
-//        AnimatedVisibility(
-//            modifier = Modifier.zIndex(2f),
-//            visible = showList && !areHabitsEmpty,
-//            enter = fadeIn(),
-//            exit = fadeOut()
-//        ) {
-//            LazyColumn(
-//                contentPadding = PaddingValues(bottom = bottomPadding())
-//            ) {
-//                items(habits) { habit ->
-//                    WaffleCardItem(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(
-//                                top = if (habits.indexOf(habit) != -1 && habits.indexOf(habit) != 0) 24.dp else 0.dp
-//                            ),
-//                        habit = habit,
-//                        damierViewModel = damierViewModel,
-//                        onCardClicked = { onHabitClicked(habit.id) },
-//                        onLongButtonPressed = { onButtonPressed(habit.id) },
-//                        onButtonPressed = {
-//                            damierViewModel.insertTrackingInfo(TrackingInfo(
-//                                habitId = habit.id,
-//                                date = LocalDate.now().format(dateFormatter),
-//                                time = LocalTime.now().format(timeFormatter),
-//                                count = 1
-//                            ))
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
 }
