@@ -1,12 +1,22 @@
 package dev.lijucay.damier.presentation.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.lijucay.damier.util.ExportUtil
+import dev.lijucay.damier.util.ImportUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UIViewModel : ViewModel() {
+@HiltViewModel
+class UIViewModel @Inject constructor(
+    private val exportUtil: ExportUtil,
+    private val importUtil: ImportUtil
+): ViewModel() {
     private val _currentTitle = MutableStateFlow<String?>(null)
     val currentTitle: StateFlow<String?> = _currentTitle
 
@@ -31,6 +41,17 @@ class UIViewModel : ViewModel() {
     private val _showEditDefaultGoalDialog = MutableStateFlow(false)
     val showEditDefaultGoalDialog: StateFlow<Boolean> = _showEditDefaultGoalDialog
 
+    private val _currentFileUri = MutableStateFlow<Uri?>(null)
+    val currentFileUri: StateFlow<Uri?> = _currentFileUri
+
+    private val _showImportDialog = MutableStateFlow(false)
+    val showImportDialog: StateFlow<Boolean> = _showImportDialog
+
+    private val _showCheckIns = MutableStateFlow(false)
+    val showCheckIns: StateFlow<Boolean> = _showCheckIns
+
+    fun setShowImportDialog(show: Boolean) = _showImportDialog.update { show }
+
     fun setCurrentTitle(title: String?) = _currentTitle.update { title }
 
     fun setShowCounterDialog(show: Boolean) = _showCounterDialog.update { show }
@@ -45,5 +66,33 @@ class UIViewModel : ViewModel() {
         _infoDialogTitle.update { title }
         _infoDialogMessage.update { message }
         _showInfoDialog.update { show }
+    }
+
+    fun setCurrentFileUri(uri: Uri?) = _currentFileUri.update { uri }
+
+    fun exportData(onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            onComplete(exportUtil.exportData())
+        }
+    }
+
+    fun importData(
+        fileUri: Uri,
+        onTotalCountUpdate: (Int) -> Unit,
+        onCurrentCountUpdate: (Int) -> Unit,
+        onComplete: (Boolean) -> Unit
+    ) {
+        viewModelScope.launch {
+            importUtil.importData(
+                fileUri,
+                onTotalCountUpdate,
+                onCurrentCountUpdate,
+                onComplete
+            )
+        }
+    }
+
+    fun setShowCheckIns(show: Boolean) {
+        _showCheckIns.update { show }
     }
 }
