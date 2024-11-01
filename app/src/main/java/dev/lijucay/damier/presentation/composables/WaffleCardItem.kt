@@ -59,7 +59,10 @@ fun WaffleCardItem(
             modifier = Modifier.padding(20.dp)
         ) {
             if (showTitle) {
-                LargeTitleText(text = title)
+                LargeTitleText(
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = title
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             }
             WaffleDiagram(
