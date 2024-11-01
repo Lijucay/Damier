@@ -9,14 +9,14 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 object Utils {
-    fun groupTrackingInfoByMonth(trackingInfoList: List<TrackingInfo>): Map<YearMonth, List<TrackingInfo>> {
+    const val DATABASE_SCHEME_VERSION = 1
+
+    fun groupTrackingInfoByMonth(
+        trackingInfoList: List<TrackingInfo>
+    ): Map<YearMonth, List<TrackingInfo>> {
         return trackingInfoList
-            .sortedByDescending { ti ->
-                LocalDateTime.parse("${ti.date}T${ti.time}")
-            }
-            .groupBy { ti ->
-                YearMonth.from(LocalDate.parse(ti.date))
-            }
+            .sortedByDescending { ti -> LocalDateTime.parse("${ti.date}T${ti.time}") }
+            .groupBy { ti -> YearMonth.from(LocalDate.parse(ti.date)) }
             .toSortedMap(Comparator.reverseOrder())
     }
 
