@@ -24,8 +24,8 @@ class HabitViewModel @Inject constructor(
     private val _habitList = MutableStateFlow<List<Habit>>(mutableListOf())
     val habitList: StateFlow<List<Habit>> = _habitList
 
-    private val _currentSelectedHabit = MutableStateFlow<Int?>(null)
-    val currentSelectedHabit: StateFlow<Int?> = _currentSelectedHabit
+    private val _currentSelectedHabit = MutableStateFlow<String?>(null)
+    val currentSelectedHabit: StateFlow<String?> = _currentSelectedHabit
 
     fun loadHabits() {
         viewModelScope.launch {
@@ -47,7 +47,7 @@ class HabitViewModel @Inject constructor(
 
     fun updateHabit(habit: Habit) = viewModelScope.launch { repository.updateHabit(habit) }
 
-    fun deleteHabit(id: Int) = viewModelScope.launch { repository.deleteHabit(id) }
+    fun deleteHabit(title: String) = viewModelScope.launch { repository.deleteHabit(title) }
 
-    fun setCurrentSelectedHabit(habitId: Int?) = _currentSelectedHabit.update { habitId }
+    fun setCurrentSelectedHabit(habitTitle: String?) = _currentSelectedHabit.update { habitTitle }
 }
