@@ -14,6 +14,10 @@ import dev.lijucay.damier.data.local.repository.HabitRepository
 import dev.lijucay.damier.data.local.repository.HabitRepositoryImpl
 import dev.lijucay.damier.data.local.repository.TrackingInfoRepository
 import dev.lijucay.damier.data.local.repository.TrackingInfoRepositoryImpl
+import dev.lijucay.damier.util.ExportUtil
+import dev.lijucay.damier.util.ExportUtilImpl
+import dev.lijucay.damier.util.ImportUtil
+import dev.lijucay.damier.util.ImportUtilImpl
 import javax.inject.Singleton
 
 @Module
@@ -35,7 +39,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideTrackingInfoDao(database: DamierDatabase) = database.trackingInfoDao()
+    fun provideTrackingInfoDao(database: DamierDatabase): TrackingInfoDao = database.trackingInfoDao()
 
     @Singleton
     @Provides
@@ -45,4 +49,22 @@ class AppModule {
     @Provides
     fun provideTrackingInfoRepository(trackingInfoDao: TrackingInfoDao): TrackingInfoRepository =
         TrackingInfoRepositoryImpl(trackingInfoDao)
+
+    @Singleton
+    @Provides
+    fun provideImportUtil(
+        trackingInfoDao: TrackingInfoDao,
+        habitDao: HabitDao,
+        @ApplicationContext context: Context
+    ): ImportUtil =
+        ImportUtilImpl(habitDao, trackingInfoDao, context)
+
+    @Singleton
+    @Provides
+    fun provideExportUtil(
+        trackingInfoDao: TrackingInfoDao,
+        habitDao: HabitDao,
+        @ApplicationContext context: Context
+    ): ExportUtil =
+        ExportUtilImpl(context, habitDao, trackingInfoDao)
 }
