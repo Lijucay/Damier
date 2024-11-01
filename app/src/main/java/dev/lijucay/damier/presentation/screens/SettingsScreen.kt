@@ -1,10 +1,17 @@
 package dev.lijucay.damier.presentation.screens
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.FileOpen
 import androidx.compose.material.icons.rounded.FlagCircle
+import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.LocalPolice
 import androidx.compose.material.icons.rounded.SportsScore
 import androidx.compose.runtime.Composable
@@ -24,6 +31,7 @@ import dev.lijucay.damier.presentation.viewmodels.UIViewModel
 import dev.lijucay.damier.util.DataStore.DEFAULT_GOAL
 import dev.lijucay.damier.util.DataStore.SHOW_GOAL
 import dev.lijucay.damier.util.DataStore.dataStore
+import dev.lijucay.damier.util.ImportUtil
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -44,6 +52,23 @@ fun SettingsScreen(
         preferences[DEFAULT_GOAL] ?: 10
     }.collectAsState(10)
 
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val fileUri = result.data?.data
+
+            fileUri?.let {
+                uiViewModel.setCurrentFileUri(it)
+                uiViewModel.setShowImportDialog(true)
+            } ?: run {
+                Log.d("SettingsScreen", "File picker result is null")
+            }
+        } else {
+            Log.d("SettingsScreen", "File picker result not OK")
+        }
+    }
+
     LaunchedEffect(Unit) {
         uiViewModel.setCurrentTitle(context.getString(R.string.settings))
     }
@@ -52,6 +77,26 @@ fun SettingsScreen(
         modifier = Modifier
             .verticalScroll(scrollState)
     ) {
+        PreferenceCategoryTitle(stringResource(R.string.app_settings))
+        Preference(
+            title = stringResource(R.string.export_database),
+            summary = stringResource(R.string.export_database_summary),
+            iconVector = Icons.Rounded.IosShare
+        ) {
+            uiViewModel.exportData {  }
+        }
+        Preference(
+            title = stringResource(R.string.import_data),
+            summary = stringResource(R.string.import_data_summary),
+            iconVector = Icons.Rounded.FileOpen
+        ) {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "application/octet-stream"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+
+            filePickerLauncher.launch(intent)
+        }
         PreferenceCategoryTitle(stringResource(R.string.damier_settings))
         SwitchPreference(
             checked = showGoal,
