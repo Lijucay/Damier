@@ -35,7 +35,7 @@ fun WaffleDiagram(
         Log.d("WaffleDiagram", "Waffle data was updated: $habitWaffleBoardInfo")
     }
 
-    val waffleDiagramData = habitWaffleBoardInfo[habit.id]
+    val waffleDiagramData = habitWaffleBoardInfo[habit.title]
 
     val currentDate = LocalDate.now()
     val startDate = currentDate.minusWeeks(13).with(DayOfWeek.MONDAY)
