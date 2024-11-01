@@ -1,5 +1,6 @@
 package dev.lijucay.damier.presentation.screens
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -15,6 +16,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +46,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -79,7 +82,7 @@ fun MainScreen(
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStack?.destination?.route
 
-    val currentHabitID by habitViewModel.currentSelectedHabit.collectAsState()
+    val currentHabitTitle by habitViewModel.currentSelectedHabit.collectAsState()
     val currentTitle by uiViewModel.currentTitle.collectAsState()
 
     val tertiaryColor = MaterialTheme.colorScheme.tertiary
@@ -107,65 +110,54 @@ fun MainScreen(
                     titleContentColor = contentColorFor(MaterialTheme.colorScheme.surfaceContainer)
                 ),
                 actions = {
-                    AnimatedVisibility(
-                        visible =
-                            currentRoute == Screens.HabitList.route,
-                        enter = expandHorizontally() + fadeIn(),
-                        exit = shrinkHorizontally(shrinkTowards = Alignment.Start) + fadeOut()
-                    ) {
-                        IconButton(
-                            onClick = {
-                                navController.navigate(Screens.SettingsScreen.route)
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Settings,
-                                contentDescription = stringResource(R.string.settings)
-                            )
-                        }
-                    }
-
-                    AnimatedVisibility(
-                        visible =
-                            currentRoute == Screens.HabitDetailScreen.route &&
-                        currentHabitID != null,
-                        enter = expandHorizontally() + fadeIn(),
-                        exit = shrinkHorizontally() + fadeOut()
-                    ) {
-                        IconButton(
-                            onClick = {
-                                currentHabitID?.let {
-                                    habitViewModel.setCurrentSelectedHabit(it)
-                                    uiViewModel.setShowEditHabitDialog(true)
+                    AnimatedContent(
+                        targetState = currentRoute,
+                        label = "TopAppBarActions"
+                    ) { state ->
+                        when (state) {
+                            Screens.HabitList.route -> {
+                                IconButton(
+                                    onClick = {
+                                        navController.navigate(Screens.SettingsScreen.route)
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Settings,
+                                        contentDescription = stringResource(R.string.settings)
+                                    )
                                 }
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Edit,
-                                contentDescription = stringResource(R.string.edit)
-                            )
-                        }
-                    }
+                            Screens.HabitDetailScreen.route -> {
+                                Row {
+                                    IconButton(
+                                        onClick = {
+                                            currentHabitTitle?.let {
+                                                habitViewModel.setCurrentSelectedHabit(it)
+                                                uiViewModel.setShowEditHabitDialog(true)
+                                            }
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Edit,
+                                            contentDescription = stringResource(R.string.edit)
+                                        )
+                                    }
 
-                    AnimatedVisibility(
-                        visible =
-                        currentRoute == Screens.HabitDetailScreen.route &&
-                        currentHabitID != null,
-                        enter = expandHorizontally() + fadeIn(),
-                        exit = shrinkHorizontally() + fadeOut()
-                    ) {
-                        IconButton(
-                            onClick = {
-                                currentHabitID?.let {
-                                    navController.popBackStack()
-                                    habitViewModel.deleteHabit(it)
+                                    IconButton(
+                                        onClick = {
+                                            currentHabitTitle?.let {
+                                                navController.popBackStack()
+                                                habitViewModel.deleteHabit(it)
+                                            }
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Delete,
+                                            contentDescription = stringResource(R.string.remove_habit)
+                                        )
+                                    }
                                 }
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = stringResource(R.string.remove_habit)
-                            )
                         }
                     }
                 },
@@ -176,7 +168,6 @@ fun MainScreen(
                         exit = slideOutHorizontally() + fadeOut()
                     ) {
                         IconButton(
-                            modifier = Modifier.padding(start = 16.dp),
                             onClick = {
                                 if (navController.canGoBack)
                                     navController.popBackStack()
@@ -212,7 +203,7 @@ fun MainScreen(
             }
             AnimatedVisibility(
                 currentRoute == Screens.HabitDetailScreen.route &&
-                currentHabitID != null,
+                currentHabitTitle != null,
                 enter = expandVertically(animationSpec = tween(500, easing = LinearEasing)),
                 exit = shrinkVertically(animationSpec = tween(500, easing = LinearEasing))
             ) {
@@ -325,14 +316,14 @@ fun MainScreen(
                     }
 
                     composable(Screens.HabitDetailScreen.route) {
-                        currentHabitID?.let { id ->
+                        currentHabitTitle?.let { title ->
                             AnimatedVisibility(
                                 visible = true,
                                 enter = fadeIn(),
                                 exit = fadeOut()
                             ) {
                                 HabitDetailsScreen(
-                                    id = id,
+                                    title = title,
                                     trackingInfoViewModel = trackingInfoViewModel,
                                     uiViewModel = uiViewModel,
                                     habitViewModel = habitViewModel
