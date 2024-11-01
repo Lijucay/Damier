@@ -19,14 +19,14 @@ import javax.inject.Inject
 class TrackingInfoViewModel @Inject constructor(
     private val repository: TrackingInfoRepository
 ) : ViewModel() {
-    private val _trackingInfoCollectionJobs = mutableMapOf<Int, Job>()
-    private val _waffleBoardInfoCollectionJobs = mutableMapOf<Int, Job>()
+    private val _trackingInfoCollectionJobs = mutableMapOf<String, Job>()
+    private val _waffleBoardInfoCollectionJobs = mutableMapOf<String, Job>()
 
-    private val _trackingInfoMap = MutableStateFlow(mutableMapOf<Int, List<TrackingInfo>>())
-    val trackingInfoMap: StateFlow<Map<Int, List<TrackingInfo>>> = _trackingInfoMap
+    private val _trackingInfoMap = MutableStateFlow(mutableMapOf<String, List<TrackingInfo>>())
+    val trackingInfoMap: StateFlow<Map<String, List<TrackingInfo>>> = _trackingInfoMap
 
-    private val _waffleBoardInfoMap = MutableStateFlow(mutableMapOf<Int, List<DateCount>>())
-    val waffleBoardInfoMap: StateFlow<Map<Int, List<DateCount>>> = _waffleBoardInfoMap
+    private val _waffleBoardInfoMap = MutableStateFlow(mutableMapOf<String, List<DateCount>>())
+    val waffleBoardInfoMap: StateFlow<Map<String, List<DateCount>>> = _waffleBoardInfoMap
 
     fun collectTrackingInfo(habits: List<Habit>) {
         Log.d("TrackingViewModel", "Collecting tracking info with habits: $habits")
@@ -34,22 +34,22 @@ class TrackingInfoViewModel @Inject constructor(
         _trackingInfoCollectionJobs.values.forEach { it.cancel() }
         _trackingInfoCollectionJobs.clear()
 
-        val habitIDs = habits.map { it.id }.toSet()
+        val habitTitles = habits.map { it.title }.toSet()
 
-        _trackingInfoMap.update { it.filterKeys { key -> key in habitIDs }.toMutableMap() }
+        _trackingInfoMap.update { it.filterKeys { key -> key in habitTitles }.toMutableMap() }
         Log.d("TrackingViewModel", "tracking info map was updated: ${trackingInfoMap.value}")
 
         habits.forEach { habit ->
-            val id = habit.id
+            val title = habit.title
             val job = viewModelScope.launch {
-                repository.getTrackingInfo(id)?.collect { info ->
+                repository.getTrackingInfo(title)?.collect { info ->
                     _trackingInfoMap.update { map ->
-                        map.toMutableMap().apply { this[id] = info }
+                        map.toMutableMap().apply { this[title] = info }
                     }
                 }
             }
 
-            _trackingInfoCollectionJobs[id] = job
+            _trackingInfoCollectionJobs[title] = job
         }
     }
 
@@ -59,22 +59,22 @@ class TrackingInfoViewModel @Inject constructor(
         _waffleBoardInfoCollectionJobs.values.forEach { it.cancel() }
         _waffleBoardInfoCollectionJobs.clear()
 
-        val habitIDs = habits.map { it.id }.toSet()
+        val habitTitles = habits.map { it.title }.toSet()
 
-        _waffleBoardInfoMap.update { it.filterKeys { key -> key in habitIDs }.toMutableMap() }
+        _waffleBoardInfoMap.update { it.filterKeys { key -> key in habitTitles }.toMutableMap() }
         Log.d("TrackingViewModel", "Waffle-Board map was updated: ${waffleBoardInfoMap.value}")
 
         habits.forEach { habit ->
-            val id = habit.id
+            val title = habit.title
             val job = viewModelScope.launch {
-                repository.getWaffleDiagramData(id).collect { data ->
+                repository.getWaffleDiagramData(title).collect { data ->
                     _waffleBoardInfoMap.update { map ->
-                        map.toMutableMap().apply { this[id] = data }
+                        map.toMutableMap().apply { this[title] = data }
                     }
                 }
             }
 
-            _waffleBoardInfoCollectionJobs[id] = job
+            _waffleBoardInfoCollectionJobs[title] = job
         }
     }
 
@@ -82,18 +82,18 @@ class TrackingInfoViewModel @Inject constructor(
         repository.insertTrackingInfo(trackingInfo)
     }
 
-    fun removeTrackingInfo(habitID: Int, trackingInfo: TrackingInfo) {
+    fun removeTrackingInfo(habitTitle: String, trackingInfo: TrackingInfo) {
         viewModelScope.launch {
-            repository.deleteTrackingInfo(trackingInfo.id)
+            repository.deleteTrackingInfo(trackingInfo)
         }.invokeOnCompletion {
             _trackingInfoMap.update { map ->
-                val list = map[habitID]
+                val list = map[habitTitle]
 
                 list?.let {
                     val newList = it.toMutableList()
                     newList.remove(trackingInfo)
 
-                    map.toMutableMap().apply { replace(habitID, newList.toList()) }
+                    map.toMutableMap().apply { replace(habitTitle, newList.toList()) }
                 } ?: map
             }
         }

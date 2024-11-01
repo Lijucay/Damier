@@ -5,8 +5,8 @@ import dev.lijucay.damier.data.local.model.TrackingInfo
 import kotlinx.coroutines.flow.Flow
 
 interface TrackingInfoRepository {
-    fun getTrackingInfo(habitId: Int): Flow<List<TrackingInfo>>?
+    fun getTrackingInfo(habitTitle: String): Flow<List<TrackingInfo>>?
     suspend fun insertTrackingInfo(trackingInfo: TrackingInfo): Long
-    fun getWaffleDiagramData(habitId: Int): Flow<List<DateCount>>
-    suspend fun deleteTrackingInfo(id: Int): Int
+    fun getWaffleDiagramData(habitTitle: String): Flow<List<DateCount>>
+    suspend fun deleteTrackingInfo(trackingInfo: TrackingInfo): Int
 }

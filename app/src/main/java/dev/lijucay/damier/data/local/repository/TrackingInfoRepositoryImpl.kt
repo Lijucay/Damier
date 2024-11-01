@@ -13,22 +13,22 @@ import javax.inject.Inject
 class TrackingInfoRepositoryImpl @Inject constructor(
     private val trackingInfoDao: TrackingInfoDao
 ) : TrackingInfoRepository {
-    override fun getTrackingInfo(habitId: Int): Flow<List<TrackingInfo>>? {
-        return trackingInfoDao.getTrackingInfo(habitId)
+    override fun getTrackingInfo(habitTitle: String): Flow<List<TrackingInfo>>? {
+        return trackingInfoDao.getTrackingInfo(habitTitle)
     }
 
     override suspend fun insertTrackingInfo(trackingInfo: TrackingInfo): Long {
         return trackingInfoDao.insertTrackingInfo(trackingInfo)
     }
 
-    override fun getWaffleDiagramData(habitId: Int): Flow<List<DateCount>> {
+    override fun getWaffleDiagramData(habitTitle: String): Flow<List<DateCount>> {
         val endDate = LocalDate.now()
         val startDate = endDate.minusWeeks(13).with(DayOfWeek.MONDAY)
 
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
         return trackingInfoDao.getCountsForDateRange(
-            habitId = habitId,
+            habitTitle = habitTitle,
             startDate = startDate.format(formatter),
             endDate = endDate.format(formatter)
         ).map { list ->
@@ -43,7 +43,7 @@ class TrackingInfoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteTrackingInfo(id: Int): Int {
-        return trackingInfoDao.deleteTrackingInfo(id)
+    override suspend fun deleteTrackingInfo(trackingInfo: TrackingInfo): Int {
+        return trackingInfoDao.deleteTrackingInfo(trackingInfo)
     }
 }
