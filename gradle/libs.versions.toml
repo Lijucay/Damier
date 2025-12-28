@@ -17,6 +17,8 @@ room = "2.8.4"
 
 ksp = "2.2.21-2.0.4"
 
+composeGraph = "0.2.0"
+
 [libraries]
 androidx-compose-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 androidx-compose-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
@@ -46,6 +48,8 @@ koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-andr
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+compose-graph = { group = "io.github.ehsannarmani", name = "compose-charts", version.ref = "composeGraph" }
 
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]

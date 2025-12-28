@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.compose.graph)
+
     implementation(libs.bundles.koin)
     implementation(libs.bundles.room)
 

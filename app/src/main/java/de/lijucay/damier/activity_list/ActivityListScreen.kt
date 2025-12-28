@@ -24,6 +24,7 @@ fun ActivityListScreen(
     modifier: Modifier = Modifier,
     isWidthAtLeastExpanded: Boolean,
     activityList: List<ActivityUi>,
+    onActivityClicked: (ActivityUi) -> Unit
 ) {
     ScreenContainer(
         modifier = modifier.fillMaxSize(),
@@ -50,7 +51,9 @@ fun ActivityListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(activityList) { activityUi ->
-                ActivityListItem(activityUi = activityUi) { }
+                ActivityListItem(activityUi = activityUi) {
+                    onActivityClicked(activityUi)
+                }
             }
         }
     }

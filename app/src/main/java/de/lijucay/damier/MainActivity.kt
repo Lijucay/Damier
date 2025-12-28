@@ -14,12 +14,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.window.core.layout.WindowSizeClass
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsScreen
 import de.lijucay.damier.activity_list.ActivityListScreen
+import de.lijucay.damier.activity_list.ActivityListViewModel
 import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.components.AdaptivePane
 import de.lijucay.damier.core.presentation.exampleActivities
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
 class MainActivity : ComponentActivity() {
@@ -45,16 +48,9 @@ class MainActivity : ComponentActivity() {
                 )
             )
 
-            val a = ActivityUi(
-                id = UUID.randomUUID(),
-                title = "Reading",
-                singularUnit = "Unit",
-                pluralUnit = "Unit",
-                reference = 10,
-                referenceType = ReferenceType.GOAL
-            )
-
             val scope = rememberCoroutineScope()
+
+            val activityListViewModel = koinViewModel<ActivityListViewModel>()
 
             DamierTheme {
                 AdaptivePane(
@@ -62,12 +58,19 @@ class MainActivity : ComponentActivity() {
                         ActivityListScreen(
                             isWidthAtLeastExpanded = isWidthAtLeastExpanded,
                             activityList = exampleActivities()
-                        )
+                        ) { activityUi ->
+                            activityListViewModel.observeSelectedActivity(activityUi.id)
+
+                            scope.launch {
+                                scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                            }
+                        }
                     },
                     detailPane = {
                         ActivityDetailsScreen(
                             isWidthAtLeastExpanded = isWidthAtLeastExpanded,
                             isHeightAtLeastExpanded = isHeightAtLeastExpanded,
+                            activityListViewModel = activityListViewModel,
                             onNavigateBack = {
                                 if (scaffoldNavigator.canNavigateBack()) {
                                     scope.launch {

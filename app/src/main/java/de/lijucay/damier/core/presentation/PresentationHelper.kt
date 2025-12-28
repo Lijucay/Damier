@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import java.util.UUID
 
@@ -90,24 +91,21 @@ fun exampleActivities(): List<ActivityUi> = listOf(
     ActivityUi(
         id = UUID.randomUUID(),
         title = stringResource(R.string.reading),
-        singularUnit = stringResource(R.string.page),
-        pluralUnit = stringResource(R.string.pages),
+        unitId = UnitId.PAGES,
         reference = 10,
         referenceType = ReferenceType.GOAL
     ),
     ActivityUi(
         id = UUID.randomUUID(),
         title = stringResource(R.string.code),
-        singularUnit = stringResource(R.string.minute),
-        pluralUnit = stringResource(R.string.minutes),
+        unitId = UnitId.MINUTES,
         reference = 10,
         referenceType = ReferenceType.MAX
     ),
     ActivityUi(
         id = UUID.randomUUID(),
         title = stringResource(R.string.play_video_games),
-        singularUnit = stringResource(R.string.hour),
-        pluralUnit = stringResource(R.string.hours),
+        unitId = UnitId.HOURS,
         reference = 10,
         referenceType = ReferenceType.LIMIT
     )

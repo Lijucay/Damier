@@ -71,8 +71,10 @@ fun ActivityListItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 itemVerticalAlignment = Alignment.CenterVertically
             ) {
+
+                // TODO: If using ReferenceType#MAX, make sure to show the correct reference (instead of 10)
                 Text(
-                    text = "Reference: ${activityUi.reference}",
+                    text = "${activityUi.referenceType}: ${activityUi.reference}",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold
                     )
