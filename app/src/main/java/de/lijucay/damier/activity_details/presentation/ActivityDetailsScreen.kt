@@ -163,10 +163,7 @@ private fun ActivityDetails(modifier: Modifier = Modifier, activityUi: ActivityU
         MaterialTheme.colorScheme.primaryContainer
     else MaterialTheme.colorScheme.errorContainer
 
-    LazyColumn(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-    ) {
+    LazyColumn(modifier = modifier) {
         item {
             Card(
                 modifier = Modifier
@@ -200,13 +197,17 @@ private fun ActivityDetails(modifier: Modifier = Modifier, activityUi: ActivityU
             Card(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .padding(top = 2.dp)
+                    .padding(top = 4.dp)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(
                     topStart = 4.dp,
                     topEnd = 4.dp,
                     bottomStart = 24.dp,
                     bottomEnd = 24.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = containerColor,
+                    contentColor = contentColorFor(containerColor)
                 )
             ) {
                 WeeklyChart(
@@ -218,5 +219,14 @@ private fun ActivityDetails(modifier: Modifier = Modifier, activityUi: ActivityU
                 )
             }
         }
+        item {
+            Text(
+                text = stringResource(R.string.check_ins),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
+        
     }
 }

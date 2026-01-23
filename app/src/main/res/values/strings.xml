@@ -87,4 +87,5 @@
     <string name="times">Times</string>
     <string name="x">x</string>
     <string name="no_activity_selected">No activity selected</string>
+    <string name="check_ins">Check ins</string>
 </resources>
