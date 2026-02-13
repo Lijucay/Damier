@@ -15,10 +15,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
+import de.lijucay.damier.core.domain.Activity
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import java.util.UUID
+
+sealed interface DetailsDestination {
+    data object AddActivity : DetailsDestination
+    data class ActivityDetails(val activity: Activity) : DetailsDestination
+}
 
 @Composable
 fun Modifier.adaptiveHorizontalCutoutPadding(

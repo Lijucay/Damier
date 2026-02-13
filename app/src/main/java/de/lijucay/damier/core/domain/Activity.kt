@@ -5,9 +5,7 @@ import java.util.UUID
 data class Activity(
     val id: UUID,
     val title: String,
-    val description: String,
-    val singularUnit: String,
-    val pluralUnit: String,
+    val unitId: UnitId,
     val reference: Int,
     val referenceType: ReferenceType
 )
