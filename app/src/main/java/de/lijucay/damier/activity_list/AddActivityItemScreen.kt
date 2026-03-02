@@ -1,12 +1,13 @@
 package de.lijucay.damier.activity_list
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.core.domain.Activity
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.domain.getLongUnitNamesById
@@ -54,24 +54,32 @@ fun AddActivityItemScreen(modifier: Modifier = Modifier) {
 
     // Unit selection + reference (if reference 1, use singular unit name, else use plural unit name
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            top = 16.dp
-        ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
     ) {
-        item {
-            ActivityListItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                activityUi = finalActivity
-            ) {}
+        // Top-Padding:
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Preview
+        ActivityListItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            activityUi = finalActivity
+        ) {}
+
+        // Title field
+        Text(text = title)
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(text = unitId.getLongUnitNamesById(context).singularName)
         }
 
-        item {
-
-        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
