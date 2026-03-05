@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,15 +17,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.domain.getLongUnitNamesById
+import de.lijucay.damier.core.presentation.components.AdaptivePane
+import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import java.util.UUID
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun AddActivityItemScreen(modifier: Modifier = Modifier) {
+fun AddActivityItemScreen(
+    modifier: Modifier = Modifier,
+    isWidthAtLeastExpanded: Boolean
+) {
     val context = LocalContext.current
 
     val activityId = UUID.randomUUID()
@@ -54,32 +63,36 @@ fun AddActivityItemScreen(modifier: Modifier = Modifier) {
 
     // Unit selection + reference (if reference 1, use singular unit name, else use plural unit name
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+    ScreenContainer(
+        modifier = modifier.fillMaxSize(),
+        isWidthAtLeastExpanded = isWidthAtLeastExpanded,
+        title = stringResource(R.string.add_activity)
     ) {
-        // Top-Padding:
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Preview
-        ActivityListItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            activityUi = finalActivity
-        ) {}
-
-        // Title field
-        Text(text = title)
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
         ) {
-            Text(text = unitId.getLongUnitNamesById(context).singularName)
-        }
+            // Top-Padding:
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // Preview
+            ActivityListItem(
+                modifier = Modifier.fillMaxWidth(),
+                activityUi = finalActivity
+            ) {}
+
+            // Title field
+            Text(text = title)
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(text = unitId.getLongUnitNamesById(context).singularName)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }

@@ -24,7 +24,8 @@ fun ActivityListScreen(
     modifier: Modifier = Modifier,
     isWidthAtLeastExpanded: Boolean,
     activityList: List<ActivityUi>,
-    onActivityClicked: (ActivityUi) -> Unit
+    onActivityClicked: (ActivityUi) -> Unit,
+    onAddActivity: () -> Unit
 ) {
     ScreenContainer(
         modifier = modifier.fillMaxSize(),
@@ -34,7 +35,7 @@ fun ActivityListScreen(
             FloatingActionButton(
                 modifier = Modifier
                     .paddingWithSafeNavigationBar(),
-                onClick = {}
+                onClick = onAddActivity
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,

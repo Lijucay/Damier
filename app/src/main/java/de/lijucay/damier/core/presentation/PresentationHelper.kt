@@ -23,7 +23,7 @@ import java.util.UUID
 
 sealed interface DetailsDestination {
     data object AddActivity : DetailsDestination
-    data class ActivityDetails(val activity: Activity) : DetailsDestination
+    data class ActivityDetails(val activity: ActivityUi) : DetailsDestination
 }
 
 @Composable
