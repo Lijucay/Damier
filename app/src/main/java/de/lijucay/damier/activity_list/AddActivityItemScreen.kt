@@ -23,7 +23,6 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.domain.getLongUnitNamesById
-import de.lijucay.damier.core.presentation.components.AdaptivePane
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import java.util.UUID
