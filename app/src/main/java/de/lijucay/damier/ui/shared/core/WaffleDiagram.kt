@@ -1,4 +1,4 @@
-package de.lijucay.damier.core.presentation.components
+package de.lijucay.damier.ui.shared.core
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

@@ -1,6 +1,8 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.core.data.entities.CheckInInfo
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -10,10 +12,20 @@ data class DisplayableDateTime(
 )
 
 fun LocalDateTime.toDisplayableDateTime(): DisplayableDateTime {
-    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
+    val formatter = DateTimeFormatter
+        .ofLocalizedDateTime(FormatStyle.FULL)
+        .withZone(ZoneId.systemDefault())
 
     return DisplayableDateTime(
         formatted = this.format(formatter),
         value = this
+    )
+}
+
+fun CheckInInfo.toCheckInUi(): CheckInUi {
+    return CheckInUi(
+        activityId = activityId,
+        dateTime = timestamp.toDisplayableDateTime(),
+        checkInCount = checkInCount
     )
 }

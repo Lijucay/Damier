@@ -1,6 +1,8 @@
 [versions]
 adaptive = "1.3.0-alpha09"
 agp = "9.1.0"
+datastore = "1.2.0"
+datastorePreferencesAndroid = "1.2.0"
 kotlin = "2.3.10"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -18,6 +20,7 @@ room = "2.8.4"
 ksp = "2.3.2"
 
 composeGraph = "0.2.5"
+navigationCompose = "2.9.7"
 
 [libraries]
 androidx-compose-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
@@ -28,6 +31,8 @@ androidx-compose-material-icons-core = { module = "androidx.compose.material:mat
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
 androidx-compose-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-datastore-preferences-android = { module = "androidx.datastore:datastore-preferences-android", version.ref = "datastorePreferencesAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -50,6 +55,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 compose-graph = { group = "io.github.ehsannarmani", name = "compose-charts", version.ref = "composeGraph" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]
@@ -59,4 +65,5 @@ room = [ "room-runtime", "room-ktx" ]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.serialization)
 }
 
 configure<ApplicationExtension> {
@@ -38,14 +39,19 @@ configure<ApplicationExtension> {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences.android)
+
     implementation(libs.compose.graph)
 
     implementation(libs.bundles.koin)
     implementation(libs.bundles.room)
+    implementation(libs.androidx.navigation.compose)
 
     ksp(libs.room.compiler)
 

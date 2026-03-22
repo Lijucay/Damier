@@ -11,7 +11,10 @@ import java.util.UUID
 @Dao
 interface CheckInDao {
     @Query("SELECT * FROM CheckInInfo WHERE activityId = :activityId")
-    fun queryCheckIns(activityId: UUID): Flow<List<CheckInInfo>>
+    fun observeCheckIns(activityId: UUID): Flow<List<CheckInInfo>>
+
+    @Query("SELECT * FROM CheckInInfo WHERE activityId = :activityId")
+    suspend fun getCheckIns(activityId: UUID): List<CheckInInfo>
 
     @Query("SELECT * FROM CheckInInfo")
     fun queryAllCheckIns(): Flow<List<CheckInInfo>>

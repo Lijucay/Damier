@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -13,8 +14,10 @@ import androidx.compose.material3.adaptive.layout.AdaptStrategy
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldDefaults
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,7 +29,7 @@ import de.lijucay.damier.activity_list.AddActivityItemScreen
 import de.lijucay.damier.core.presentation.DetailsDestination
 import de.lijucay.damier.core.presentation.UIViewModel
 import de.lijucay.damier.core.presentation.components.AdaptivePane
-import de.lijucay.damier.core.presentation.exampleActivities
+import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -38,6 +41,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val activityListViewViewModel = koinViewModel<ActivityListViewModel>()
+            val uiViewModel = koinViewModel<UIViewModel>()
+
             val windowAdaptiveInfo = currentWindowAdaptiveInfo()
             val isWidthAtLeastExpanded = windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(
                 WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
@@ -45,6 +51,11 @@ class MainActivity : ComponentActivity() {
             val isHeightAtLeastExpanded = windowAdaptiveInfo.windowSizeClass.isHeightAtLeastBreakpoint(
                 WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
             )
+            val scope = rememberCoroutineScope()
+
+            LaunchedEffect(isWidthAtLeastExpanded, isHeightAtLeastExpanded) {
+                uiViewModel.setWindowSizeInfo(isWidthAtLeastExpanded,  isHeightAtLeastExpanded)
+            }
 
             val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator(
                 adaptStrategies = ListDetailPaneScaffoldDefaults.adaptStrategies(
@@ -55,24 +66,24 @@ class MainActivity : ComponentActivity() {
                 )
             )
 
-            val scope = rememberCoroutineScope()
-            val activityListViewModel = koinViewModel<ActivityListViewModel>()
-            val uiViewModel = koinViewModel<UIViewModel>()
-
             val detailsPage by uiViewModel.detailsPage.collectAsStateWithLifecycle()
 
             DamierTheme {
                 AdaptivePane(
                     listPane = {
                         ActivityListScreen(
-                            isWidthAtLeastExpanded = isWidthAtLeastExpanded,
-                            activityList = exampleActivities(),
-                            onActivityClicked = { activityUi ->
-                                activityListViewModel.observeSelectedActivity(activityUi.id)
-
-                                uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails(activityUi))
+                            onActivityClicked = {
                                 scope.launch {
+                                    uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
                                     scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                                }
+                            },
+                            onSettingsClicked = {
+                                scope.launch {
+                                    uiViewModel.setDetailsPage(DetailsDestination.Settings)
+                                    scaffoldNavigator.navigateTo(
+                                        pane = ListDetailPaneScaffoldRole.Detail
+                                    )
                                 }
                             },
                             onAddActivity = {
@@ -84,22 +95,32 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     detailPane = {
-                        detailsPage?.let { detailsDestination ->
+                        AnimatedContent(targetState = detailsPage) { detailsDestination ->
                             when (detailsDestination) {
                                 is DetailsDestination.ActivityDetails -> {
-                                    ActivityDetailsScreen(
-                                        isWidthAtLeastExpanded = isWidthAtLeastExpanded,
-                                        isHeightAtLeastExpanded = isHeightAtLeastExpanded,
-                                        activityListViewModel = activityListViewModel
-                                    ) { scope.launch { scaffoldNavigator.navigateBack() } }
+                                    ActivityDetailsScreen {
+                                        scope.launch { scaffoldNavigator.navigateBack() }
+                                    }
                                 }
                                 DetailsDestination.AddActivity -> {
-                                    AddActivityItemScreen(
-                                        isWidthAtLeastExpanded = isWidthAtLeastExpanded                                    )
+                                    AddActivityItemScreen {
+                                        scope.launch { scaffoldNavigator.navigateBack() }
+                                    }
+                                }
+                                is DetailsDestination.Settings -> {
+                                    SettingsScreen {
+                                        scope.launch { scaffoldNavigator.navigateBack() }
+                                    }
+                                }
+                                else -> {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(text = stringResource(R.string.no_activity_selected))
+                                    }
                                 }
                             }
-                        } ?: Box(modifier = Modifier.fillMaxSize()) {
-                            Text(text = stringResource(R.string.no_activity_selected))
                         }
                     },
                     showDetailPane = isWidthAtLeastExpanded,

@@ -1,40 +1,51 @@
 package de.lijucay.damier.activity_list
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
-import de.lijucay.damier.core.presentation.bottomPadding
-import de.lijucay.damier.core.presentation.components.ScreenContainer
-import de.lijucay.damier.core.presentation.models.ActivityUi
+import de.lijucay.damier.core.presentation.UIViewModel
 import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
+import de.lijucay.damier.ui.shared.core.ScreenContainer
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActivityListScreen(
     modifier: Modifier = Modifier,
-    isWidthAtLeastExpanded: Boolean,
-    activityList: List<ActivityUi>,
-    onActivityClicked: (ActivityUi) -> Unit,
+    onActivityClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onAddActivity: () -> Unit
 ) {
+    val uiViewModel = koinViewModel<UIViewModel>()
+
+    val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
+
     ScreenContainer(
         modifier = modifier.fillMaxSize(),
         isWidthAtLeastExpanded = isWidthAtLeastExpanded,
         title = stringResource(R.string.app_name),
+        topAppBarActions = {
+            IconButton(
+                onClick = onSettingsClicked
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Settings,
+                    contentDescription = stringResource(R.string.settings)
+                )
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier
-                    .paddingWithSafeNavigationBar(),
+                modifier = Modifier.paddingWithSafeNavigationBar(),
                 onClick = onAddActivity
             ) {
                 Icon(
@@ -44,18 +55,6 @@ fun ActivityListScreen(
             }
         }
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                bottom = bottomPadding() + 70.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(activityList) { activityUi ->
-                ActivityListItem(activityUi = activityUi) {
-                    onActivityClicked(activityUi)
-                }
-            }
-        }
+        ActivityList(onActivityClicked = { onActivityClicked() })
     }
 }

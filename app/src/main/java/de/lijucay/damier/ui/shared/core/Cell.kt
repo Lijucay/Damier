@@ -1,4 +1,4 @@
-package de.lijucay.damier.core.presentation.components
+package de.lijucay.damier.ui.shared.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.core.domain.ReferenceType
 import java.time.LocalDate
@@ -55,7 +54,7 @@ fun Cell(
 }
 
 @Composable
-fun getCellColor(
+private fun getCellColor(
     type: ReferenceType,
     checkInCount: Int,
     currentDate: LocalDate,
@@ -67,17 +66,6 @@ fun getCellColor(
     else 0f
 
     val alpha = 0.1f + (0.9f * intensity)
-
-    if (
-        type == ReferenceType.LIMIT &&
-        (
-            currentDate.isBefore(endDate) ||
-            currentDate.isEqual(endDate) &&
-            checkInCount != 0
-        )
-    ) {
-
-    }
 
     return when {
         type == ReferenceType.LIMIT &&

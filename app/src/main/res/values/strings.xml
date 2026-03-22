@@ -88,4 +88,88 @@
     <string name="x">x</string>
     <string name="no_activity_selected">No activity selected</string>
     <string name="check_ins">Check ins</string>
+    <string name="use_units">Use units</string>
+    <string name="unit">Unit</string>
+    <string name="use_default_amount">Use default amount</string>
+    <string name="amount">Amount</string>
+    <string name="use_units_explanation">Measure progress with a unit - like pages, minutes or times</string>
+    <string name="tracking_options">Tracking options</string>
+    <string name="title">Title</string>
+    <string name="use_default_amount_explanation">When set, checking in logs this amount automatically without asking.</string>
+    <string name="override_reference_type">Override reference type</string>
+    <string name="override_reference_type_explanation">When set, the board and cells are colored based on this type. Otherwise, coloring is based on the highest value currently visible on the board.</string>
+    <string name="reference_type">Reference type</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="today">Today</string>
+    <string name="default_amount">Default amount</string>
+    <string name="show_reference">Show reference</string>
+    <string name="show_reference_explanation">If turned on, it shows your reference type and value as a label (e.g. Limit: 10) on the card</string>
+    <string name="show_max">Show max amount</string>
+    <string name="show_max_explanation">If turned on, it shows the highest amount ever logged for this activity as a label on the card.</string>
+    <string name="activity_options">Activity options</string>
+    <string name="settings">Settings</string>
+    <string name="credits">Made with ♥️ in Germany</string>
+    <string name="version">Damier Version: %1$s</string>
+    <string name="current_streak">Current streak</string>
+    <string name="days">Days</string>
+    <string name="personal_best">Personal best: %1$d Days</string>
+
+    <string-array name="streak_m_ns">
+        <item>Tap. Just once.</item>
+        <item>It won\'t start itself.</item>
+        <item>The button is right there.</item>
+        <item>Zero is embarrassing.</item>
+        <item>Literally just press it</item>
+        <item>Start. Please. Just start.</item>
+        <item>Well, this is awkward.</item>
+        <item>Anytime now.</item>
+        <item>Come on.</item>
+        <item>No pressure, but also start.</item>
+        <item>Bold of you to wait.</item>
+    </string-array>
+
+    <string-array name="streak_m_s">
+        <item>You didn\'t quit. Yet.</item>
+        <item>The streak lives. For now.</item>
+        <item>Don\'t you dare stop now!</item>
+        <item>Who are you again?</item>
+        <item>Streak intact. You\'re welcome.</item>
+        <item>Still going strong. Ish.</item>
+        <item>Don\'t blow it now!</item>
+        <item>Streak status: Surprisingly alive.</item>
+        <item>Still here? Respect.</item>
+        <item>Not bad. Keep going.</item>
+        <item>The streak is fragile. Be careful.</item>
+        <item>You\'re on a roll. Tiny roll.</item>
+    </string-array>
+
+    <string-array name="streak_m_m">
+        <item>Still here? Genuinely surprised.</item>
+        <item>The streak is getting cocky.</item>
+        <item>One week. Don\'t ruin everything.</item>
+        <item>Okay fine, you\'re consistent. Ugh.</item>
+        <item>The app didn\'t expect this.</item>
+        <item>The streak is real, handle it with care.</item>
+        <item>You\'re doing it, against all odds.</item>
+        <item>Almost a habit. Almost.</item>
+        <item>You\'re doing suspiciously well.</item>
+        <item>Getting harder to quit now. Good.</item>
+        <item>A week in. No excuses.</item>
+        <item>Habit loading… Please wait</item>
+        <item>Almost impressive. Almost.</item>
+        <item>You\'re in too deep to stop.</item>
+        <item>Breaking now would be criminal.</item>
+    </string-array>
+
+    <string-array name="streak_m_l">
+        <item>The habit is alive.</item>
+        <item>This is who you are now.</item>
+        <item>No going back. Sorry.</item>
+        <item>You can\'t quit. It\'d be weird.</item>
+        <item>The habit is watching you sleep.</item>
+        <item>Resistance is futile now.</item>
+        <item>You\'re kind of a big deal.</item>
+        <item>The streak is permanent. Basically.</item>
+    </string-array>
 </resources>
