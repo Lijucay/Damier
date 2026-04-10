@@ -12,4 +12,6 @@ enum class ReferenceType {
             MAX -> "Max"
         }
     }
+
+    fun isMax(): Boolean = this == MAX
 }

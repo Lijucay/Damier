@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "669744723652",
+    "project_id": "damier-d23e5",
+    "storage_bucket": "damier-d23e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669744723652:android:cc1d92790f1ce77840bb91",
+        "android_client_info": {
+          "package_name": "de.lijucay.damier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH2GwCMwM3MhwKAlrra67Lt4W4DRjmIMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

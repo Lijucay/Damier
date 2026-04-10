@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.serialization)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 configure<ApplicationExtension> {
@@ -17,15 +19,16 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "0.1.1-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -44,6 +47,12 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
+    implementation(libs.process.phoenix)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.com.google.code.gson)
+
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences.android)
 
@@ -52,6 +61,7 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.room)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.documentfile)
 
     ksp(libs.room.compiler)
 

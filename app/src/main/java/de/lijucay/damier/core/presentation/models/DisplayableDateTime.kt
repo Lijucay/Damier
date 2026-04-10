@@ -24,8 +24,9 @@ fun LocalDateTime.toDisplayableDateTime(): DisplayableDateTime {
 
 fun CheckInInfo.toCheckInUi(): CheckInUi {
     return CheckInUi(
+        id = id,
         activityId = activityId,
         dateTime = timestamp.toDisplayableDateTime(),
-        checkInCount = checkInCount
+        amount = checkInCount
     )
 }

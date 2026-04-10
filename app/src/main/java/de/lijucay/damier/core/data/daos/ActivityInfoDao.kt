@@ -1,9 +1,10 @@
 package de.lijucay.damier.core.data.daos
 
 import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import kotlinx.coroutines.flow.Flow
@@ -14,8 +15,11 @@ interface ActivityInfoDao {
     @Query("SELECT * FROM ActivityInfo")
     fun getActivityInfo(): Flow<List<ActivityInfo>>
 
-    @Insert
-    suspend fun insertActivity(activity: ActivityInfo): Long
+    @Query("SELECT * FROM ActivityInfo")
+    fun getActivityInfoList(): List<ActivityInfo>
+
+    @Upsert
+    suspend fun upsert(activity: ActivityInfo)
 
     @Transaction
     @Query("SELECT * FROM ActivityInfo where id = :id")
@@ -27,4 +31,7 @@ interface ActivityInfoDao {
     @Transaction
     @Query("SELECT * FROM ActivityInfo")
     fun getActivities(): Flow<List<Activity>>
+
+    @Delete
+    suspend fun deleteActivity(activity: ActivityInfo)
 }

@@ -2,8 +2,6 @@ package de.lijucay.damier.core.data.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
@@ -21,6 +19,9 @@ interface StreakDao {
 
     @Query("SELECT MAX(length) FROM streak WHERE activityId = :activityId")
     fun getLongest(activityId: UUID): Flow<Int?>
+
+    @Query("SELECT * FROM streak")
+    fun getAllStreaks(): List<Streak>
 
     @Upsert
     suspend fun upsert(streak: Streak)

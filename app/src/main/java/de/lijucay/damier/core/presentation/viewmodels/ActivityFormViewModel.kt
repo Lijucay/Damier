@@ -1,0 +1,89 @@
+package de.lijucay.damier.core.presentation.viewmodels
+
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.ViewModel
+import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.core.presentation.models.ActivityFormState
+import de.lijucay.damier.core.presentation.getRandomCheckInInfo
+import de.lijucay.damier.core.presentation.models.ActivityUi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import java.util.UUID
+
+class ActivityFormViewModel : ViewModel() {
+    private val _state = MutableStateFlow(ActivityFormState())
+    val state = _state.asStateFlow()
+
+    private var activityId: UUID = UUID.randomUUID()
+
+    fun initForAdd() {
+        activityId = UUID.randomUUID()
+        _state.value = ActivityFormState(
+            checkInInfo = getRandomCheckInInfo()
+        )
+    }
+
+    fun initForEdit(activity: ActivityUi) {
+        activityId = activity.id
+        _state.value = ActivityFormState.fromExisting(activity)
+    }
+
+    fun setTitle(value: String) = _state.update { it.copy(title = value) }
+
+    fun setUnitId(value: UnitId) = _state.update { it.copy(unitId = value) }
+
+    fun setDefaultAmount(value: TextFieldValue) = _state.update { it.copy(defaultAmount = value) }
+
+    fun setReference(value: TextFieldValue) = _state.update { state ->
+        state.copy(
+            reference = value,
+            checkInInfo = state.checkInInfo?.copy(reference = value.text.toIntOrNull() ?: 10)
+        )
+    }
+
+    fun setReferenceType(value: ReferenceType) = _state.update { state ->
+        state.copy(
+            referenceType = value,
+            checkInInfo = state.checkInInfo?.copy(referenceType = value)
+        )
+    }
+
+    fun setUseUnits(value: Boolean) = _state.update { it.copy(useUnits = value) }
+
+    fun setShowUnits(value: Boolean) = _state.update { it.copy(showUnits = value) }
+
+    fun setUseDefaultAmount(value: Boolean) = _state.update { it.copy(useDefaultAmount = value) }
+
+    fun setUseReference(value: Boolean) = _state.update { state ->
+        state.copy(
+            useReference = value,
+            checkInInfo = state.checkInInfo?.copy(
+                referenceType = if (!value) ReferenceType.MAX else state.referenceType
+            )
+        )
+    }
+
+    fun setShowReferenceTypes(value: Boolean) = _state.update { it.copy(showReferenceTypes = value) }
+
+    fun focusDefaultAmount(current: TextFieldValue): TextFieldValue =
+        current.copy(selection = TextRange(current.text.length))
+
+    fun focusReference(current: TextFieldValue): TextFieldValue =
+        current.copy(selection = TextRange(current.text.length))
+
+    fun buildActivityInfo(): ActivityInfo {
+        val s = _state.value
+        return ActivityInfo(
+            id = activityId,
+            activityName = s.title,
+            unit = if (s.useUnits) s.unitId else UnitId.TIMES,
+            reference = s.reference.text.toInt(),
+            referenceType = if (s.useReference) s.referenceType else ReferenceType.MAX,
+            defaultAmount = if (s.useDefaultAmount) s.defaultAmount.text.toInt() else 1
+        )
+    }
+}

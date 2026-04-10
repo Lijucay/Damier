@@ -1,56 +1,143 @@
 package de.lijucay.damier.settings.presentation
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.FileOpen
+import androidx.compose.material.icons.rounded.IosShare
+import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material.icons.rounded.ReportGmailerrorred
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.lijucay.damier.BuildConfig
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.jakewharton.processphoenix.ProcessPhoenix
 import de.lijucay.damier.R
-import de.lijucay.damier.core.presentation.UIViewModel
-import de.lijucay.damier.ui.shared.core.ScreenContainer
-import de.lijucay.damier.settings.presentation.components.SwitchPreference
+import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
+import de.lijucay.damier.core.domain.InfoMode
+import de.lijucay.damier.core.presentation.components.ScreenContainer
+import de.lijucay.damier.core.presentation.components.SwitchPreference
+import de.lijucay.damier.core.presentation.components.VersionInfo
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
+    snackbarHost: @Composable (() -> Unit),
+    showCrashlyticsChangedSnackbar: (Int, Boolean, Int, () -> Unit) -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    val uiViewModel = koinViewModel<UIViewModel>()
-    val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
-    val appVersion = BuildConfig.VERSION_NAME
+    val uiViewModel = koinViewModel<UIViewModel>()
+    val activityListViewModel = koinViewModel<ActivityListViewModel>()
+
+    val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
 
     val showReference by uiViewModel.showReference.collectAsStateWithLifecycle()
     val showMaxAmount by uiViewModel.showMaxAmount.collectAsStateWithLifecycle()
+    val savedDirUri by uiViewModel.savedDirUri.collectAsStateWithLifecycle()
+
+    var backupUri by remember { mutableStateOf<Uri?>(null) }
+
+    val crashlytics = FirebaseCrashlytics.getInstance()
+
+    var crashlyticsEnabled by remember {
+        mutableStateOf(crashlytics.isCrashlyticsCollectionEnabled)
+    }
+
+    LaunchedEffect(savedDirUri) {
+        savedDirUri?.let { savedDirUriStr ->
+            val uri = savedDirUriStr.toUri()
+            val persistedUriPermissions = context.contentResolver.persistedUriPermissions
+            val hasPermission = persistedUriPermissions.any {
+                it.uri == uri && it.isReadPermission && it.isWritePermission
+            }
+
+            if (hasPermission) {
+                backupUri = uri
+            } else {
+                uiViewModel.setSavedDirUri(null)
+                backupUri = null
+            }
+        } ?: run {
+            backupUri = null
+        }
+    }
+
+    val invalidDirStr = stringResource(R.string.invalid_directory)
+
+    val directoryPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        uri?.let {
+            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            context.contentResolver.takePersistableUriPermission(uri, takeFlags)
+
+            uiViewModel.setSavedDirUri(uri.toString())
+            backupUri = uri
+
+            // Starte Export sofort nach Auswahl
+            activityListViewModel.exportData(uri) { success, errorMessage ->
+                if (success) {
+                    uiViewModel.setInfoMode(InfoMode.BackupSuccess)
+                } else {
+                    uiViewModel.setInfoMode(InfoMode.BackupError(errorMessage))
+                }
+            }
+        }
+    }
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val fileUri = result.data?.data
+
+            fileUri?.let {
+                activityListViewModel.import(
+                    fileUri = fileUri,
+                    onTotalCountUpdate = {},
+                    onCurrentCountUpdate = {},
+                    onComplete = { result ->
+                        if (result) {
+                            uiViewModel.setInfoMode(InfoMode.ImportSuccess)
+                        }
+                    }
+                )
+            }
+        }
+    }
 
     ScreenContainer(
         isWidthAtLeastExpanded = isWidthAtLeastExpanded,
         title = stringResource(R.string.settings),
         bottomBarContent = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(text = stringResource(R.string.version, appVersion))
-                Text(text = stringResource(R.string.credits))
-            }
+            VersionInfo()
         },
+        snackbarHost = snackbarHost,
+        showBottomBarContent = true,
         navigationIcon = {
             if (!isWidthAtLeastExpanded) {
                 IconButton(
@@ -66,13 +153,70 @@ fun SettingsScreen(
     ) {
         Column(
             modifier = modifier
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                text = stringResource(R.string.activity_options),
-                style = typography.titleMedium.copy(color = colorScheme.primary)
+            PreferenceCategoryTitle(
+                title = stringResource(R.string.app_settings)
+            )
+            SwitchPreference(
+                title = stringResource(R.string.enable_crashlytics),
+                subTitle = stringResource(R.string.crashlytics_info),
+                icon = Icons.Rounded.ReportGmailerrorred,
+                checked = crashlyticsEnabled
+            ) {
+                crashlytics.isCrashlyticsCollectionEnabled = !crashlytics.isCrashlyticsCollectionEnabled
+                crashlyticsEnabled = !crashlyticsEnabled
+                showCrashlyticsChangedSnackbar(
+                    R.string.restart_info,
+                    true,
+                    R.string.restart
+                ) {
+                    ProcessPhoenix.triggerRebirth(context)
+                }
+            }
+
+            PreferenceCategoryTitle(
+                title = stringResource(R.string.export_import)
+            )
+            Preference(
+                title = stringResource(R.string.backup_data),
+                summary = stringResource(R.string.backup_data_summary),
+                iconVector = Icons.Rounded.IosShare
+            ) {
+                val currentUri = backupUri
+                if (currentUri != null) {
+                    activityListViewModel.exportData(currentUri) { success, errorMessage ->
+                        if (success) {
+                            uiViewModel.setInfoMode(InfoMode.BackupSuccess)
+                        } else {
+                            if (errorMessage == invalidDirStr) {
+                                uiViewModel.setSavedDirUri(null)
+                                backupUri = null
+                                directoryPicker.launch(null)
+                            } else {
+                                uiViewModel.setInfoMode(InfoMode.BackupError(errorMessage))
+                            }
+                        }
+                    }
+                } else {
+                    directoryPicker.launch(null)
+                }
+            }
+            Preference(
+                title = stringResource(R.string.import_data),
+                summary = stringResource(R.string.import_data_summary),
+                iconVector = Icons.Rounded.FileOpen
+            ) {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    type = "application/octet-stream"
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                }
+
+                filePickerLauncher.launch(intent)
+            }
+
+            PreferenceCategoryTitle(
+                title = stringResource(R.string.activity_options)
             )
             SwitchPreference(
                 title = stringResource(R.string.show_reference),
@@ -93,6 +237,22 @@ fun SettingsScreen(
                 ) { checked ->
                     uiViewModel.changeShowMaxAmount(checked)
                 }
+            }
+
+            PreferenceCategoryTitle(
+                title = stringResource(R.string.privacy_policy)
+            )
+
+            Preference(
+                title = stringResource(R.string.privacy_policy),
+                summary = stringResource(R.string.privacy_policy_sum),
+                iconVector = Icons.Rounded.PrivacyTip
+            ) {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setData("https://damier.lijucay.de/privacy".toUri())
+                }
+
+                context.startActivity(intent)
             }
         }
     }

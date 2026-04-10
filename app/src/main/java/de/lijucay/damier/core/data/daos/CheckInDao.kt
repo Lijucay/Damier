@@ -2,8 +2,8 @@ package de.lijucay.damier.core.data.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Upsert
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -17,10 +17,10 @@ interface CheckInDao {
     suspend fun getCheckIns(activityId: UUID): List<CheckInInfo>
 
     @Query("SELECT * FROM CheckInInfo")
-    fun queryAllCheckIns(): Flow<List<CheckInInfo>>
+    fun getAllCheckIns(): List<CheckInInfo>
 
-    @Insert
-    suspend fun insertCheckIn(checkInInfo: CheckInInfo): Long
+    @Upsert
+    suspend fun upsert(checkInInfo: CheckInInfo)
 
     @Delete
     suspend fun deleteCheckIn(checkInInfo: CheckInInfo): Int

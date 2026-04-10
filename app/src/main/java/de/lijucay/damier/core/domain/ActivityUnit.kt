@@ -1,14 +1,12 @@
 package de.lijucay.damier.core.domain
 
-import android.content.Context
-
 
 data class ActivityUnit(
     val unitId: UnitId,
     val group: UnitGroup
 )
 
-fun getUnits(context: Context) = listOf(
+val units = listOf(
     ActivityUnit(
         unitId = UnitId.CALORIES,
         group = UnitGroup.HEALTH

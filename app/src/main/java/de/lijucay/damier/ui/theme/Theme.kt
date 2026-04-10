@@ -1,8 +1,9 @@
 package de.lijucay.damier.ui.theme
 
 import android.os.Build
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
@@ -10,6 +11,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -58,3 +60,62 @@ fun DamierTheme(
         content = content
     )
 }
+
+@Composable
+fun ActivityTheme(
+    useLimitTheme: Boolean,
+    content: @Composable () -> Unit
+) {
+    val base = MaterialTheme.colorScheme
+    val target = if (useLimitTheme) base.toErrorScheme() else base
+
+    val primary by animateColorAsState(target.primary)
+    val onPrimary by animateColorAsState(target.onPrimary)
+    val primaryContainer by animateColorAsState(target.primaryContainer)
+    val onPrimaryContainer by animateColorAsState(target.onPrimaryContainer)
+    val secondary by animateColorAsState(target.secondary)
+    val onSecondary by animateColorAsState(target.onSecondary)
+    val secondaryContainer by animateColorAsState(target.secondaryContainer)
+    val onSecondaryContainer by animateColorAsState(target.onSecondaryContainer)
+    val tertiary by animateColorAsState(target.tertiary)
+    val onTertiary by animateColorAsState(target.onTertiary)
+    val tertiaryContainer by animateColorAsState(target.tertiaryContainer)
+    val onTertiaryContainer by animateColorAsState(target.onTertiaryContainer)
+
+    MaterialTheme(
+        colorScheme = base.copy(
+            primary = primary,
+            onPrimary = onPrimary,
+            primaryContainer = primaryContainer,
+            onPrimaryContainer = onPrimaryContainer,
+            secondary = secondary,
+            onSecondary = onSecondary,
+            secondaryContainer = secondaryContainer,
+            onSecondaryContainer = onSecondaryContainer,
+            tertiary = tertiary,
+            onTertiary = onTertiary,
+            tertiaryContainer = tertiaryContainer,
+            onTertiaryContainer = onTertiaryContainer,
+        ),
+        typography = Typography,
+        shapes = MaterialTheme.shapes,
+        motionScheme = MotionScheme.expressive(),
+        content = content
+    )
+}
+
+@Composable
+fun ColorScheme.toErrorScheme() = copy(
+    primary = error,
+    onPrimary = onError,
+    primaryContainer = errorContainer,
+    onPrimaryContainer = onErrorContainer,
+    secondary = error,
+    onSecondary = onError,
+    secondaryContainer = errorContainer,
+    onSecondaryContainer = onErrorContainer,
+    tertiary = error,
+    onTertiary = onError,
+    tertiaryContainer = errorContainer,
+    onTertiaryContainer = onErrorContainer,
+)

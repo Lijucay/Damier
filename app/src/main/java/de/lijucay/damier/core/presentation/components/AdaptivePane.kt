@@ -41,7 +41,7 @@ fun AdaptivePane(
             ),
         navigator = scaffoldNavigator,
         listPane = {
-            AnimatedPane() {
+            AnimatedPane {
                 Box(content = listPane)
             }
         },

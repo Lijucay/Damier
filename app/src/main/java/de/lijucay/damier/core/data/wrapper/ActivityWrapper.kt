@@ -1,6 +1,7 @@
 package de.lijucay.damier.core.data.wrapper
 
 import de.lijucay.damier.core.data.Activity
+import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.toCheckInUi
 
@@ -25,3 +26,14 @@ fun Activity.toActivityUi(): ActivityUi {
 
 fun List<Activity>.toActivityUis(): List<ActivityUi> =
     this.map { it.toActivityUi() }
+
+fun ActivityUi.toActivityInfo(): ActivityInfo {
+    return ActivityInfo(
+        id = id,
+        activityName = title,
+        unit = unitId,
+        reference = reference,
+        referenceType = referenceType,
+        defaultAmount = defaultAmount
+    )
+}

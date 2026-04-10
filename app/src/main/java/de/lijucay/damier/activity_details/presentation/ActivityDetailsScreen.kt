@@ -17,13 +17,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,244 +33,382 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.toShape
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
-import de.lijucay.damier.ui.shared.activity_details.components.CheckInItem
-import de.lijucay.damier.ui.shared.activity_details.components.StreakCard
-import de.lijucay.damier.activity_list.ActivityListViewModel
+import de.lijucay.damier.activity_details.presentation.components.CheckInItem
+import de.lijucay.damier.activity_details.presentation.components.StreakCard
+import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.data.entities.CheckInInfo
-import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.getShortUnitNamesById
-import de.lijucay.damier.core.presentation.UIViewModel
-import de.lijucay.damier.ui.shared.core.ScreenContainer
-import de.lijucay.damier.ui.shared.core.WaffleDiagram
-import de.lijucay.damier.core.presentation.models.ActivityUi
-import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
-import de.lijucay.damier.ui.shared.core.CookieButton
+import de.lijucay.damier.core.presentation.components.CookieButton
+import de.lijucay.damier.core.presentation.components.ScreenContainer
+import de.lijucay.damier.core.presentation.components.WaffleDiagram
+import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
+import de.lijucay.damier.core.presentation.models.CheckInUi
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.ui.theme.ActivityTheme
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ActivityDetailsScreen(
     modifier: Modifier = Modifier,
+    onEditActivity: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val uiViewModel = koinViewModel<UIViewModel>()
+    val detailsViewModel = koinViewModel<ActivityDetailsViewModel>()
+
     val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
     val isHeightAtLeastExpanded by uiViewModel.isHeightAtLeastExpanded.collectAsStateWithLifecycle()
-
     val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
-    val title = remember(selectedActivity?.id) { selectedActivity?.title }
+    val state by detailsViewModel.state.collectAsStateWithLifecycle()
 
-    val shouldUseLimitTheme = selectedActivity?.referenceType == ReferenceType.LIMIT
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    ScreenContainer(
-        modifier = modifier,
-        isWidthAtLeastExpanded = isWidthAtLeastExpanded,
-        title = title,
-        bottomBarContent = {
-            CookieButton(
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (shouldUseLimitTheme)
-                        colorScheme.error
-                    else
-                        colorScheme.tertiary,
-                    contentColor = if (shouldUseLimitTheme)
-                        colorScheme.onError
-                    else
-                        colorScheme.onTertiary
-                )
-            ) {
-                /*Todo: Show check in dialog*/
-                selectedActivity?.let {
-                    activityListViewModel.insertCheckIn(
-                        CheckInInfo(
-                            activityId = it.id,
-                            timestamp = LocalDateTime.now(),
-                            checkInCount = it.defaultAmount
-                        )
+    LaunchedEffect(selectedActivity) {
+        selectedActivity?.let {
+            detailsViewModel.load(it)
+        } ?: detailsViewModel.clear()
+    }
+
+    ActivityTheme(useLimitTheme = state.useLimitTheme) {
+        ScreenContainer(
+            modifier = modifier,
+            isWidthAtLeastExpanded = isWidthAtLeastExpanded,
+            title = state.title.ifBlank { null },
+            bottomBarContent = {
+                CookieButton(
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = colorScheme.tertiary,
+                        contentColor = colorScheme.onTertiary
                     )
+                ) {
+                    selectedActivity?.let {
+                        activityListViewModel.upsert(
+                            CheckInInfo(
+                                activityId = it.id,
+                                timestamp = LocalDateTime.now(),
+                                checkInCount = state.defaultAmount
+                            )
+                        )
+                    }
+                }
+            },
+            showBottomBarContent = isHeightAtLeastExpanded,
+            navigationIcon = {
+                if (!isWidthAtLeastExpanded) {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                }
+            },
+            topAppBarActions = {
+                selectedActivity?.let { activity ->
+                    IconButton(onClick = onEditActivity) {
+                        Icon(
+                            imageVector = Icons.Rounded.Edit,
+                            contentDescription = stringResource(R.string.edit_activity)
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            uiViewModel.setDeletionMode(DeletionMode.Activity(activity))
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = stringResource(R.string.delete)
+                        )
+                    }
                 }
             }
-        },
-        showBottomBarContent = isHeightAtLeastExpanded,
-        navigationIcon = {
-            if (!isWidthAtLeastExpanded) IconButton(onClick = onNavigateBack) {
-                Icon(
-                    imageVector = Icons.Rounded.ArrowBackIosNew,
-                    contentDescription = stringResource(R.string.back)
-                )
-            }
-        }
-    ) {
-        AnimatedContent(
-            targetState = selectedActivity,
-            contentKey = { it?.id },
-            transitionSpec = {
-                fadeIn(animationSpec = tween(300)) togetherWith
-                        fadeOut(animationSpec = tween(300))
-            }
-        ) { activity ->
-            if (activity != null) {
-                ActivityDetails(activityUi = activity)
-            } else {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = stringResource(R.string.no_activity_selected))
+        ) {
+            AnimatedContent(
+                targetState = selectedActivity,
+                contentKey = { it?.id },
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+                }
+            ) { activity ->
+                if (activity != null) {
+                    ActivityDetails(
+                        state = state,
+                        onShowHistory = {
+                            detailsViewModel.setShowHistory(true)
+                        },
+                        onItemClick = {
+                            detailsViewModel.setCheckInFormMode(
+                                mode = CheckInFormMode.Edit(it)
+                            )
+                        }
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = stringResource(R.string.no_activity_selected))
+                    }
                 }
             }
         }
     }
+
+    state.checkInFormMode?.let { mode ->
+        selectedActivity?.let { activity ->
+            CheckInForm(
+                onDismissRequest = { detailsViewModel.setCheckInFormMode(null) },
+                mode = mode,
+                useLimitTheme = state.useLimitTheme,
+                onDeleteRequest = { uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) }
+            )
+        }
+    }
+
+    if (state.showCheckInHistory) {
+        CheckInHistory(
+            sheetState = sheetState,
+            checkIns = state.allCheckIns,
+            unitId = state.unitId,
+            usesLimitColors = state.useLimitTheme,
+            onDismissRequest = {
+                scope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    detailsViewModel.setShowHistory(false)
+                }
+            }
+        ) {
+            detailsViewModel.setCheckInFormMode(
+                mode = CheckInFormMode.Edit(it)
+            )
+        }
+    }
 }
+
 
 @Composable
 private fun ActivityDetails(
     modifier: Modifier = Modifier,
-    activityUi: ActivityUi
+    state: ActivityDetailsState,
+    onShowHistory: () -> Unit,
+    onItemClick: (CheckInUi) -> Unit
 ) {
-    val containerColor = if (activityUi.referenceType != ReferenceType.LIMIT)
-        colorScheme.primaryContainer
-    else colorScheme.errorContainer
-
     val context = LocalContext.current
-    val today = LocalDate.now()
-
-    val todaysCheckIns = activityUi.groupedCheckIns[today] ?: emptyList()
-    val currentStreak = activityUi.streaks.maxByOrNull { it.endDate.value }
-    val longestStreak = activityUi.streaks.maxByOrNull { it.length }
-
-    val unitNames = activityUi.unitId.getShortUnitNamesById(context = context)
-    val shouldUseLimitTheme = activityUi.referenceType == ReferenceType.LIMIT
+    val unitNames = state.unitId.getShortUnitNamesById(context)
 
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        item {
-            Column {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = containerColor,
-                        contentColor = contentColorFor(containerColor)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        WaffleDiagram(
-                            reference = activityUi.reference,
-                            type = activityUi.referenceType,
-                            checkIns = activityUi.groupedCheckIns.values.flatten()
-                        )
-                    }
-                }
+        waffleDiagramItem(state)
+        streakItem(state)
+        todayHeaderItem(state, unitNames.shortUnitSingular, unitNames.shortUnitPlural)
+        checkInItems(
+            state,
+            unitNames.shortUnitSingular,
+            unitNames.shortUnitPlural,
+            onItemClick = onItemClick
+        )
+        checkInHistory(state, onClick = onShowHistory)
+    }
+}
 
-                Spacer(modifier = Modifier.height(6.dp))
-            }
-        }
-        item {
-            Column {
-                StreakCard(
-                    modifier = Modifier
-                        .padding(top = 8.dp),
-                    currentStreak = currentStreak?.length ?: 0,
-                    longestStreak = longestStreak?.length ?: 0
-                )
 
-                Spacer(modifier = Modifier.height(6.dp))
-            }
-        }
-
-        item {
-            Row(
+private fun LazyListScope.waffleDiagramItem(state: ActivityDetailsState) {
+    item {
+        state.waffleDiagramData ?: return@item
+        Column {
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.today),
-                    style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                    .animateItem()
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = colorScheme.primaryContainer,
+                    contentColor = contentColorFor(colorScheme.primaryContainer)
                 )
-
-                Box(
-                    Modifier
-                        .clip(shape = shapes.extraLarge)
-                        .background(
-                            if (shouldUseLimitTheme)
-                                colorScheme.errorContainer
-                            else
-                                colorScheme.tertiaryContainer
-                        )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    val todayCheckInAmount =
-                        activityUi.groupedCheckIns[today]?.sumOf { it.checkInCount } ?: 0
-
-                    val unitName = if (todayCheckInAmount == 1)
-                        unitNames.shortUnitSingular
-                    else
-                        unitNames.shortUnitPlural
-                    val displayText = "$todayCheckInAmount $unitName"
-
-                    AnimatedContent(
-                        targetState = displayText,
-                        transitionSpec = {
-                            (slideInVertically { it } + fadeIn()) togetherWith (slideOutVertically { -it } + fadeOut())
-                        }
-                    ) { text ->
-                        Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            color = if (shouldUseLimitTheme)
-                                colorScheme.onErrorContainer
-                            else
-                                colorScheme.onTertiaryContainer,
-                            text = text
-                        )
-                    }
+                    WaffleDiagram(waffleDiagramData = state.waffleDiagramData)
                 }
             }
             Spacer(modifier = Modifier.height(6.dp))
         }
+    }
+}
 
-        items(todaysCheckIns) { checkIn ->
-            CheckInItem(
-                checkInUi = checkIn,
-                isItemFirst = todaysCheckIns.first() == checkIn,
-                isItemLast = todaysCheckIns.last() == checkIn,
-                unitName = if (checkIn.checkInCount > 1)
-                    unitNames.shortUnitPlural
-                else
-                    unitNames.shortUnitSingular,
-                usesLimitColors = activityUi.referenceType == ReferenceType.LIMIT
+private fun LazyListScope.streakItem(state: ActivityDetailsState) {
+    item {
+        if (!state.showStreakCard) return@item
+        Column {
+            StreakCard(
+                modifier = Modifier
+                    .animateItem()
+                    .padding(top = 8.dp),
+                currentStreak = state.currentStreakLength,
+//                longestStreak = state.longestStreakLength
             )
+            Spacer(modifier = Modifier.height(6.dp))
+        }
+    }
+}
+
+private fun LazyListScope.todayHeaderItem(
+    state: ActivityDetailsState,
+    singularName: String,
+    pluralName: String,
+) {
+    item {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateItem()
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.today),
+                style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+
+            Box(
+                modifier = Modifier
+                    .clip(shape = shapes.extraLarge)
+                    .background(colorScheme.tertiaryContainer)
+            ) {
+                val unitName = if (state.todaysTotal == 1) singularName else pluralName
+                val displayText = "${state.todaysTotal} $unitName"
+
+                AnimatedContent(
+                    targetState = displayText,
+                    transitionSpec = {
+                        (slideInVertically { it } + fadeIn()) togetherWith (slideOutVertically { -it } + fadeOut())
+                    }
+                ) { text ->
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        color = colorScheme.onTertiaryContainer,
+                        text = text
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+    }
+}
+
+private fun LazyListScope.checkInItems(
+    state: ActivityDetailsState,
+    singularName: String,
+    pluralName: String,
+    onItemClick: (CheckInUi) -> Unit
+) {
+    if (state.todaysCheckIns.isEmpty()) {
+        item {
+            Box(
+                modifier = Modifier
+                    .animateItem()
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.nothing_logged_yet),
+                    style = typography.bodyLarge,
+                    color = colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    } else {
+        items(state.todaysCheckIns) { checkIn ->
+            CheckInItem(
+                modifier = Modifier
+                    .animateItem(),
+                checkInUi = checkIn,
+                isItemFirst = state.todaysCheckIns.first() == checkIn,
+                isItemLast = state.todaysCheckIns.last() == checkIn,
+                unitName = if (checkIn.amount > 1) pluralName else singularName,
+                usesLimitColors = state.useLimitTheme,
+                onClick = { onItemClick(checkIn) }
+            )
+        }
+    }
+}
+
+private fun LazyListScope.checkInHistory(
+    state: ActivityDetailsState,
+    onClick: () -> Unit
+) {
+    item {
+        Card(
+            modifier = Modifier
+                .animateItem(),
+            shape = RoundedCornerShape(
+                topStart = 28.dp,
+                topEnd = 28.dp,
+                bottomEnd = 28.dp,
+                bottomStart = 28.dp
+            ),
+            onClick = onClick,
+            colors = CardDefaults.cardColors(
+                containerColor = if (state.useLimitTheme)
+                    colorScheme.errorContainer
+                else
+                    colorScheme.primaryContainer,
+                contentColor = if (state.useLimitTheme)
+                    colorScheme.onErrorContainer
+                else
+                    colorScheme.onPrimaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.full_history)
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowForwardIos,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
