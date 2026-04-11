@@ -32,7 +32,7 @@ fun DefaultAmountCard(
         parentLayout = {
             SwitchPreference(
                 checked = state.useDefaultAmount,
-                title = stringResource(R.string.use_default_amount),
+                title = stringResource(R.string.override_default_amount),
                 subTitle = stringResource(R.string.use_default_amount_explanation),
                 columnPadding = PaddingValues(16.dp),
                 onCheckedChange = { onUseDefaultAmountToggle() }

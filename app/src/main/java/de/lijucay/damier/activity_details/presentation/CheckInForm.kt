@@ -120,8 +120,9 @@ fun CheckInForm(
         ) {
             Surface(
                 modifier =
-                    Modifier.requiredWidth(360.0.dp)
-                        .heightIn(max = 568.0.dp),
+                    Modifier
+                        .requiredWidth(360.0.dp)
+                        .heightIn(max = 720.0.dp),
                 shape = AlertDialogDefaults.shape,
                 color = AlertDialogDefaults.containerColor
             ) {

@@ -82,11 +82,11 @@
     <string name="laps">Laps</string>
     <string name="time">Time</string>
     <string name="times">Times</string>
-    <string name="x">x</string>
+    <string name="x" translatable="false">x</string>
     <string name="no_activity_selected">No activity selected</string>
     <string name="use_units">Use units</string>
     <string name="unit">Unit</string>
-    <string name="use_default_amount">Use default amount</string>
+    <string name="override_default_amount">Override default amount</string>
     <string name="use_units_explanation">Measure progress with a unit - like pages, minutes or times</string>
     <string name="tracking_options">Tracking options</string>
     <string name="title">Title</string>

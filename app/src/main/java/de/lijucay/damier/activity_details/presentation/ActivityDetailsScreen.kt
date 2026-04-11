@@ -55,7 +55,6 @@ import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
-import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.components.CookieButton
@@ -67,7 +66,6 @@ import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -107,13 +105,7 @@ fun ActivityDetailsScreen(
                     )
                 ) {
                     selectedActivity?.let {
-                        activityListViewModel.upsert(
-                            CheckInInfo(
-                                activityId = it.id,
-                                timestamp = LocalDateTime.now(),
-                                checkInCount = state.defaultAmount
-                            )
-                        )
+                        detailsViewModel.setCheckInFormMode(CheckInFormMode.Add(it.id))
                     }
                 }
             },

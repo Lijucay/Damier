@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Damier</string>
+    <string name="page">Seite</string>
+    <string name="pages">Seiten</string>
+    <string name="minute">Minute</string>
+    <string name="minutes">Minuten</string>
+    <string name="hour">Stunde</string>
+    <string name="hours">Stunden</string>
+    <string name="second">Sekunde</string>
+    <string name="seconds">Sekunden</string>
+    <string name="kilometer">Kilometer</string>
+    <string name="kilometers">Kilometer</string>
+    <string name="meter">Meter</string>
+    <string name="meters">Meter</string>
+    <string name="miles">Meile</string>
+    <string name="mile">Meilen</string>
+    <string name="foot">Fuß</string>
+    <string name="feet">Füße</string>
+    <string name="liter">Liter</string>
+    <string name="liters">Liter</string>
+    <string name="milliliter">Milliliter</string>
+    <string name="milliliters">Milliliter</string>
+    <string name="centiliter">Zentiliter</string>
+    <string name="centiliters">Zentiliter</string>
+    <string name="kilogram">Kilogramm</string>
+    <string name="kilograms">Kilogramm</string>
+    <string name="gram">Gramm</string>
+    <string name="grams">Gramm</string>
+    <string name="milligram">Milligramm</string>
+    <string name="milligrams">Milligramm</string>
+    <string name="calorie">Kalorie</string>
+    <string name="calories">Kalorien</string>
+    <string name="step">Schritt</string>
+    <string name="steps">Schritte</string>
+    <string name="glass">Glas</string>
+    <string name="glasses">Gläser</string>
+    <string name="cup">Tasse</string>
+    <string name="cups">Tassen</string>
+    <string name="chapter">Kapitel</string>
+    <string name="chapters">Kapitel</string>
+    <string name="book">Buch</string>
+    <string name="books">Bücher</string>
+    <string name="repetition">Wiederholung</string>
+    <string name="repetitions">Wiederholungen</string>
+    <string name="time">Mal</string>
+    <string name="times">Male</string>
+    <string name="title">Titel</string>
+    <string name="save">Speichern</string>
+    <string name="back">Zurück</string>
+    <string name="today">Heute</string>
+    <string name="show_reference">Referenz anzeigen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="credits">Hergestellt mit ♥️ in Deutschland</string>
+    <string name="version">Damier Version: %1$s</string>
+    <string name="current_streak">Aktueller Streak</string>
+    <string name="days">Tage</string>
+    <string name="delete">Löschen</string>
+    <string name="are_you_sure">Bist du sicher?</string>
+    <string name="edit">%1$s bearbeiten</string>
+    <string name="date">Datum</string>
+    <string name="select">Auswählen</string>
+    <string name="failed_to_create_backup">Backup-Datei konnte nicht erstellt werden</string>
+    <string name="export_import">Exportieren/Importieren</string>
+    <string name="import_data">Daten importieren</string>
+    <string name="import_data_summary">Importiere eine Backup-Datei in Damier</string>
+    <string name="full_history">Vollständiger Verlauf</string>
+    <string name="import_successful">Daten wurden erfolgreich importiert</string>
+    <string name="success">Erfolg</string>
+    <string name="import_error">Daten konnten nicht importiert werden</string>
+    <string name="unknown_failure">Unbekannter Fehler</string>
+    <string name="app_settings">App-Einstellungen</string>
+    <string name="restart">Neustart</string>
+    <string name="check_in">Eintragen</string>
+    <string name="add_activity">Aktivität hinzufügen</string>
+    <string name="hour_short_singular">Std.</string>
+    <string name="hour_short_plural">Std.</string>
+    <string name="minute_short_singular">Min.</string>
+    <string name="minute_short_plural">Min.</string>
+    <string name="second_short_singular">Sek.</string>
+    <string name="second_short_plural">Sek.</string>
+    <string name="kilometer_short">km</string>
+    <string name="meter_short">m</string>
+    <string name="mile_short">mi</string>
+    <string name="foot_short">ft</string>
+    <string name="yard">Yard</string>
+    <string name="yards">Yards</string>
+    <string name="yard_short">yd</string>
+    <string name="liter_short">l</string>
+    <string name="milliliter_short">ml</string>
+    <string name="centiliter_short">cl</string>
+    <string name="gallon">Gallone</string>
+    <string name="gallons">Gallonen</string>
+    <string name="gallon_short">gal</string>
+    <string name="fluid_ounce">Flüssigunze</string>
+    <string name="fluid_ounces">Flüssigunzen</string>
+    <string name="fluid_ounce_short">fl oz</string>
+    <string name="kilogram_short">kg</string>
+    <string name="gram_short">g</string>
+    <string name="milligram_short">mg</string>
+    <string name="pound">Pfund</string>
+    <string name="pounds">Pfund</string>
+    <string name="pound_short">lb</string>
+    <string name="ounce">Unze</string>
+    <string name="ounces">Unzen</string>
+    <string name="ounce_short">oz</string>
+    <string name="kcal">kcal</string>
+    <string name="set">Satz</string>
+    <string name="sets">Sätze</string>
+    <string name="lap">Runde</string>
+    <string name="laps">Runden</string>
+    <string name="no_activity_selected">Keine Aktivität ausgewählt</string>
+    <string name="use_units">Einheiten verwenden</string>
+    <string name="unit">Einheit</string>
+    <string name="override_default_amount">Standardmenge überschreiben</string>
+    <string name="use_units_explanation">Fortschritt mit einer Einheit messen – z.B. Seiten, Minuten oder Mal</string>
+    <string name="tracking_options">Tracking-Optionen</string>
+    <string name="use_default_amount_explanation">Wenn aktiviert, wird beim Eintragen diese Menge automatisch erfasst, ohne nachzufragen.</string>
+    <string name="override_reference_type">Referenztyp überschreiben</string>
+    <string name="override_reference_type_explanation">Wenn aktiviert, werden das Board und die Zellen basierend auf diesem Typ eingefärbt. Andernfalls richtet sich die Färbung nach dem höchsten aktuell sichtbaren Wert auf dem Board.</string>
+    <string name="reference_type">Referenztyp</string>
+    <string name="default_amount">Standardmenge</string>
+    <string name="show_reference_explanation">Wenn aktiviert, wird der Referenztyp und -wert als Beschriftung auf der Karte angezeigt (z.B. Limit: 10)</string>
+    <string name="show_max">Höchstwert anzeigen</string>
+    <string name="show_max_explanation">Wenn aktiviert, wird der bisher höchste eingetragene Wert dieser Aktivität als Beschriftung auf der Karte angezeigt.</string>
+    <string name="activity_options">Aktivitätsoptionen</string>
+    <string name="edit_activity">Aktivität bearbeiten</string>
+    <string name="deletion_information_activity">Das Löschen dieser Aktivität entfernt auch alle bisherigen Einträge. Ohne ein aktuelles Backup kann das nicht rückgängig gemacht werden.</string>
+    <string name="deletion_information_check_in">Das Löschen dieses Eintrags kann nicht rückgängig gemacht werden.</string>
+    <string name="edit_check_in">Eintrag bearbeiten</string>
+    <string name="amount">Menge</string>
+    <string name="invalid_directory">Ungültiger Ordner ausgewählt</string>
+    <string name="backup_data">Daten sichern</string>
+    <string name="backup_data_summary">Aktuelle Daten sichern</string>
+    <string name="no_activities">Noch keine Aktivitäten. Füge eine hinzu, um loszulegen.</string>
+    <string name="nothing_logged_yet">Noch nichts eingetragen</string>
+    <string name="backup_successful">Daten erfolgreich gesichert</string>
+    <string name="back_up_error">Daten konnten nicht gesichert werden</string>
+    <string name="enable_crashlytics">Google Crashlytics aktivieren</string>
+    <string name="crashlytics_info">Wenn aktiviert, werden Absturzberichte und Fehlerprotokolle an Firebase gesendet, um die App zu verbessern</string>
+    <string name="restart_info">Die App muss neu gestartet werden, um die Änderungen zu übernehmen</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="privacy_policy_sum">Erfahre, wie deine Daten verarbeitet werden.</string>
+
+    <string-array name="streak_m_ns">
+        <item>Tipp drauf. Einmal reicht.</item>
+        <item>Von alleine fängt das nicht an.</item>
+        <item>Der Knopf ist direkt da.</item>
+        <item>Null ist peinlich.</item>
+        <item>Einmal drücken. Bitte.</item>
+        <item>Fang an. Bitte. Einfach anfangen.</item>
+        <item>Na, das ist unangenehm.</item>
+        <item>Jederzeit gerne.</item>
+        <item>Na los.</item>
+        <item>Kein Stress, aber fang an.</item>
+        <item>Mutig, so zu warten.</item>
+    </string-array>
+
+    <string-array name="streak_m_s">
+        <item>Du hast noch nicht aufgehört. Noch nicht.</item>
+        <item>Die Streak lebt. Vorerst.</item>
+        <item>Jetzt bloß nicht aufhören!</item>
+        <item>Wer bist du nochmal?</item>
+        <item>Streak intakt. Gern geschehen.</item>
+        <item>Läuft. So halbwegs.</item>
+        <item>Jetzt nicht versauen!</item>
+        <item>Streak-Status: Überraschend lebendig.</item>
+        <item>Noch dabei? Respekt.</item>
+        <item>Nicht schlecht. Weiter so.</item>
+        <item>Die Streak ist fragil. Vorsicht.</item>
+        <item>Du bist auf Kurs. Mini-Kurs.</item>
+    </string-array>
+
+    <string-array name="streak_m_m">
+        <item>Noch hier? Ehrlich überrascht.</item>
+        <item>Die Streak wird langsam arrogant.</item>
+        <item>Eine Woche. Ruin es nicht.</item>
+        <item>Okay, du bist konsistent. Ugh.</item>
+        <item>Das hat die App nicht erwartet.</item>
+        <item>Die Streak ist echt. Behandle sie gut.</item>
+        <item>Du ziehst das durch. Irgendwie.</item>
+        <item>Fast eine Gewohnheit. Fast.</item>
+        <item>Du läufst verdächtig gut.</item>
+        <item>Aufhören wird schwerer. Gut so.</item>
+        <item>Eine Woche durch. Keine Ausreden.</item>
+        <item>Gewohnheit lädt… Bitte warten</item>
+        <item>Fast beeindruckend. Fast.</item>
+        <item>Du steckst zu tief drin zum Aufhören.</item>
+        <item>Jetzt aufzuhören wäre kriminell.</item>
+    </string-array>
+
+    <string-array name="streak_m_l">
+        <item>Die Gewohnheit lebt.</item>
+        <item>Das bist du jetzt.</item>
+        <item>Kein Zurück mehr. Sorry.</item>
+        <item>Aufhören geht nicht. Wär zu komisch.</item>
+        <item>Die Gewohnheit beobachtet dich beim Schlafen.</item>
+        <item>Widerstand ist zwecklos.</item>
+        <item>Du bist jetzt so eine Art große Sache.</item>
+        <item>Die Streak ist permanent. Quasi.</item>
+    </string-array>
+</resources>
