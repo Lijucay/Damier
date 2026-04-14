@@ -12,13 +12,13 @@ plugins {
 configure<ApplicationExtension> {
     namespace = "de.lijucay.damier"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "de.lijucay.damier"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 4
         versionName = "0.2.0-alpha"
 

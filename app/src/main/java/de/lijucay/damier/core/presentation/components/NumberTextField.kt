@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -20,6 +22,8 @@ import androidx.compose.ui.unit.dp
 fun NumberTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    cursorBrush: Brush = SolidColor(colorScheme.primary),
+    textColor: Color = colorScheme.primary,
     focusRequester: FocusRequester,
 ) {
     BasicTextField(
@@ -28,9 +32,9 @@ fun NumberTextField(
             .focusRequester(focusRequester),
         value = value,
         onValueChange = onValueChange,
-        cursorBrush = SolidColor(colorScheme.primary),
+        cursorBrush = cursorBrush,
         textStyle = typography.bodyLarge.copy(
-            color = colorScheme.primary,
+            color = textColor,
             fontWeight = FontWeight.Bold
         ),
         keyboardOptions = KeyboardOptions(

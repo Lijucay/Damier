@@ -10,7 +10,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.layout.AdaptStrategy
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldDefaults
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -27,23 +27,16 @@ import de.lijucay.damier.activity_details.presentation.EditActivityScreen
 import de.lijucay.damier.activity_list.presentation.ActivityListScreen
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.activity_list.presentation.AddActivityItemScreen
-import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.data.wrapper.toCheckInInfo
 import de.lijucay.damier.core.domain.DeletionMode
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.DetailsDestination
 import de.lijucay.damier.core.presentation.components.AdaptivePane
 import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
-import de.lijucay.damier.core.presentation.getRandomCheckInInfo
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -57,7 +50,7 @@ class MainActivity : ComponentActivity() {
             val activityListViewModel = koinViewModel<ActivityListViewModel>()
             koinViewModel<ActivityDetailsViewModel>()
 
-            val windowAdaptiveInfo = currentWindowAdaptiveInfo()
+            val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
             val isWidthAtLeastExpanded = windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(
                 WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
             )

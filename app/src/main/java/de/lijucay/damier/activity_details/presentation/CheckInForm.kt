@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -33,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.getSelectedDate
 import androidx.compose.material3.isInputValid
 import androidx.compose.material3.rememberDatePickerState
@@ -45,6 +47,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -124,7 +128,7 @@ fun CheckInForm(
                         .requiredWidth(360.0.dp)
                         .heightIn(max = 720.0.dp),
                 shape = AlertDialogDefaults.shape,
-                color = AlertDialogDefaults.containerColor
+                color = if (useLimitTheme) colorScheme.errorContainer else AlertDialogDefaults.containerColor
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Box(
@@ -136,7 +140,9 @@ fun CheckInForm(
                             modifier = Modifier
                                 .padding(top = 16.dp)
                                 .size(AlertDialogDefaults.IconSize),
-                            tint = AlertDialogDefaults.iconContentColor,
+                            tint = if (useLimitTheme) {
+                                colorScheme.onErrorContainer
+                            } else AlertDialogDefaults.iconContentColor,
                             imageVector = when (mode) {
                                 is CheckInFormMode.Add -> Icons.Rounded.Bolt
                                 is CheckInFormMode.Edit -> Icons.Rounded.Edit
@@ -179,7 +185,7 @@ fun CheckInForm(
                                     .clip(shape = shapes.extraLarge)
                                     .background(
                                         if (useLimitTheme)
-                                            colorScheme.error
+                                            colorScheme.onErrorContainer
                                         else
                                             colorScheme.tertiaryContainer
                                     )
@@ -188,7 +194,7 @@ fun CheckInForm(
                                 Text(
                                     modifier = Modifier.padding(horizontal = 8.dp),
                                     color = if (useLimitTheme)
-                                        colorScheme.onError
+                                        colorScheme.errorContainer
                                     else
                                         colorScheme.onTertiaryContainer,
                                     text = dateState.getSelectedDate()!!.toDisplayableDate().formatted
@@ -198,6 +204,28 @@ fun CheckInForm(
 
                         AnimatedVisibility(visible = state.showDatePicker) {
                             DatePicker(
+                                colors = if (useLimitTheme) {
+                                    DatePickerDefaults.colors(
+                                        containerColor = colorScheme.errorContainer,
+                                        weekdayContentColor = colorScheme.onErrorContainer,
+                                        yearContentColor = colorScheme.onErrorContainer,
+                                        currentYearContentColor = colorScheme.onErrorContainer,
+                                        disabledYearContentColor = colorScheme.onErrorContainer.copy(0.5f),
+                                        selectedYearContainerColor = colorScheme.onErrorContainer,
+                                        selectedYearContentColor = colorScheme.errorContainer,
+                                        dayContentColor = colorScheme.onErrorContainer,
+                                        selectedDayContainerColor = colorScheme.onErrorContainer,
+                                        selectedDayContentColor = colorScheme.errorContainer,
+                                        disabledDayContentColor = colorScheme.onErrorContainer.copy(0.5f),
+                                        todayDateBorderColor = colorScheme.onErrorContainer,
+                                        todayContentColor = colorScheme.onErrorContainer,
+                                        subheadContentColor = colorScheme.onErrorContainer,
+                                        dividerColor = colorScheme.onErrorContainer,
+                                        navigationContentColor = colorScheme.onErrorContainer,
+                                    )
+                                } else {
+                                    DatePickerDefaults.colors()
+                                },
                                 state = dateState,
                                 showModeToggle = false,
                                 title = null,
@@ -218,7 +246,7 @@ fun CheckInForm(
                                     .clip(shape = shapes.extraLarge)
                                     .background(
                                         if (useLimitTheme)
-                                            colorScheme.error
+                                            colorScheme.onErrorContainer
                                         else
                                             colorScheme.tertiaryContainer
                                     )
@@ -227,7 +255,7 @@ fun CheckInForm(
                                 Text(
                                     modifier = Modifier.padding(horizontal = 8.dp),
                                     color = if (useLimitTheme)
-                                        colorScheme.onError
+                                        colorScheme.errorContainer
                                     else
                                         colorScheme.onTertiaryContainer,
                                     text = LocalTime.of(timeState.hour, timeState.minute)
@@ -242,6 +270,24 @@ fun CheckInForm(
                                 contentAlignment = Alignment.Center
                             ) {
                                 TimePicker(
+                                    colors = if (useLimitTheme) {
+                                        TimePickerDefaults.colors(
+                                            containerColor = colorScheme.errorContainer,
+                                            timeSelectorSelectedContainerColor = colorScheme.onErrorContainer,
+                                            timeSelectorSelectedContentColor = colorScheme.errorContainer,
+                                            timeSelectorUnselectedContentColor = colorScheme.onErrorContainer,
+                                            timeSelectorUnselectedContainerColor = colorScheme.errorContainer,
+                                            periodSelectorSelectedContainerColor = colorScheme.onErrorContainer,
+                                            periodSelectorBorderColor = colorScheme.errorContainer,
+                                            clockDialSelectedContentColor = colorScheme.errorContainer,
+                                            clockDialUnselectedContentColor = colorScheme.onErrorContainer,
+                                            periodSelectorSelectedContentColor = colorScheme.errorContainer,
+                                            clockDialColor = colorScheme.errorContainer,
+                                            selectorColor = colorScheme.onErrorContainer,
+                                            periodSelectorUnselectedContainerColor = colorScheme.errorContainer,
+                                            periodSelectorUnselectedContentColor = colorScheme.onErrorContainer
+                                        )
+                                    } else TimePickerDefaults.colors(),
                                     state = timeState
                                 )
                             }
@@ -266,7 +312,13 @@ fun CheckInForm(
                             NumberTextField(
                                 value = state.amount,
                                 onValueChange = formViewModel::setAmount,
-                                focusRequester = focusRequester
+                                focusRequester = focusRequester,
+                                cursorBrush = SolidColor(
+                                    if (useLimitTheme) {
+                                        colorScheme.onErrorContainer
+                                    } else colorScheme.primary
+                                ),
+                                textColor = if (useLimitTheme) colorScheme.onErrorContainer else colorScheme.primary
                             )
                         }
                     }
@@ -274,7 +326,7 @@ fun CheckInForm(
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
-                            .padding(bottom = 16.dp)
+                            .padding(vertical = 8.dp)
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -282,6 +334,7 @@ fun CheckInForm(
                             onClick = onDismissRequest
                         ) {
                             Text(
+                                color = if (useLimitTheme) colorScheme.onErrorContainer else Color.Unspecified,
                                 text = stringResource(android.R.string.cancel)
                             )
                         }
@@ -292,6 +345,7 @@ fun CheckInForm(
                                 is CheckInFormMode.Edit -> {
                                     TextButton(onClick = { onDeleteRequest(mode.checkIn) }) {
                                         Text(
+                                            color = if (useLimitTheme) colorScheme.onErrorContainer else Color.Unspecified,
                                             text = stringResource(R.string.delete)
                                         )
                                     }
@@ -316,7 +370,10 @@ fun CheckInForm(
                                     }
                                 }
                             ) {
-                                Text(text = stringResource(R.string.save))
+                                Text(
+                                    color = if (useLimitTheme) colorScheme.onErrorContainer else Color.Unspecified,
+                                    text = stringResource(R.string.save)
+                                )
                             }
                         }
                     }
