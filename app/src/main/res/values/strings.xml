@@ -141,6 +141,12 @@
     <string name="restart">Restart</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_sum">Learn how your data is handled.</string>
+    <string name="statistics">Statistics</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="check_ins">Check-ins</string>
+    <string name="streak">Streak</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

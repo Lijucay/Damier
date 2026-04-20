@@ -26,6 +26,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.QueryStats
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,10 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
+import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.getShortUnitNamesById
@@ -82,6 +87,10 @@ fun ActivityDetailsScreen(
     val isHeightAtLeastExpanded by uiViewModel.isHeightAtLeastExpanded.collectAsStateWithLifecycle()
     val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
     val state by detailsViewModel.state.collectAsStateWithLifecycle()
+
+    val statsDialogState = rememberModalBottomSheetState()
+
+    var showStats by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -122,6 +131,14 @@ fun ActivityDetailsScreen(
             },
             topAppBarActions = {
                 selectedActivity?.let { activity ->
+                    IconButton(
+                        onClick = { showStats = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.QueryStats,
+                            contentDescription = null
+                        )
+                    }
                     IconButton(onClick = onEditActivity) {
                         Icon(
                             imageVector = Icons.Rounded.Edit,
@@ -201,6 +218,18 @@ fun ActivityDetailsScreen(
                 mode = CheckInFormMode.Edit(it)
             )
         }
+    }
+
+    if (showStats) {
+        StatsBottomSheet(
+            state = state,
+            dialogState = statsDialogState,
+            onDismissRequest = {
+                scope.launch { statsDialogState.hide() }.invokeOnCompletion {
+                    showStats = false
+                }
+            }
+        )
     }
 }
 

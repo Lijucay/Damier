@@ -47,6 +47,10 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+
+    implementation (libs.compose.graph)
     implementation(libs.process.phoenix)
 
     implementation(platform(libs.firebase.bom))

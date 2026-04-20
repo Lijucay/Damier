@@ -1,10 +1,12 @@
 package de.lijucay.damier.activity_details.presentation
 
+import de.lijucay.damier.core.data.entities.Streak
 import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
+import de.lijucay.damier.core.presentation.models.StreakUi
 import java.time.LocalDate
 
 data class ActivityDetailsState(
@@ -14,6 +16,7 @@ data class ActivityDetailsState(
     val defaultAmount: Int = 1,
     val waffleDiagramData: WaffleDiagramData? = null,
     val allCheckIns: Map<LocalDate, List<CheckInUi>> = emptyMap(),
+    val streaks: List<StreakUi> = emptyList(),
     val todaysCheckIns: List<CheckInUi> = emptyList(),
     val todaysTotal: Int = 0,
     val currentStreakLength: Int = 0,
@@ -38,6 +41,7 @@ data class ActivityDetailsState(
                     checkIns = activity.groupedCheckIns.values.flatten()
                 ),
                 allCheckIns = activity.groupedCheckIns,
+                streaks = activity.streaks,
                 todaysCheckIns = todaysCheckIns,
                 todaysTotal = todaysCheckIns.sumOf { it.amount },
                 currentStreakLength = activity.streaks
