@@ -1,6 +1,14 @@
 package de.lijucay.damier
 
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProviderInfo
+import android.content.ComponentName
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +27,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.glance.ExperimentalGlanceApi
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.runComposition
+import androidx.glance.appwidget.setWidgetPreviews
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsScreen
@@ -35,8 +49,16 @@ import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
+import de.lijucay.damier.widget.presentation.DamierWidget
+import de.lijucay.damier.widget.presentation.DamierWidgetReceiver
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.util.UUID
+import androidx.core.graphics.createBitmap
+import androidx.lifecycle.lifecycleScope
+import de.lijucay.damier.widget.presentation.DamierWidgetState
+import kotlinx.coroutines.flow.first
+import java.io.File
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -44,8 +66,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        setContent {
+        val activityId = intent.getStringExtra("activityId")?.let { id ->
+            UUID.fromString(id)
+        }
 
+        setContent {
             val uiViewModel = koinViewModel<UIViewModel>()
             val activityListViewModel = koinViewModel<ActivityListViewModel>()
             koinViewModel<ActivityDetailsViewModel>()
@@ -71,6 +96,13 @@ class MainActivity : ComponentActivity() {
                         ) else AdaptStrategy.Hide
                 )
             )
+
+            LaunchedEffect(activityId) {
+                activityId?.let { id ->
+                    activityListViewModel.observeSelectedActivity(id)
+                    scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                }
+            }
 
             val detailsPage by uiViewModel.detailsPage.collectAsStateWithLifecycle()
             val deletionMode by uiViewModel.deletionDialogMode.collectAsStateWithLifecycle()

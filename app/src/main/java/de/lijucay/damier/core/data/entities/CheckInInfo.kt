@@ -26,5 +26,5 @@ data class CheckInInfo(
     @PrimaryKey(autoGenerate = false) val id: UUID = UUID.randomUUID(),
     val activityId: UUID,
     val timestamp: LocalDateTime,
-    @ColumnInfo(defaultValue = "0") val checkInCount: Int
+    @ColumnInfo(defaultValue = "0") val amount: Int
 )

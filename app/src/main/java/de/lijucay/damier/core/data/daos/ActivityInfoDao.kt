@@ -26,7 +26,13 @@ interface ActivityInfoDao {
     fun observeSelectedActivity(id: UUID): Flow<Activity?>
 
     @Query("SELECT * FROM ActivityInfo WHERE id = :id LIMIT 1")
-    suspend fun getActivityById(id: UUID): ActivityInfo?
+    suspend fun getActivityInfoById(id: UUID): ActivityInfo?
+
+    @Query("SELECT * FROM ActivityInfo WHERE id = :id LIMIT 1")
+    suspend fun getActivityById(id: UUID): Activity?
+
+    @Query("SELECT * FROM ActivityInfo")
+    suspend fun getActivitiesForWidgetConfig(): List<ActivityInfo>
 
     @Transaction
     @Query("SELECT * FROM ActivityInfo")

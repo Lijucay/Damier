@@ -17,7 +17,7 @@ configure<ApplicationExtension> {
 
     defaultConfig {
         applicationId = "de.lijucay.damier"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 37
         versionCode = 5
         versionName = "0.2.1-alpha"
@@ -47,6 +47,10 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
+    implementation(libs.vico.compose.m3)
+
+    debugImplementation(libs.androidx.glance.appwidget.preview)
+
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
 

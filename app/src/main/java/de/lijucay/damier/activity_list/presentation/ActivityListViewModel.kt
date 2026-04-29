@@ -1,8 +1,10 @@
 package de.lijucay.damier.activity_list.presentation
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
+import androidx.glance.appwidget.updateAll
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import de.lijucay.damier.DamierApplication
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.wrapper.toActivityInfo
@@ -14,6 +16,8 @@ import de.lijucay.damier.core.domain.ExportUtil
 import de.lijucay.damier.core.domain.ImportUtil
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
+import de.lijucay.damier.widget.presentation.DamierWidget
+import de.lijucay.damier.widget.presentation.DamierWidgetState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,8 +33,9 @@ import java.util.UUID
 class ActivityListViewModel(
     private val repository: ActivityRepository,
     private val importUtil: ImportUtil,
-    private val exportUtil: ExportUtil
-) : ViewModel() {
+    private val exportUtil: ExportUtil,
+    application: DamierApplication
+) : AndroidViewModel(application = application) {
     private val _activities = MutableStateFlow(emptyList<ActivityUi>())
     val activities = _activities
         .onStart { loadActivities() }
@@ -74,24 +79,30 @@ class ActivityListViewModel(
     }
 
     fun upsert(checkIn: CheckInInfo) {
+        val context = getApplication<DamierApplication>()
         viewModelScope.launch {
             repository.upsertCheckIn(checkIn)
+            DamierWidgetState.updateWidgetForActivity(context, checkIn.activityId)
         }
     }
 
     fun deleteActivity(activityUi: ActivityUi) {
         val activity = activityUi.toActivityInfo()
+        val context = getApplication<DamierApplication>()
 
         viewModelScope.launch {
             repository.deleteActivity(activity)
+            DamierWidgetState.updateWidgetForActivity(context, activityUi.id)
         }
     }
 
     fun deleteCheckIn(checkInUi: CheckInUi) {
         val checkIn = checkInUi.toCheckInInfo()
+        val context = getApplication<DamierApplication>()
 
         viewModelScope.launch {
             repository.deleteCheckIn(checkIn)
+            DamierWidgetState.updateWidgetForActivity(context, checkInUi.activityId)
         }
     }
 

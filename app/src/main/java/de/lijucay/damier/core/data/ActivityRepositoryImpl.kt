@@ -19,7 +19,7 @@ class ActivityRepositoryImpl(
 
     override fun observeActivity(id: UUID): Flow<Activity?> = activityDao.observeSelectedActivity(id)
 
-    override suspend fun getActivityById(id: UUID): ActivityInfo? = activityDao.getActivityById(id)
+    override suspend fun getActivityById(id: UUID): ActivityInfo? = activityDao.getActivityInfoById(id)
 
     override suspend fun upsertActivity(activity: ActivityInfo) = activityDao.upsert(activity)
 
@@ -36,7 +36,7 @@ class ActivityRepositoryImpl(
     }
 
     private suspend fun recalculateStreakForActivity(activityId: UUID) {
-        val activity = activityDao.getActivityById(activityId) ?: return
+        val activity = activityDao.getActivityInfoById(activityId) ?: return
         streakDataSource.recalculateStreak(
             activityId = activityId,
             reference = if (activity.referenceType == ReferenceType.GOAL) activity.reference else 1

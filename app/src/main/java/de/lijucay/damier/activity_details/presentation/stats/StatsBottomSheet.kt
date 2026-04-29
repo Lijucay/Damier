@@ -2,11 +2,20 @@ package de.lijucay.damier.activity_details.presentation.stats
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.CompareArrows
+import androidx.compose.material.icons.rounded.CompareArrows
+import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -34,8 +43,7 @@ fun StatsBottomSheet(
         dragHandle = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BottomSheetDefaults.DragHandle()
                 Text(
@@ -45,12 +53,90 @@ fun StatsBottomSheet(
             }
         }
     ) {
-        TimelineGraph(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            state = state
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Spacer(Modifier.height(16.dp))
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Timeline,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = stringResource(R.string.timeline),
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(R.string.timeline_expl),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
+                    TimelineGraph(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp),
+                        state = state
+                    )
+                }
+            }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.CompareArrows,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = stringResource(R.string.week_comparison),
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(R.string.week_comparison_expl),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
+                    ComparisonChart(
+                        modifier = Modifier
+                            .height(260.dp)
+                            .padding(vertical = 16.dp),
+                        state = state
+                    )
+                }
+            }
+        }
 
         // Todo: Check-ins per week day per week
         //  (pie-chart for weekdays vs. weekends,

@@ -1,19 +1,19 @@
 [versions]
 adaptive = "1.3.0-alpha10"
-agp = "9.1.1"
+agp = "9.2.0"
 datastore = "1.2.1"
 datastorePreferencesAndroid = "1.2.1"
 firebaseBom = "34.12.0"
-glanceMaterial3 = "1.1.1"
-kotlin = "2.3.20"
+glanceMaterial3 = "1.2.0-rc01"
+kotlin = "2.3.21"
 coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-composeBom = "2026.03.01"
-materialAlpha = "1.5.0-alpha17"
+composeBom = "2026.04.01"
+materialAlpha = "1.5.0-alpha18"
 materialIconsCore = "1.7.8"
 
 koin = "4.2.1"
@@ -23,12 +23,15 @@ room = "2.8.4"
 ksp = "2.3.2"
 
 composeGraph = "0.2.5"
-navigationCompose = "2.9.7"
-gson = "2.13.2"
+navigationCompose = "2.9.8"
+gson = "2.14.0"
 documentfile = "1.1.0"
+
+vico = "3.1.0"
 
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceMaterial3" }
+androidx-glance-appwidget-preview = { module = "androidx.glance:glance-appwidget-preview", version.ref = "glanceMaterial3" }
 androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glanceMaterial3" }
 com-google-code-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
@@ -69,6 +72,8 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 compose-graph = { group = "io.github.ehsannarmani", name = "compose-charts", version.ref = "composeGraph" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
+
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]

@@ -43,10 +43,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,9 +85,9 @@ fun ActivityDetailsScreen(
     val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
     val state by detailsViewModel.state.collectAsStateWithLifecycle()
 
-    val statsDialogState = rememberModalBottomSheetState()
-
-    var showStats by remember { mutableStateOf(false) }
+    val statsDialogState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -132,7 +129,9 @@ fun ActivityDetailsScreen(
             topAppBarActions = {
                 selectedActivity?.let { activity ->
                     IconButton(
-                        onClick = { showStats = true }
+                        onClick = {
+                            detailsViewModel.setShowStatsDialog(true)
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.QueryStats,
@@ -220,13 +219,13 @@ fun ActivityDetailsScreen(
         }
     }
 
-    if (showStats) {
+    if (state.showStatsDialog) {
         StatsBottomSheet(
             state = state,
             dialogState = statsDialogState,
             onDismissRequest = {
                 scope.launch { statsDialogState.hide() }.invokeOnCompletion {
-                    showStats = false
+                    detailsViewModel.setShowStatsDialog(false)
                 }
             }
         )

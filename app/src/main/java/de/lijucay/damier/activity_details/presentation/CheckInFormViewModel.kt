@@ -42,7 +42,7 @@ class CheckInFormViewModel : ViewModel() {
             id = checkInId,
             activityId = activityId,
             timestamp = s.dateTime.value,
-            checkInCount = s.amount.text.toInt()
+            amount = s.amount.text.toInt()
         )
     }
 

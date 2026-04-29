@@ -23,11 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.core.presentation.bottomPadding
+import de.lijucay.damier.widget.presentation.DamierWidget
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 import java.util.UUID
@@ -77,7 +79,7 @@ fun ActivityList(
             ) {
                 items(
                     activities,
-                    key = { it -> it.id }
+                    key = { it.id }
                 ) { activityUi ->
                     ActivityListItem(
                         modifier = Modifier.animateItem(fadeInSpec = motionScheme.defaultSpatialSpec()),
@@ -86,7 +88,7 @@ fun ActivityList(
                             val checkIn = CheckInInfo(
                                 activityId = activityUi.id,
                                 timestamp = LocalDateTime.now(),
-                                checkInCount = activityUi.defaultAmount
+                                amount = activityUi.defaultAmount
                             )
 
                             activityListViewModel.upsert(checkIn)

@@ -147,6 +147,15 @@
     <string name="year">Year</string>
     <string name="check_ins">Check-ins</string>
     <string name="streak">Streak</string>
+    <string name="activities">Activities</string>
+    <string name="amount_of_reference">%1$d/%2$d</string>
+    <string name="activity_widget_preview">Reading</string>
+    <string name="timeline">Timeline</string>
+    <string name="timeline_expl">Total amount over time</string>
+    <string name="this_week">This week</string>
+    <string name="last_week">Last week</string>
+    <string name="week_comparison">Week comparison</string>
+    <string name="week_comparison_expl">Total daily amounts for the current week in comparison to last week</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

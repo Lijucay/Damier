@@ -1,0 +1,15 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:configure="de.lijucay.damier.widget.presentation.DamierWidgetConfigActivity"
+    android:resizeMode="horizontal|vertical"
+    android:minWidth="160dp"
+    android:minHeight="160dp"
+    android:minResizeWidth="160dp"
+    android:minResizeHeight="160dp"
+    android:maxResizeHeight="160dp"
+    android:maxResizeWidth="160dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:previewImage="@drawable/widget_preview"
+    android:updatePeriodMillis="3600000">
+</appwidget-provider>

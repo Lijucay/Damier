@@ -1,9 +1,8 @@
 package de.lijucay.damier.activity_details.presentation
 
-import de.lijucay.damier.core.data.entities.Streak
-import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.StreakUi
@@ -22,7 +21,8 @@ data class ActivityDetailsState(
     val currentStreakLength: Int = 0,
     val longestStreakLength: Int = 0,
     val checkInFormMode: CheckInFormMode? = null,
-    val showCheckInHistory: Boolean = false
+    val showCheckInHistory: Boolean = false,
+    val showStatsDialog: Boolean = false
 ) {
     val useLimitTheme: Boolean get() = referenceType == ReferenceType.LIMIT
     val showStreakCard: Boolean get() = referenceType != ReferenceType.LIMIT

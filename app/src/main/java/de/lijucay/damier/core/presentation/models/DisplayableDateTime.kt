@@ -27,6 +27,6 @@ fun CheckInInfo.toCheckInUi(): CheckInUi {
         id = id,
         activityId = activityId,
         dateTime = timestamp.toDisplayableDateTime(),
-        amount = checkInCount
+        amount = amount
     )
 }
