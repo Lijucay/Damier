@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.FadingEdges
+import com.patrykandpatrick.vico.compose.cartesian.Scroll
 import com.patrykandpatrick.vico.compose.cartesian.axis.HorizontalAxis
 import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
@@ -27,6 +28,7 @@ import com.patrykandpatrick.vico.compose.cartesian.marker.DefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.LineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.Insets
 import com.patrykandpatrick.vico.compose.common.MarkerCornerBasedShape
@@ -94,15 +96,17 @@ fun TimelineGraph(
         pointProvider = LineCartesianLayer.PointProvider.single(
             LineCartesianLayer.Point(
                 component = rememberShapeComponent(
-                    fill = Fill(MaterialTheme.colorScheme.primary),
+                    fill = Fill(MaterialTheme.colorScheme.tertiary),
                     shape = CircleShape
                 ),
                 size = 8.dp
             )
-        )
+        ),
+        fill = LineCartesianLayer.LineFill.single(Fill(MaterialTheme.colorScheme.primary))
     )
 
     CartesianChartHost(
+        scrollState = rememberVicoScrollState(initialScroll = Scroll.Absolute.End),
         modifier = modifier,
         chart = rememberCartesianChart(
             rememberLineCartesianLayer(

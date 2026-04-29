@@ -40,8 +40,8 @@ fun ComparisonChart(
     val lastMonday = remember { monday.minusWeeks(1) }
     val locale = remember { Locale.getDefault() }
 
-    val currentWeekColor = MaterialTheme.colorScheme.onPrimaryContainer
-    val lastWeekColor = MaterialTheme.colorScheme.onSecondaryContainer
+    val currentWeekColor = MaterialTheme.colorScheme.primary
+    val lastWeekColor = MaterialTheme.colorScheme.secondary
 
     val bars = remember(state.allCheckIns, locale) {
         (0..6).map { offset ->
