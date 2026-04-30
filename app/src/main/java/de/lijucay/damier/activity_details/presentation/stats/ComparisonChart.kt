@@ -83,11 +83,16 @@ fun ComparisonChart(
         ),
         indicatorProperties = HorizontalIndicatorProperties(
             textStyle = MaterialTheme.typography.bodySmall
+                .copy(color = MaterialTheme.colorScheme.onSurface)
         ),
         labelProperties = LabelProperties(
             enabled = true,
-            textStyle = MaterialTheme.typography.bodySmall,
+            textStyle = MaterialTheme.typography.bodySmall
+                .copy(color = MaterialTheme.colorScheme.onSurface),
             rotation = LabelProperties.Rotation(degree = 0f)
+        ),
+        labelHelperProperties = LabelHelperProperties(
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface)
         ),
         gridProperties = GridProperties(
             enabled = true,
