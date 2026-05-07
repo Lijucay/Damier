@@ -133,7 +133,7 @@
     <string name="success">Success</string>
     <string name="back_up_error">Couldn\'t backup data</string>
     <string name="import_error">Couldn\'t import data</string>
-    <string name="unknown_failure">Unknown failure</string>
+    <string name="unknown_error">Unknown error</string>
     <string name="app_settings">App settings</string>
     <string name="enable_crashlytics">Enable Google Crashlytics</string>
     <string name="crashlytics_info">When enabled, crash reports and error logs are sent to Firebase to help improve the app</string>
@@ -156,6 +156,15 @@
     <string name="last_week">Last week</string>
     <string name="week_comparison">Week comparison</string>
     <string name="week_comparison_expl">Total daily amounts for the current week in comparison to last week</string>
+    <string name="nfc_chip_linked">NFC chip connected</string>
+    <string name="link_nfc_chip">Connect NFC chip</string>
+    <string name="writing">Writing</string>
+    <string name="tag_lost">The chip was removed too early. Please try again.</string>
+    <string name="not_compatible">This chip is not compatible with Cue.</string>
+    <string name="not_writeable">This chip is write-protected and cannot be used</string>
+    <string name="insufficient_size">This chip is too small to store the required data.</string>
+    <string name="check_in_done">Logged %1$s</string>
+    <string name="waiting_for_tag">Waiting for tag</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

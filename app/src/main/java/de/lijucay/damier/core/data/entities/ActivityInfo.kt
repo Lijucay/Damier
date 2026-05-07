@@ -17,5 +17,6 @@ data class ActivityInfo(
     val unit: UnitId,
     val reference:Int,
     val referenceType: ReferenceType,
-    val defaultAmount: Int
+    val defaultAmount: Int,
+    val nfcChipId: String? = null
 )

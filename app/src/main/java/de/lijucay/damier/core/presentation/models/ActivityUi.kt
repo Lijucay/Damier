@@ -13,5 +13,6 @@ data class ActivityUi(
     val referenceType: ReferenceType,
     val defaultAmount: Int,
     val groupedCheckIns: Map<LocalDate, List<CheckInUi>>,
-    val streaks: List<StreakUi>
+    val streaks: List<StreakUi>,
+    val nfcChipId: String?
 )

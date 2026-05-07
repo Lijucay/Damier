@@ -6,6 +6,7 @@ import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.StreakUi
+import de.lijucay.damier.cue.NfcWriteState
 import java.time.LocalDate
 
 data class ActivityDetailsState(
@@ -22,7 +23,9 @@ data class ActivityDetailsState(
     val longestStreakLength: Int = 0,
     val checkInFormMode: CheckInFormMode? = null,
     val showCheckInHistory: Boolean = false,
-    val showStatsDialog: Boolean = false
+    val showStatsDialog: Boolean = false,
+    val nfcChipId: String? = null,
+    val nfcWriteState: NfcWriteState = NfcWriteState.Idle
 ) {
     val useLimitTheme: Boolean get() = referenceType == ReferenceType.LIMIT
     val showStreakCard: Boolean get() = referenceType != ReferenceType.LIMIT
@@ -51,6 +54,7 @@ data class ActivityDetailsState(
                         end == today || end == today.minusDays(1)
                     }?.length ?: 0,
                 longestStreakLength = activity.streaks.maxByOrNull { it.length }?.length ?: 0,
+                nfcChipId = activity.nfcChipId
             )
         }
     }

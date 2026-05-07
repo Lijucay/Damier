@@ -1,14 +1,9 @@
 package de.lijucay.damier
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProviderInfo
-import android.content.ComponentName
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.os.Build
+import android.content.Intent
+import android.nfc.NfcAdapter
+import android.nfc.Tag
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -27,14 +22,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import androidx.glance.ExperimentalGlanceApi
-import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.runComposition
-import androidx.glance.appwidget.setWidgetPreviews
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.window.core.layout.WindowSizeClass
+import de.lijucay.cue_read.CueReadManager
+import de.lijucay.cue_read.ReadResult
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsScreen
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsViewModel
 import de.lijucay.damier.activity_details.presentation.EditActivityScreen
@@ -47,24 +39,26 @@ import de.lijucay.damier.core.presentation.components.AdaptivePane
 import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.cue.NfcWriteState
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
-import de.lijucay.damier.widget.presentation.DamierWidget
-import de.lijucay.damier.widget.presentation.DamierWidgetReceiver
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.UUID
-import androidx.core.graphics.createBitmap
-import androidx.lifecycle.lifecycleScope
-import de.lijucay.damier.widget.presentation.DamierWidgetState
-import kotlinx.coroutines.flow.first
-import java.io.File
 
 class MainActivity : ComponentActivity() {
+    private val detailsViewModel: ActivityDetailsViewModel by viewModel()
+    private val listViewModel: ActivityListViewModel by viewModel()
+
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        handleNfcIntent(intent)
 
         val activityId = intent.getStringExtra("activityId")?.let { id ->
             UUID.fromString(id)
@@ -225,5 +219,35 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNfcIntent(intent)
+    }
+
+    private fun handleNfcIntent(intent: Intent) {
+        when (intent.action) {
+            NfcAdapter.ACTION_NDEF_DISCOVERED,
+            NfcAdapter.ACTION_TECH_DISCOVERED -> {
+                if (detailsViewModel.state.value.nfcWriteState is NfcWriteState.WaitingForTag) {
+                    val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) ?: return
+                    val activityId = listViewModel.selectedActivity.value?.id ?: return
+                    detailsViewModel.onTagDiscovered(tag, activityId)
+                    return
+                }
+
+                if (intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
+                    lifecycleScope.launch { handleNfcRead(intent) }
+                }
+            }
+        }
+    }
+
+    private suspend fun handleNfcRead(intent: Intent) {
+        val result = withContext(Dispatchers.IO) { CueReadManager().read(intent) }
+
+        if (result !is ReadResult.Success) return
+        listViewModel.checkInByNfcChipId(result.chipId)
     }
 }

@@ -20,7 +20,8 @@ fun Activity.toActivityUi(): ActivityUi {
         referenceType = activityInfo.referenceType,
         defaultAmount = activityInfo.defaultAmount,
         groupedCheckIns = groupedCheckIns,
-        streaks = streaks.map { it.toStreakUi() }
+        streaks = streaks.map { it.toStreakUi() },
+        nfcChipId = activityInfo.nfcChipId
     )
 }
 
@@ -34,6 +35,7 @@ fun ActivityUi.toActivityInfo(): ActivityInfo {
         unit = unitId,
         reference = reference,
         referenceType = referenceType,
-        defaultAmount = defaultAmount
+        defaultAmount = defaultAmount,
+        nfcChipId = nfcChipId
     )
 }

@@ -51,7 +51,7 @@ class ImportUtilImpl(
             }
 
             when (fileVersion) {
-                1 -> importDataFromV1(fileUri, onTotalCountUpdate, onCurrentCountUpdate, onComplete)
+                1,2,3 -> importDataFromV1(fileUri, onTotalCountUpdate, onCurrentCountUpdate, onComplete)
                 else -> onComplete(false)
             }
         }

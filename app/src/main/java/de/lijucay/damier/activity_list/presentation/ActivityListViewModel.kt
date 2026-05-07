@@ -1,10 +1,11 @@
 package de.lijucay.damier.activity_list.presentation
 
 import android.net.Uri
-import androidx.glance.appwidget.updateAll
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.lijucay.damier.DamierApplication
+import de.lijucay.damier.R
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.wrapper.toActivityInfo
@@ -16,8 +17,8 @@ import de.lijucay.damier.core.domain.ExportUtil
 import de.lijucay.damier.core.domain.ImportUtil
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
-import de.lijucay.damier.widget.presentation.DamierWidget
 import de.lijucay.damier.widget.presentation.DamierWidgetState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,6 +29,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.UUID
 
 class ActivityListViewModel(
@@ -129,6 +132,39 @@ class ActivityListViewModel(
         viewModelScope.launch {
             val result = exportUtil.exportData(dirUri)
             onComplete(result.first, result.second)
+        }
+    }
+
+    fun checkInByNfcChipId(chipId: String) {
+        val context = getApplication<DamierApplication>()
+
+        viewModelScope.launch {
+            val activity = repository.getActivityByNfcChipId(chipId) ?: return@launch
+
+            val checkIn = CheckInInfo(
+                activityId = activity.id,
+                amount = activity.defaultAmount,
+                timestamp = LocalDateTime.now()
+            )
+
+            repository.upsertCheckIn(checkIn)
+            DamierWidgetState.updateWidgetForActivity(context, activity.id)
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    context.getString(
+                        R.string.check_in_done,
+                        activity.activityName
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    fun updateNfcChipId(activityId: UUID, chipId: String?) {
+        viewModelScope.launch {
+            repository.updateNfcChipId(activityId, chipId)
         }
     }
 }

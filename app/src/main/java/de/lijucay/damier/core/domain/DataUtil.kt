@@ -2,7 +2,7 @@ package de.lijucay.damier.core.domain
 
 object DataUtil {
     const val VERSION_KEY = "version"
-    const val DATABASE_SCHEME_VERSION = 1
+    const val DATABASE_SCHEME_VERSION = 3
     const val ACTIVITIES_KEY = "activities"
     const val CHECK_INS_KEY = "check_ins"
     const val STREAKS_KEY = "streaks"

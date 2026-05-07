@@ -35,6 +35,14 @@ class ActivityRepositoryImpl(
         recalculateStreakForActivity(checkIn.activityId)
     }
 
+    override suspend fun updateNfcChipId(activityId: UUID, chipId: String?) {
+        activityDao.updateNfcChipId(activityId, chipId)
+    }
+
+    override suspend fun getActivityByNfcChipId(chipId: String): ActivityInfo? {
+        return activityDao.getActivityByNfcChipId(chipId)
+    }
+
     private suspend fun recalculateStreakForActivity(activityId: UUID) {
         val activity = activityDao.getActivityInfoById(activityId) ?: return
         streakDataSource.recalculateStreak(

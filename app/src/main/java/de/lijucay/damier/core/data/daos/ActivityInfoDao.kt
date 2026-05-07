@@ -40,4 +40,10 @@ interface ActivityInfoDao {
 
     @Delete
     suspend fun deleteActivity(activity: ActivityInfo)
+
+    @Query("UPDATE ActivityInfo SET nfcChipId = :chipId WHERE id = :activityId")
+    suspend fun updateNfcChipId(activityId: UUID, chipId: String?)
+
+    @Query("SELECT * FROM ActivityInfo WHERE nfcChipId = :chipId LIMIT 1")
+    suspend fun getActivityByNfcChipId(chipId: String): ActivityInfo?
 }

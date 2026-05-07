@@ -1,6 +1,6 @@
 [versions]
-adaptive = "1.3.0-alpha10"
-agp = "9.2.0"
+adaptive = "1.3.0-beta01"
+agp = "9.2.1"
 datastore = "1.2.1"
 datastorePreferencesAndroid = "1.2.1"
 firebaseBom = "34.12.0"
@@ -12,8 +12,8 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-composeBom = "2026.04.01"
-materialAlpha = "1.5.0-alpha18"
+composeBom = "2026.05.00"
+materialAlpha = "1.5.0-alpha19"
 materialIconsCore = "1.7.8"
 
 koin = "4.2.1"
@@ -28,6 +28,8 @@ gson = "2.14.0"
 documentfile = "1.1.0"
 
 vico = "3.1.0"
+
+cue = "v1.0.1"
 
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceMaterial3" }
@@ -74,6 +76,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+cue = { group = "com.github.lijucay.cue", name = "cue", version.ref = "cue" }
 
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]

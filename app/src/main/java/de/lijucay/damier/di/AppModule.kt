@@ -2,6 +2,7 @@ package de.lijucay.damier.di
 
 import android.content.Context
 import androidx.room.Room
+import de.lijucay.cue_write.NfcWriteManager
 import de.lijucay.damier.DamierApplication
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsViewModel
 import de.lijucay.damier.activity_details.presentation.CheckInFormViewModel
@@ -11,6 +12,7 @@ import de.lijucay.damier.core.data.ActivityRepositoryImpl
 import de.lijucay.damier.core.data.DamierDatabase
 import de.lijucay.damier.core.data.ExportUtilImpl
 import de.lijucay.damier.core.data.ImportUtilImpl
+import de.lijucay.damier.core.data.Migrations
 import de.lijucay.damier.core.data.StreakDataSourceImpl
 import de.lijucay.damier.core.domain.ActivityRepository
 import de.lijucay.damier.core.domain.ExportUtil
@@ -34,12 +36,16 @@ val appModule = module {
             androidContext(),
             DamierDatabase::class.java,
             "damier_data"
-        ).build()
+        )
+            .addMigrations(Migrations.Migration_1_2, Migrations.Migration_2_3)
+            .build()
     }
 
     single { get<DamierDatabase>().activityInfoDao() }
     single { get<DamierDatabase>().checkInDao() }
     single { get<DamierDatabase>().streakDao() }
+
+    single { NfcWriteManager() }
 
     singleOf(::ImportUtilImpl).bind<ImportUtil>()
     singleOf(::ExportUtilImpl).bind<ExportUtil>()

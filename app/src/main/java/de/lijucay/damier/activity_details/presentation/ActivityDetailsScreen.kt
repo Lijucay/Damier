@@ -1,5 +1,11 @@
 package de.lijucay.damier.activity_details.presentation
 
+import android.app.Activity
+import android.app.PendingIntent
+import android.content.Intent
+import android.nfc.NfcAdapter
+import android.nfc.tech.Ndef
+import android.nfc.tech.NdefFormatable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -41,8 +47,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,6 +74,7 @@ import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.cue.NfcWriteState
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -76,6 +86,10 @@ fun ActivityDetailsScreen(
     onEditActivity: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val nfcAdapter = remember { NfcAdapter.getDefaultAdapter(context) }
+
+
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val uiViewModel = koinViewModel<UIViewModel>()
     val detailsViewModel = koinViewModel<ActivityDetailsViewModel>()
@@ -96,6 +110,53 @@ fun ActivityDetailsScreen(
         selectedActivity?.let {
             detailsViewModel.load(it)
         } ?: detailsViewModel.clear()
+    }
+
+    val nfcWriteState by remember { derivedStateOf { state.nfcWriteState } }
+
+    DisposableEffect(nfcWriteState) {
+        val activity = context as? Activity ?: return@DisposableEffect onDispose {}
+
+        if (nfcWriteState is NfcWriteState.WaitingForTag) {
+            val intent = Intent(activity, activity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                activity, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+            )
+
+            val techLists = arrayOf(
+                arrayOf(Ndef::class.java.name),
+                arrayOf(NdefFormatable::class.java.name)
+            )
+
+            nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, techLists)
+        } else {
+            nfcAdapter?.disableForegroundDispatch(activity)
+        }
+
+        onDispose {
+            nfcAdapter?.disableForegroundDispatch(activity)
+        }
+    }
+
+    when (val writeState = state.nfcWriteState) {
+        NfcWriteState.Idle -> {}
+        is NfcWriteState.Success -> {
+            LaunchedEffect(writeState) {
+                selectedActivity?.let { activity ->
+                    activityListViewModel.updateNfcChipId(activity.id, writeState.chipId)
+                }
+                detailsViewModel.dismissNfcWrite()
+            }
+        }
+        else -> {
+            NfcWriteDialog(
+                writeState = writeState,
+                onDismiss = { detailsViewModel.dismissNfcWrite() }
+            )
+        }
     }
 
     ActivityTheme(useLimitTheme = state.useLimitTheme) {
@@ -167,6 +228,7 @@ fun ActivityDetailsScreen(
                 if (activity != null) {
                     ActivityDetails(
                         state = state,
+                        hasNfc = nfcAdapter != null,
                         onShowHistory = {
                             detailsViewModel.setShowHistory(true)
                         },
@@ -174,6 +236,9 @@ fun ActivityDetailsScreen(
                             detailsViewModel.setCheckInFormMode(
                                 mode = CheckInFormMode.Edit(it)
                             )
+                        },
+                        onWriteNfcChip = {
+                            if (nfcAdapter != null) detailsViewModel.startNfcWrite()
                         }
                     )
                 } else {
@@ -237,8 +302,10 @@ fun ActivityDetailsScreen(
 private fun ActivityDetails(
     modifier: Modifier = Modifier,
     state: ActivityDetailsState,
+    hasNfc: Boolean,
     onShowHistory: () -> Unit,
-    onItemClick: (CheckInUi) -> Unit
+    onItemClick: (CheckInUi) -> Unit,
+    onWriteNfcChip: () -> Unit
 ) {
     val context = LocalContext.current
     val unitNames = state.unitId.getShortUnitNamesById(context)
@@ -249,6 +316,7 @@ private fun ActivityDetails(
     ) {
         waffleDiagramItem(state)
         streakItem(state)
+        nfcChipItem(state, hasNfc, onWriteNfcChip)
         todayHeaderItem(state, unitNames.shortUnitSingular, unitNames.shortUnitPlural)
         checkInItems(
             state,
@@ -430,5 +498,60 @@ private fun LazyListScope.checkInHistory(
                 )
             }
         }
+    }
+}
+
+private fun LazyListScope.nfcChipItem(
+    state: ActivityDetailsState,
+    hasNfc: Boolean,
+    onWriteNfcChip: () -> Unit
+) {
+    if (!hasNfc) return
+
+    item {
+        Card(
+            modifier = Modifier
+                .animateItem()
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            onClick = onWriteNfcChip,
+            colors = CardDefaults.cardColors(
+                containerColor = colorScheme.secondaryContainer,
+                contentColor = colorScheme.onSecondaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(
+                            if (state.nfcChipId != null) R.string.nfc_chip_linked
+                            else R.string.link_nfc_chip
+                        ),
+                        style = typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+
+                    if (state.nfcChipId != null) {
+                        Text(
+                            text = state.nfcChipId,
+                            style = typography.bodySmall,
+                            color = colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowForwardIos,
+                    contentDescription = null
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
     }
 }

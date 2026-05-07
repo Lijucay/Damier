@@ -8,6 +8,7 @@ import de.lijucay.damier.core.data.daos.StreakDao
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.entities.Streak
+import de.lijucay.damier.core.domain.DataUtil
 
 @Database(
     entities = [
@@ -15,7 +16,7 @@ import de.lijucay.damier.core.data.entities.Streak
         CheckInInfo::class,
         Streak::class
     ],
-    version = 1,
+    version = DataUtil.DATABASE_SCHEME_VERSION,
     exportSchema = false
 )
 abstract class DamierDatabase : RoomDatabase() {

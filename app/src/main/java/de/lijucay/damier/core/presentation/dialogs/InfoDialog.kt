@@ -28,10 +28,10 @@ fun InfoDialog(
         text = {
             Text(
                 text = when (mode) {
-                        is InfoMode.BackupError -> mode.message ?: stringResource(R.string.unknown_failure)
+                        is InfoMode.BackupError -> mode.message ?: stringResource(R.string.unknown_error)
                         InfoMode.BackupSuccess -> stringResource(R.string.backup_successful)
                         InfoMode.ImportSuccess -> stringResource(R.string.import_successful)
-                        is InfoMode.ImportError -> mode.message ?: stringResource(R.string.unknown_failure)
+                        is InfoMode.ImportError -> mode.message ?: stringResource(R.string.unknown_error)
                     }
             )
         },
