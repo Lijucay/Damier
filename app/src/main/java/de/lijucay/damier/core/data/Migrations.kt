@@ -14,22 +14,8 @@ object Migrations {
             cursor.close()
 
             if ("checkInCount" in columns) {
-                db.execSQL("""
-                CREATE TABLE CheckInInfo_new (
-                    id TEXT NOT NULL PRIMARY KEY,
-                    activityId TEXT NOT NULL,
-                    amount INTEGER NOT NULL,
-                    timestamp TEXT NOT NULL
-                )
-            """)
-                db.execSQL("""
-                INSERT INTO CheckInInfo_new (id, activityId, amount, timestamp)
-                SELECT id, activityId, checkInCount, timestamp FROM CheckInInfo
-            """)
-                db.execSQL("DROP TABLE CheckInInfo")
-                db.execSQL("ALTER TABLE CheckInInfo_new RENAME TO CheckInInfo")
+                db.execSQL("ALTER TABLE CheckInInfo RENAME IF EXISTS COLUMN checkInCount to amount")
             }
-            // Falls amount bereits existiert → nichts tun
         }
     }
 

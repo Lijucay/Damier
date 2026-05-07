@@ -19,8 +19,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 28
         targetSdk = 37
-        versionCode = 9
-        versionName = "0.3.3-alpha"
+        versionCode = 10
+        versionName = "0.4.1-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
