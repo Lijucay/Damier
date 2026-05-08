@@ -13,17 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
-import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.data.wrapper.toCheckInInfo
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
-import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
-import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
 import de.lijucay.damier.core.presentation.components.ScreenContainer
-import de.lijucay.damier.core.presentation.getRandomCheckInInfo
+import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import org.koin.androidx.compose.koinViewModel
-import java.util.UUID
 
 @Composable
 fun ActivityListScreen(

@@ -18,7 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.cue.NfcWriteState
+import de.lijucay.damier.design.components.DefaultText
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -83,7 +83,7 @@ fun NfcWriteDialog(
                                     contentDescription = null
                                 )
 
-                                Text(
+                                DefaultText(
                                     text = stringResource(R.string.insufficient_size)
                                 )
                             }
@@ -102,7 +102,7 @@ fun NfcWriteDialog(
                                     contentDescription = null
                                 )
 
-                                Text(
+                                DefaultText(
                                     text = stringResource(R.string.not_compatible)
                                 )
                             }
@@ -121,7 +121,7 @@ fun NfcWriteDialog(
                                     contentDescription = null
                                 )
 
-                                Text(
+                                DefaultText(
                                     text = stringResource(R.string.not_writeable)
                                 )
                             }
@@ -140,7 +140,7 @@ fun NfcWriteDialog(
                                     contentDescription = null
                                 )
 
-                                Text(
+                                DefaultText(
                                     text = stringResource(R.string.tag_lost)
                                 )
                             }
@@ -159,7 +159,7 @@ fun NfcWriteDialog(
                                     contentDescription = null
                                 )
 
-                                Text(
+                                DefaultText(
                                     text = stringResource(R.string.unknown_error)
                                 )
                             }
@@ -176,7 +176,7 @@ fun NfcWriteDialog(
                                     modifier = Modifier.fillMaxWidth()
                                 )
 
-                                Text(text = stringResource(R.string.waiting_for_tag))
+                                DefaultText(text = stringResource(R.string.waiting_for_tag))
                             }
                         }
                         NfcWriteState.Writing -> {
@@ -191,7 +191,7 @@ fun NfcWriteDialog(
                                     modifier = Modifier.fillMaxWidth()
                                 )
 
-                                Text(text = stringResource(R.string.writing))
+                                DefaultText(text = stringResource(R.string.writing))
                             }
                         }
 

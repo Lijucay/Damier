@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.design.components.DefaultText
 
 @Composable
 fun ReferenceTypeRow(
@@ -34,7 +34,7 @@ fun ReferenceTypeRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             RadioButton(selected = selected, onClick = null)
-            Text(type.name.lowercase().replaceFirstChar { it.uppercase() })
+            DefaultText(text = type.name.lowercase().replaceFirstChar { it.uppercase() })
         }
     }
 }

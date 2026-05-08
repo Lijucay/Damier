@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +25,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun SwitchPreference(
@@ -66,19 +67,11 @@ fun SwitchPreference(
                     .padding(columnPadding),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(
-                    text = title,
-                    style = typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    )
-                )
+                TitleText(text = title)
 
                 subTitle?.let { t ->
                     Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = t,
-                        style = typography.bodySmall
-                    )
+                    SmallText(text = t)
                 }
             }
 

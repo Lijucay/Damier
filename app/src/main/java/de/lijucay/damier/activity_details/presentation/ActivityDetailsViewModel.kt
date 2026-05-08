@@ -66,7 +66,7 @@ class ActivityDetailsViewModel(
         _state.update { it.copy(nfcWriteState = NfcWriteState.Writing) }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val (result, chip) = nfcWriteManager.write(tag)
+            val (result, chip) = nfcWriteManager.write(tag, "damier")
 
             if (result == WriteResult.Success && chip != null) {
                 activityRepository.updateNfcChipId(activityId, chip.chipId)

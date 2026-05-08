@@ -6,12 +6,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.DeletionMode
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun DeletionDialog(
@@ -27,10 +28,10 @@ fun DeletionDialog(
             )
         },
         title = {
-            Text(text = stringResource(R.string.are_you_sure))
+            TitleText(text = stringResource(R.string.are_you_sure))
         },
         text = {
-            Text(
+            DefaultText(
                 text = stringResource(
                     id = when (mode) {
                         is DeletionMode.Activity -> R.string.deletion_information_activity
@@ -48,7 +49,7 @@ fun DeletionDialog(
                     contentColor = colorScheme.onErrorContainer
                 )
             ) {
-                Text(stringResource(R.string.delete))
+                DefaultText(text = stringResource(R.string.delete))
             }
         },
         dismissButton = {
@@ -59,7 +60,7 @@ fun DeletionDialog(
                     contentColor = colorScheme.onErrorContainer
                 )
             ) {
-                Text(stringResource(android.R.string.cancel))
+                DefaultText(text = stringResource(android.R.string.cancel))
             }
         },
         containerColor = colorScheme.errorContainer,

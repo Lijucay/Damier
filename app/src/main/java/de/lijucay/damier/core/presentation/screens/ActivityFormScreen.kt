@@ -16,7 +16,6 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +38,8 @@ import de.lijucay.damier.core.presentation.components.cards.ReferenceCard
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.TitleField
 import de.lijucay.damier.core.presentation.components.cards.UnitCard
+import de.lijucay.damier.design.components.HeadlineText
+import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.ui.theme.ActivityTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -118,10 +119,9 @@ fun ActivityFormScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                Text(
+                LargeTitleText(
                     modifier = Modifier.padding(start = 16.dp),
                     text = stringResource(R.string.tracking_options),
-                    style = typography.titleLargeEmphasized.copy(fontWeight = FontWeight.Bold)
                 )
 
                 Spacer(Modifier.height(8.dp))

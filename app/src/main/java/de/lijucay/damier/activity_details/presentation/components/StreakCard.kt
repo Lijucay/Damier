@@ -15,19 +15,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
+import de.lijucay.damier.design.components.HeadlineText
+import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun StreakCard(
@@ -38,12 +38,11 @@ fun StreakCard(
     val resources = LocalResources.current
 
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        shape = shapes.extraLarge,
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = colorScheme.secondaryContainer,
-            contentColor = colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
         Column(
@@ -57,17 +56,15 @@ fun StreakCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.current_streak),
-                    style = typography.titleMedium
-                )
+
+                TitleText(text = stringResource(R.string.current_streak))
 
                 Box(
                     modifier = Modifier
-                        .clip(shape = shapes.extraLarge)
-                        .background(color = colorScheme.tertiaryContainer)
+                        .clip(shape = MaterialTheme.shapes.extraLarge)
+                        .background(color = MaterialTheme.colorScheme.onSecondaryContainer)
                 ) {
-                    Text(
+                    SmallText(
                         modifier = Modifier.padding(4.dp),
                         text = resources.getStringArray(
                             when (currentStreak) {
@@ -78,7 +75,7 @@ fun StreakCard(
                                 else -> R.array.streak_m_ns
                             }
                         ).random(),
-                        style = typography.bodySmall.copy(color = colorScheme.onTertiaryContainer)
+                        color = MaterialTheme.colorScheme.secondaryContainer
                     )
                 }
             }
@@ -94,16 +91,10 @@ fun StreakCard(
                         (slideInVertically { it } + fadeIn()) togetherWith (slideOutVertically { -it } + fadeOut())
                     }
                 ) { streak ->
-                    Text(
-                        text = "$streak",
-                        style = typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
-                    )
+                    HeadlineText(text = streak.toString())
                 }
 
-                Text(
-                    text = stringResource(R.string.days),
-                    style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                LargeText(text = stringResource(R.string.days))
             }
 
 //            HorizontalDivider()

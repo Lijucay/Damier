@@ -10,7 +10,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialShapes
-import androidx.compose.material3.Text
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import de.lijucay.damier.BuildConfig
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
+import de.lijucay.damier.design.components.DefaultText
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -54,7 +54,7 @@ fun CookieButton(
 fun VersionInfo(modifier: Modifier = Modifier) {
     val version = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
-    Text(
+    DefaultText(
         modifier = modifier
             .fillMaxWidth()
             .paddingWithSafeNavigationBar(16.dp),

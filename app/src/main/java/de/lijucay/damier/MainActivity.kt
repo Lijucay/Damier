@@ -248,6 +248,7 @@ class MainActivity : ComponentActivity() {
         val result = withContext(Dispatchers.IO) { CueReadManager().read(intent) }
 
         if (result !is ReadResult.Success) return
+        if (result.host != "damier") return
         listViewModel.checkInByNfcChipId(result.chipId)
     }
 }

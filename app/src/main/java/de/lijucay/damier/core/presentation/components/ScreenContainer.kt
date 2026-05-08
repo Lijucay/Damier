@@ -28,7 +28,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.motionScheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -40,6 +39,9 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.animateClipWithScreenSize
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.clipInnerContainer
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.design.components.TitleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +79,7 @@ fun ScreenContainer(
                                 fadeIn(tween(300)) togetherWith fadeOut(tween(300))
                             }
                         ) { animatedTitle ->
-                            Text(text = animatedTitle.ifBlank { stringResource(R.string.app_name) })
+                            LargeTitleText(text = animatedTitle.ifBlank { stringResource(R.string.app_name) })
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(

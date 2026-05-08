@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
-import androidx.compose.material.icons.rounded.CompareArrows
 import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
@@ -19,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
-import de.lijucay.damier.core.data.wrapper.toCheckInInfo
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.SmallText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,10 +46,7 @@ fun StatsBottomSheet(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BottomSheetDefaults.DragHandle()
-                Text(
-                    text = stringResource(R.string.statistics),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                LargeText(text = stringResource(R.string.statistics))
             }
         }
     ) {
@@ -66,8 +63,7 @@ fun StatsBottomSheet(
                 shape = MaterialTheme.shapes.extraLarge
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Row(
@@ -78,15 +74,14 @@ fun StatsBottomSheet(
                             imageVector = Icons.Rounded.Timeline,
                             contentDescription = null
                         )
-                        Text(
+                        DefaultText(
                             text = stringResource(R.string.timeline),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
-                    Text(
-                        text = stringResource(R.string.timeline_expl),
-                        style = MaterialTheme.typography.bodySmall
+                    SmallText(
+                        text = stringResource(R.string.timeline_expl)
                     )
 
                     TimelineGraph(
@@ -105,8 +100,7 @@ fun StatsBottomSheet(
                 shape = MaterialTheme.shapes.extraLarge
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Row(
@@ -117,16 +111,13 @@ fun StatsBottomSheet(
                             imageVector = Icons.AutoMirrored.Rounded.CompareArrows,
                             contentDescription = null
                         )
-                        Text(
+                        DefaultText(
                             text = stringResource(R.string.week_comparison),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
-                    Text(
-                        text = stringResource(R.string.week_comparison_expl),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    SmallText(text = stringResource(R.string.week_comparison_expl))
 
                     ComparisonChart(
                         modifier = Modifier

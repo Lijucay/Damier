@@ -16,20 +16,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.motionScheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.entities.CheckInInfo
-import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.core.presentation.bottomPadding
-import de.lijucay.damier.widget.presentation.DamierWidget
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.design.components.LargeText
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 import java.util.UUID
@@ -65,9 +63,8 @@ fun ActivityList(
 
                 Spacer(Modifier.height(8.dp))
 
-                Text(
+                LargeText(
                     text = stringResource(R.string.no_activities),
-                    style = typography.bodyLarge,
                     color = colorScheme.onSurfaceVariant
                 )
             }

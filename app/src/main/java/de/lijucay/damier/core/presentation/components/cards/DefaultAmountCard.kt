@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.core.presentation.components.NumberTextField
 import de.lijucay.damier.core.presentation.components.SwitchPreference
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun DefaultAmountCard(
@@ -44,10 +44,7 @@ fun DefaultAmountCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.default_amount),
-                    style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                TitleText(text = stringResource(R.string.default_amount))
                 NumberTextField(
                     value = state.defaultAmount,
                     onValueChange = onValueChange,

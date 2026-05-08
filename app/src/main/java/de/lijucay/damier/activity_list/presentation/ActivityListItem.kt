@@ -18,13 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
@@ -32,6 +30,10 @@ import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.models.ActivityUi
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.HeadlineText
+import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.LargeTitleText
 
 @Composable
 fun ActivityListItem(
@@ -60,12 +62,9 @@ fun ActivityListItem(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
+            LargeTitleText(
                 modifier = Modifier.fillMaxWidth(),
                 text = activityUi.title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
                 textAlign = TextAlign.Center
             )
 
@@ -86,24 +85,16 @@ fun ActivityListItem(
                 AnimatedVisibility(
                     visible = activityUi.referenceType != ReferenceType.MAX && showReference
                 ) {
-                    Text(
-                        text = "${activityUi.referenceType}: ${activityUi.reference}",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
+                    LargeText(text = "${activityUi.referenceType}: ${activityUi.reference}")
                 }
                 AnimatedVisibility(
                     visible = activityUi.referenceType == ReferenceType.MAX
                             && showReference
                             && showMaxAmount
                 ) {
-                    Text(
+                    LargeText(
                         text = "Max: ${activityUi.groupedCheckIns.maxOfOrNull { (_, checkIns) -> checkIns.sumOf { it.amount } } ?: 0}",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold
                         )
-                    )
                 }
 
                 AnimatedContent(
@@ -132,7 +123,7 @@ fun ActivityListItem(
                                 contentColor = containerColor
                             )
                         ) {
-                            Text(text = stringResource(R.string.check_in))
+                            DefaultText(text = stringResource(R.string.check_in))
                         }
                     }
                 }

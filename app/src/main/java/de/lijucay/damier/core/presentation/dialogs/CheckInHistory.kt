@@ -16,12 +16,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +34,8 @@ import de.lijucay.damier.core.domain.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
+import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.TitleText
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +44,6 @@ fun CheckInHistory(
     sheetState: SheetState,
     checkIns: Map<LocalDate, List<CheckInUi>>,
     unitId: UnitId,
-    usesLimitColors: Boolean,
     onDismissRequest: () -> Unit,
     onItemClicked: (CheckInUi) -> Unit
 ) {
@@ -73,10 +72,7 @@ fun CheckInHistory(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BottomSheetDefaults.DragHandle()
-                Text(
-                    text = stringResource(R.string.full_history),
-                    style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                TitleText(text = stringResource(R.string.full_history))
             }
         }
     ) {
@@ -91,10 +87,7 @@ fun CheckInHistory(
                 val checkInUis = checkIns[date]
                 item {
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = date.toDisplayableDate().formatted,
-                        style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                    )
+                    TitleText(text = date.toDisplayableDate().formatted)
                     Spacer(modifier = Modifier.height(6.dp))
                 }
 
@@ -107,9 +100,8 @@ fun CheckInHistory(
                                 .padding(vertical = 32.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
+                            LargeText(
                                 text = stringResource(R.string.nothing_logged_yet),
-                                style = typography.bodyLarge,
                                 color = colorScheme.onSurfaceVariant
                             )
                         }
@@ -124,7 +116,6 @@ fun CheckInHistory(
                             else unitId.getLongUnitNamesById(context).singularName,
                             isItemFirst = checkInUis.first() == checkIn,
                             isItemLast = checkInUis.last() == checkIn,
-                            usesLimitColors = usesLimitColors,
                             onClick = { onItemClicked(checkIn) }
                         )
                     }

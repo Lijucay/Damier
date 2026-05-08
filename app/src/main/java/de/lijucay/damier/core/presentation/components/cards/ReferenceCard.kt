@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +24,7 @@ import de.lijucay.damier.core.presentation.components.NumberTextField
 import de.lijucay.damier.core.presentation.components.ReferenceTypeRow
 import de.lijucay.damier.core.presentation.components.UnitBadge
 import de.lijucay.damier.core.presentation.components.SwitchPreference
+import de.lijucay.damier.design.components.DefaultText
 
 @Composable
 fun ReferenceCard(
@@ -81,7 +81,7 @@ fun ReferenceCard(
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
+                            DefaultText(
                                 text = "${
                                     state.referenceType.name.lowercase()
                                         .replaceFirstChar { it.uppercase() }

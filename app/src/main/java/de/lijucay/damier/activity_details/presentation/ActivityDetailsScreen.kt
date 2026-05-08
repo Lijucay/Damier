@@ -40,10 +40,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -75,6 +72,10 @@ import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.cue.NfcWriteState
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.design.components.TitleText
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -167,8 +168,8 @@ fun ActivityDetailsScreen(
             bottomBarContent = {
                 CookieButton(
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = colorScheme.tertiary,
-                        contentColor = colorScheme.onTertiary
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
                     )
                 ) {
                     selectedActivity?.let {
@@ -246,54 +247,53 @@ fun ActivityDetailsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = stringResource(R.string.no_activity_selected))
+                        DefaultText(text = stringResource(R.string.no_activity_selected))
                     }
                 }
             }
         }
-    }
 
-    state.checkInFormMode?.let { mode ->
-        selectedActivity?.let { activity ->
-            CheckInForm(
-                onDismissRequest = { detailsViewModel.setCheckInFormMode(null) },
-                mode = mode,
-                useLimitTheme = state.useLimitTheme,
-                onDeleteRequest = { uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) }
+        state.checkInFormMode?.let { mode ->
+            selectedActivity?.let { activity ->
+                CheckInForm(
+                    onDismissRequest = { detailsViewModel.setCheckInFormMode(null) },
+                    mode = mode,
+                    useLimitTheme = state.useLimitTheme,
+                    onDeleteRequest = { uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) }
+                )
+            }
+        }
+
+        if (state.showCheckInHistory) {
+            CheckInHistory(
+                sheetState = sheetState,
+                checkIns = state.allCheckIns,
+                unitId = state.unitId,
+                onDismissRequest = {
+                    scope.launch {
+                        sheetState.hide()
+                    }.invokeOnCompletion {
+                        detailsViewModel.setShowHistory(false)
+                    }
+                }
+            ) {
+                detailsViewModel.setCheckInFormMode(
+                    mode = CheckInFormMode.Edit(it)
+                )
+            }
+        }
+
+        if (state.showStatsDialog) {
+            StatsBottomSheet(
+                state = state,
+                dialogState = statsDialogState,
+                onDismissRequest = {
+                    scope.launch { statsDialogState.hide() }.invokeOnCompletion {
+                        detailsViewModel.setShowStatsDialog(false)
+                    }
+                }
             )
         }
-    }
-
-    if (state.showCheckInHistory) {
-        CheckInHistory(
-            sheetState = sheetState,
-            checkIns = state.allCheckIns,
-            unitId = state.unitId,
-            usesLimitColors = state.useLimitTheme,
-            onDismissRequest = {
-                scope.launch {
-                    sheetState.hide()
-                }.invokeOnCompletion {
-                    detailsViewModel.setShowHistory(false)
-                }
-            }
-        ) {
-            detailsViewModel.setCheckInFormMode(
-                mode = CheckInFormMode.Edit(it)
-            )
-        }
-    }
-
-    if (state.showStatsDialog) {
-        StatsBottomSheet(
-            state = state,
-            dialogState = statsDialogState,
-            onDismissRequest = {
-                scope.launch { statsDialogState.hide() }.invokeOnCompletion {
-                    detailsViewModel.setShowStatsDialog(false)
-                }
-            }
-        )
     }
 }
 
@@ -339,8 +339,8 @@ private fun LazyListScope.waffleDiagramItem(state: ActivityDetailsState) {
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = colorScheme.primaryContainer,
-                    contentColor = contentColorFor(colorScheme.primaryContainer)
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer)
                 )
             ) {
                 Column(
@@ -350,7 +350,7 @@ private fun LazyListScope.waffleDiagramItem(state: ActivityDetailsState) {
                     WaffleDiagram(waffleDiagramData = state.waffleDiagramData)
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(2.dp))
         }
     }
 }
@@ -385,15 +385,12 @@ private fun LazyListScope.todayHeaderItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(R.string.today),
-                style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-            )
+            TitleText(text = stringResource(R.string.today))
 
             Box(
                 modifier = Modifier
-                    .clip(shape = shapes.extraLarge)
-                    .background(colorScheme.tertiaryContainer)
+                    .clip(shape = MaterialTheme.shapes.extraLarge)
+                    .background(MaterialTheme.colorScheme.tertiary)
             ) {
                 val unitName = if (state.todaysTotal == 1) singularName else pluralName
                 val displayText = "${state.todaysTotal} $unitName"
@@ -404,10 +401,10 @@ private fun LazyListScope.todayHeaderItem(
                         (slideInVertically { it } + fadeIn()) togetherWith (slideOutVertically { -it } + fadeOut())
                     }
                 ) { text ->
-                    Text(
+                    DefaultText(
                         modifier = Modifier.padding(horizontal = 8.dp),
-                        color = colorScheme.onTertiaryContainer,
-                        text = text
+                        text = text,
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
             }
@@ -431,10 +428,9 @@ private fun LazyListScope.checkInItems(
                     .padding(vertical = 32.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
+                LargeText(
                     text = stringResource(R.string.nothing_logged_yet),
-                    style = typography.bodyLarge,
-                    color = colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -447,7 +443,6 @@ private fun LazyListScope.checkInItems(
                 isItemFirst = state.todaysCheckIns.first() == checkIn,
                 isItemLast = state.todaysCheckIns.last() == checkIn,
                 unitName = if (checkIn.amount > 1) pluralName else singularName,
-                usesLimitColors = state.useLimitTheme,
                 onClick = { onItemClick(checkIn) }
             )
         }
@@ -471,13 +466,13 @@ private fun LazyListScope.checkInHistory(
             onClick = onClick,
             colors = CardDefaults.cardColors(
                 containerColor = if (state.useLimitTheme)
-                    colorScheme.errorContainer
+                    MaterialTheme.colorScheme.errorContainer
                 else
-                    colorScheme.primaryContainer,
+                    MaterialTheme.colorScheme.primaryContainer,
                 contentColor = if (state.useLimitTheme)
-                    colorScheme.onErrorContainer
+                    MaterialTheme.colorScheme.onErrorContainer
                 else
-                    colorScheme.onPrimaryContainer
+                    MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Row(
@@ -487,7 +482,7 @@ private fun LazyListScope.checkInHistory(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
+                DefaultText(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.full_history)
                 )
@@ -516,8 +511,8 @@ private fun LazyListScope.nfcChipItem(
             shape = RoundedCornerShape(24.dp),
             onClick = onWriteNfcChip,
             colors = CardDefaults.cardColors(
-                containerColor = colorScheme.secondaryContainer,
-                contentColor = colorScheme.onSecondaryContainer
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             )
         ) {
             Row(
@@ -528,19 +523,20 @@ private fun LazyListScope.nfcChipItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
+                    DefaultText(
                         text = stringResource(
-                            if (state.nfcChipId != null) R.string.nfc_chip_linked
-                            else R.string.link_nfc_chip
+                            id = if (state.nfcChipId != null)
+                                R.string.nfc_chip_linked
+                            else
+                                R.string.link_nfc_chip
                         ),
-                        style = typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        fontWeight = FontWeight.Bold
                     )
 
                     if (state.nfcChipId != null) {
-                        Text(
+                        SmallText(
                             text = state.nfcChipId,
-                            style = typography.bodySmall,
-                            color = colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
                         )
                     }
                 }

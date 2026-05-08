@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun PreferenceCategoryTitle(
@@ -17,12 +18,11 @@ fun PreferenceCategoryTitle(
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
+        TitleText(
             text = title,
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            fontSize = 14.sp,
             color = MaterialTheme.colorScheme.primary
         )
     }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.lijucay.damier.design.components.DefaultText
+import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun Preference(
@@ -47,16 +49,15 @@ fun Preference(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                Text(
+                TitleText(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 2.dp)
                 )
-                Text(
+                SmallText(
                     text = summary,
-                    fontSize = 14.sp,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

@@ -3,7 +3,6 @@ package de.lijucay.damier.core.presentation.components.cards
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -19,6 +18,7 @@ import de.lijucay.damier.core.presentation.components.ExpandableLayout
 import de.lijucay.damier.core.presentation.components.UnitBadge
 import de.lijucay.damier.core.presentation.components.UnitRow
 import de.lijucay.damier.core.presentation.components.SwitchPreference
+import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun UnitCard(
@@ -57,10 +57,7 @@ fun UnitCard(
                 Column {
                     val groupedUnits = units.groupBy { it.group }
                     groupedUnits.forEach { (group, units) ->
-                        Text(
-                            text = group.name.lowercase().replaceFirstChar { it.uppercase() },
-                            style = typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                        )
+                        TitleText(text = group.name.lowercase().replaceFirstChar { it.uppercase() })
                         units.forEach { unit ->
                             UnitRow(
                                 label = unit.unitId.name.lowercase()
