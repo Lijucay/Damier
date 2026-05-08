@@ -14,7 +14,7 @@ object Migrations {
             cursor.close()
 
             if ("checkInCount" in columns) {
-                db.execSQL("ALTER TABLE CheckInInfo RENAME IF EXISTS COLUMN checkInCount to amount")
+                db.execSQL("ALTER TABLE CheckInInfo RENAME COLUMN checkInCount to amount")
             }
         }
     }
