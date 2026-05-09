@@ -103,7 +103,6 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
 
     @Composable
     fun ActivityPickerScreen(
-        modifier: Modifier = Modifier,
         onActivitySelected: (ActivityInfo) -> Unit,
         onCancel: () -> Unit
     ) {

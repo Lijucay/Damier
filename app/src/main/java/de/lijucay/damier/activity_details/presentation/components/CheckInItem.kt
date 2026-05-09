@@ -27,7 +27,6 @@ fun CheckInItem(
     isItemLast: Boolean = false,
     onClick: () -> Unit
 ) {
-
     ListCard(
         modifier = modifier,
         isItemFirst = isItemFirst,

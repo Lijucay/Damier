@@ -20,6 +20,7 @@ import de.lijucay.damier.core.domain.ImportUtil
 import de.lijucay.damier.core.domain.StreakDataSource
 import de.lijucay.damier.core.presentation.viewmodels.ActivityFormViewModel
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.nfc.NfcManager
 import de.lijucay.damier.widget.data.WidgetRepositoryImpl
 import de.lijucay.damier.widget.domain.WidgetRepository
 import org.koin.android.ext.koin.androidApplication
@@ -61,4 +62,6 @@ val appModule = module {
     viewModelOf(::ActivityFormViewModel)
     viewModelOf(::ActivityDetailsViewModel)
     viewModelOf(::CheckInFormViewModel)
+
+    singleOf(::NfcManager)
 }

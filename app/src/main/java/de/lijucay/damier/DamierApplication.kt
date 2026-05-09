@@ -2,6 +2,7 @@ package de.lijucay.damier
 
 import android.app.Application
 import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import de.lijucay.damier.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.logger.AndroidLogger
@@ -13,6 +14,9 @@ class DamierApplication : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(this)
+        if (BuildConfig.DEBUG) {
+            FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = false
+        }
 
         startKoin {
             logger(AndroidLogger(level = Level.DEBUG))

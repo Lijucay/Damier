@@ -30,7 +30,7 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="cue" android:host="damier"/>
+                <data android:scheme="cue" android:host="@string/host"/>
             </intent-filter>
         </activity>
         
@@ -64,5 +64,4 @@
                 android:resource="@xml/damier_app_widget_info"/>
         </receiver>
     </application>
-
 </manifest>

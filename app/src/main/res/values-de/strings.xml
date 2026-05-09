@@ -59,7 +59,6 @@
     <string name="are_you_sure">Bist du sicher?</string>
     <string name="edit">%1$s bearbeiten</string>
     <string name="date">Datum</string>
-    <string name="select">Auswählen</string>
     <string name="failed_to_create_backup">Backup-Datei konnte nicht erstellt werden</string>
     <string name="export_import">Exportieren/Importieren</string>
     <string name="import_data">Daten importieren</string>
@@ -142,14 +141,8 @@
     <string name="privacy_policy">Datenschutzerklärung</string>
     <string name="privacy_policy_sum">Erfahre, wie deine Daten verarbeitet werden.</string>
     <string name="statistics">Statistiken</string>
-    <string name="day">Tag</string>
-    <string name="month">Monat</string>
-    <string name="year">Jahr</string>
-    <string name="check_ins">Check-ins</string>
-    <string name="streak">Streak</string>
     <string name="activities">Aktivitäten</string>
     <string name="amount_of_reference">%1$d/%2$d</string>
-    <string name="activity_widget_preview">Lesen</string>
     <string name="timeline">Zeitverlauf</string>
     <string name="timeline_expl">Gesamtmenge über die Zeit</string>
     <string name="this_week">Diese Woche</string>

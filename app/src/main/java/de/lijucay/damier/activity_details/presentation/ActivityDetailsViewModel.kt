@@ -20,7 +20,6 @@ class ActivityDetailsViewModel(
     private val nfcWriteManager: NfcWriteManager,
     private val activityRepository: ActivityRepository
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(ActivityDetailsState())
     val state = _state.asStateFlow()
 
@@ -53,6 +52,10 @@ class ActivityDetailsViewModel(
         _state.update { it.copy(showCheckInHistory = show) }
     }
 
+    fun showMenu(show: Boolean) {
+        _state.update { it.copy(menuExpanded = show) }
+    }
+
     fun startNfcWrite() {
         _state.update { it.copy(nfcWriteState = NfcWriteState.WaitingForTag) }
     }
@@ -61,12 +64,12 @@ class ActivityDetailsViewModel(
         _state.update { it.copy(nfcWriteState = NfcWriteState.Idle) }
     }
 
-    fun onTagDiscovered(tag: Tag, activityId: UUID) {
+    fun onTagDiscovered(tag: Tag, activityId: UUID, host: String) {
         if (_state.value.nfcWriteState !is NfcWriteState.WaitingForTag) return
         _state.update { it.copy(nfcWriteState = NfcWriteState.Writing) }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val (result, chip) = nfcWriteManager.write(tag, "damier")
+            val (result, chip) = nfcWriteManager.write(tag, host)
 
             if (result == WriteResult.Success && chip != null) {
                 activityRepository.updateNfcChipId(activityId, chip.chipId)

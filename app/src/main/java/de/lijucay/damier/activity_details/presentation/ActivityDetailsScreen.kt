@@ -1,11 +1,7 @@
 package de.lijucay.damier.activity_details.presentation
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.content.Intent
 import android.nfc.NfcAdapter
-import android.nfc.tech.Ndef
-import android.nfc.tech.NdefFormatable
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,23 +26,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.QueryStats
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,6 +63,7 @@ import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.getShortUnitNamesById
+import de.lijucay.damier.core.presentation.DamierMenu
 import de.lijucay.damier.core.presentation.components.CookieButton
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
@@ -90,7 +89,6 @@ fun ActivityDetailsScreen(
     val context = LocalContext.current
     val nfcAdapter = remember { NfcAdapter.getDefaultAdapter(context) }
 
-
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val uiViewModel = koinViewModel<UIViewModel>()
     val detailsViewModel = koinViewModel<ActivityDetailsViewModel>()
@@ -107,38 +105,37 @@ fun ActivityDetailsScreen(
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    val host = stringResource(R.string.host)
+
     LaunchedEffect(selectedActivity) {
         selectedActivity?.let {
             detailsViewModel.load(it)
         } ?: detailsViewModel.clear()
     }
 
-    val nfcWriteState by remember { derivedStateOf { state.nfcWriteState } }
 
-    DisposableEffect(nfcWriteState) {
+    DisposableEffect(state.nfcWriteState) {
         val activity = context as? Activity ?: return@DisposableEffect onDispose {}
 
-        if (nfcWriteState is NfcWriteState.WaitingForTag) {
-            val intent = Intent(activity, activity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            }
-            val pendingIntent = PendingIntent.getActivity(
-                activity, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        if (state.nfcWriteState is NfcWriteState.WaitingForTag) {
+            nfcAdapter?.enableReaderMode(
+                activity,
+                { tag ->
+                    val activityId = selectedActivity?.id ?: return@enableReaderMode
+                    detailsViewModel.onTagDiscovered(tag, activityId, host)
+                },
+                NfcAdapter.FLAG_READER_NFC_A or
+                NfcAdapter.FLAG_READER_NFC_B or
+                NfcAdapter.FLAG_READER_NFC_F or
+                NfcAdapter.FLAG_READER_NFC_V,
+                null
             )
-
-            val techLists = arrayOf(
-                arrayOf(Ndef::class.java.name),
-                arrayOf(NdefFormatable::class.java.name)
-            )
-
-            nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, techLists)
         } else {
-            nfcAdapter?.disableForegroundDispatch(activity)
+            nfcAdapter?.disableReaderMode(activity)
         }
 
         onDispose {
-            nfcAdapter?.disableForegroundDispatch(activity)
+            nfcAdapter?.disableReaderMode(activity)
         }
     }
 
@@ -190,30 +187,74 @@ fun ActivityDetailsScreen(
             },
             topAppBarActions = {
                 selectedActivity?.let { activity ->
-                    IconButton(
-                        onClick = {
-                            detailsViewModel.setShowStatsDialog(true)
+                    if (!isHeightAtLeastExpanded) {
+                        IconButton(
+                            onClick = {
+                                detailsViewModel.setCheckInFormMode(
+                                    CheckInFormMode.Add(
+                                        activity.id
+                                    )
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Bolt,
+                                contentDescription = null
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.QueryStats,
-                            contentDescription = null
-                        )
                     }
-                    IconButton(onClick = onEditActivity) {
-                        Icon(
-                            imageVector = Icons.Rounded.Edit,
-                            contentDescription = stringResource(R.string.edit_activity)
-                        )
-                    }
-                    IconButton(
-                        onClick = {
-                            uiViewModel.setDeletionMode(DeletionMode.Activity(activity))
-                        }
+                    DamierMenu(
+                        expanded = state.menuExpanded,
+                        onShowMenu = { detailsViewModel.showMenu(it) }
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Delete,
-                            contentDescription = stringResource(R.string.delete)
+                        DropdownMenuItem(
+                            onClick = {
+                                detailsViewModel.showMenu(false)
+                                detailsViewModel.setShowStatsDialog(true)
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.QueryStats,
+                                    contentDescription = null
+                                )
+                            },
+                            text = {
+                                Text(stringResource(R.string.statistics))
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                detailsViewModel.showMenu(false)
+                                onEditActivity()
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Edit,
+                                    contentDescription = null
+                                )
+                            },
+                            text = {
+                                Text(stringResource(R.string.edit_activity))
+                            }
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                detailsViewModel.showMenu(false)
+                                uiViewModel.setDeletionMode(DeletionMode.Activity(activity))
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Delete,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.delete),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         )
                     }
                 }

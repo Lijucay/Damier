@@ -31,7 +31,6 @@ import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.HeadlineText
 import de.lijucay.damier.design.components.LargeText
 import de.lijucay.damier.design.components.LargeTitleText
 

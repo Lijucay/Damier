@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     alias(libs.plugins.android.application)
@@ -17,15 +18,22 @@ configure<ApplicationExtension> {
 
     defaultConfig {
         applicationId = "de.lijucay.damier"
-        minSdk = 28
+        minSdk = 26
         targetSdk = 37
-        versionCode = 11
-        versionName = "0.4.2-alpha"
+        versionCode = 12
+        versionName = "0.4.3-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true

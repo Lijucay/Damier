@@ -117,7 +117,6 @@
     <string name="edit_check_in">Edit check in</string>
     <string name="date">Date</string>
     <string name="amount">Amount</string>
-    <string name="select">Select</string>
     <string name="invalid_directory">Invalid directory selected</string>
     <string name="failed_to_create_backup">Failed to create the backup file</string>
     <string name="export_import">Export/Import</string>
@@ -142,14 +141,8 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_sum">Learn how your data is handled.</string>
     <string name="statistics">Statistics</string>
-    <string name="day">Day</string>
-    <string name="month">Month</string>
-    <string name="year">Year</string>
-    <string name="check_ins">Check-ins</string>
-    <string name="streak">Streak</string>
     <string name="activities">Activities</string>
     <string name="amount_of_reference">%1$d/%2$d</string>
-    <string name="activity_widget_preview">Reading</string>
     <string name="timeline">Timeline</string>
     <string name="timeline_expl">Total amount over time</string>
     <string name="this_week">This week</string>
@@ -165,6 +158,8 @@
     <string name="insufficient_size">This chip is too small to store the required data.</string>
     <string name="check_in_done">Logged %1$s</string>
     <string name="waiting_for_tag">Waiting for tag</string>
+    <string name="menu" translatable="false">Menu</string>
+    <string name="host" translatable="false">damier</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

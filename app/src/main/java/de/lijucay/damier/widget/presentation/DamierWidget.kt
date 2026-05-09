@@ -18,7 +18,6 @@ import androidx.glance.ImageProvider
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.LinearProgressIndicator
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
@@ -27,6 +26,7 @@ import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.updateAll
 import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
@@ -47,13 +47,14 @@ import androidx.glance.text.TextStyle
 import de.lijucay.damier.MainActivity
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.widget.data.LogCheckInAction
 import de.lijucay.damier.widget.domain.WidgetRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
 import java.time.LocalDate
 import java.util.UUID
@@ -203,6 +204,14 @@ class DamierWidget : GlanceAppWidget() {
                         ),
                     )
                 }
+            }
+        }
+    }
+
+    fun updateOnReboot(context: Context?) {
+        context?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                updateAll(context)
             }
         }
     }

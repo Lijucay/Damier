@@ -39,9 +39,7 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.animateClipWithScreenSize
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.clipInnerContainer
-import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeTitleText
-import de.lijucay.damier.design.components.TitleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

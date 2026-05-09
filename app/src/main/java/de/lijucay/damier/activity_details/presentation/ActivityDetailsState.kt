@@ -25,7 +25,8 @@ data class ActivityDetailsState(
     val showCheckInHistory: Boolean = false,
     val showStatsDialog: Boolean = false,
     val nfcChipId: String? = null,
-    val nfcWriteState: NfcWriteState = NfcWriteState.Idle
+    val nfcWriteState: NfcWriteState = NfcWriteState.Idle,
+    val menuExpanded: Boolean = false
 ) {
     val useLimitTheme: Boolean get() = referenceType == ReferenceType.LIMIT
     val showStreakCard: Boolean get() = referenceType != ReferenceType.LIMIT

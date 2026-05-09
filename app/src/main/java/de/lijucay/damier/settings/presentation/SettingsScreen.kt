@@ -249,7 +249,7 @@ fun SettingsScreen(
                 iconVector = Icons.Rounded.PrivacyTip
             ) {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    setData("https://damier.lijucay.de/privacy".toUri())
+                    data = "https://damier.lijucay.de/privacy".toUri()
                 }
 
                 context.startActivity(intent)
