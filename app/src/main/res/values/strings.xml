@@ -106,7 +106,8 @@
     <string name="settings">Settings</string>
     <string name="credits">Made with ♥️ in Germany</string>
     <string name="version">Damier Version: %1$s</string>
-    <string name="current_streak">Current streak</string>
+    <string name="streak">Streak</string>
+    <string name="day">Day</string>
     <string name="days">Days</string>
     <string name="edit_activity">Edit activity</string>
     <string name="delete">Delete</string>
