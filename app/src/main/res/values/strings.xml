@@ -160,6 +160,8 @@
     <string name="waiting_for_tag">Waiting for tag</string>
     <string name="menu" translatable="false">Menu</string>
     <string name="host" translatable="false">damier</string>
+    <string name="more">More</string>
+    <string name="less">Less</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

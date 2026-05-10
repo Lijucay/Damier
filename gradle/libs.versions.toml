@@ -29,7 +29,7 @@ documentfile = "1.1.0"
 
 vico = "3.1.0"
 
-cue = "v2.0.0"
+cue = "v2.1.0"
 
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceMaterial3" }

@@ -216,4 +216,6 @@
         <item>Du bist jetzt so eine Art große Sache.</item>
         <item>Die Streak ist permanent. Quasi.</item>
     </string-array>
+    <string name="less">Weniger</string>
+    <string name="more">Mehr</string>
 </resources>

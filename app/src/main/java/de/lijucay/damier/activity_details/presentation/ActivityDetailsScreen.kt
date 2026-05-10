@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -64,6 +66,7 @@ import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.DamierMenu
+import de.lijucay.damier.core.presentation.components.Cell
 import de.lijucay.damier.core.presentation.components.CookieButton
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
@@ -78,6 +81,7 @@ import de.lijucay.damier.design.components.TitleText
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -389,6 +393,60 @@ private fun LazyListScope.waffleDiagramItem(state: ActivityDetailsState) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     WaffleDiagram(waffleDiagramData = state.waffleDiagramData)
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val cDate = LocalDate.now()
+                        val eDate = cDate.plusDays(1)
+
+                        Text(
+                            stringResource(R.string.less)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Cell(
+                            modifier = Modifier.size(16.dp),
+                            checkInCount = 1,
+                            currentDate = cDate,
+                            endDate = eDate,
+                            reference = 4,
+                            type = state.waffleDiagramData.referenceType,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Cell(
+                            modifier = Modifier.size(16.dp),
+                            checkInCount = 2,
+                            currentDate = cDate,
+                            endDate = eDate,
+                            reference = 4,
+                            type = state.waffleDiagramData.referenceType,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Cell(
+                            modifier = Modifier.size(16.dp),
+                            checkInCount = 3,
+                            currentDate = cDate,
+                            endDate = eDate,
+                            reference = 4,
+                            type = state.waffleDiagramData.referenceType,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Cell(
+                            modifier = Modifier.size(16.dp),
+                            checkInCount = 4,
+                            currentDate = cDate,
+                            endDate = eDate,
+                            reference = 4,
+                            type = state.waffleDiagramData.referenceType,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(R.string.more)
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(2.dp))
