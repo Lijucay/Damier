@@ -12,5 +12,8 @@ object DataPreferences {
         val showReference = booleanPreferencesKey("show_reference")
         val showMaxAmount = booleanPreferencesKey("show_max_amount")
         val backupDirUri = stringPreferencesKey("backup_dir_uri")
+
+        val activityId = stringPreferencesKey("selected_activity_id")
+        val activityName = stringPreferencesKey("selected_activity_name")
     }
 }

@@ -46,6 +46,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import de.lijucay.damier.MainActivity
 import de.lijucay.damier.R
+import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.ReferenceType
@@ -68,7 +69,7 @@ class DamierWidget : GlanceAppWidget() {
 
         provideContent {
             val prefs = currentState<Preferences>()
-            val rawId = prefs[DamierWidgetState.ACTIVITY_ID]
+            val rawId = prefs[DataPreferences.Keys.activityId]
 
             val activityId = runCatching { UUID.fromString(rawId) }.getOrNull()
             val activityFlow = activityId?.let { repo.observeActivity(it) } ?: flowOf(null)

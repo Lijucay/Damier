@@ -32,6 +32,7 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.lifecycle.lifecycleScope
 import de.lijucay.damier.R
+import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.ui.theme.DamierTheme
@@ -78,8 +79,8 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
                     .getGlanceIdBy(appWidgetId)
             ) { prefs ->
                 prefs.toMutablePreferences().apply {
-                    this[DamierWidgetState.ACTIVITY_ID] = activity.id.toString()
-                    this[DamierWidgetState.ACTIVITY_NAME] = activity.activityName
+                    this[DataPreferences.Keys.activityId] = activity.id.toString()
+                    this[DataPreferences.Keys.activityName] = activity.activityName
                 }
             }
 
