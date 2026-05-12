@@ -6,6 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,6 +40,7 @@ import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.nfc.NfcManager
+import de.lijucay.damier.onboarding.OnBoarding
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
@@ -70,6 +76,8 @@ class MainActivity : ComponentActivity() {
                 WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
             )
             val scope = rememberCoroutineScope()
+
+            val firstLaunch by uiViewModel.firstLaunch.collectAsStateWithLifecycle()
 
             LaunchedEffect(isWidthAtLeastExpanded, isHeightAtLeastExpanded) {
                 uiViewModel.setWindowSizeInfo(isWidthAtLeastExpanded,  isHeightAtLeastExpanded)
@@ -112,80 +120,92 @@ class MainActivity : ComponentActivity() {
             }
 
             DamierTheme {
-                AdaptivePane(
-                    listPane = {
-                        ActivityListScreen(
-                            onActivityClicked = {
-                                scope.launch {
-                                    uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
-                                    scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                }
-                            },
-                            onSettingsClicked = {
-                                scope.launch {
-                                    uiViewModel.setDetailsPage(DetailsDestination.Settings)
-                                    scaffoldNavigator.navigateTo(
-                                        pane = ListDetailPaneScaffoldRole.Detail
-                                    )
-                                }
-                            },
-                            onAddActivity = {
-                                uiViewModel.setDetailsPage(DetailsDestination.AddActivity)
-                                scope.launch {
-                                    scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                }
-                            }
-                        )
-                    },
-                    detailPane = {
-                        AnimatedContent(targetState = detailsPage) { detailsDestination ->
-                            when (detailsDestination) {
-                                is DetailsDestination.ActivityDetails -> {
-                                    ActivityDetailsScreen(
-                                        onEditActivity = {
-                                            uiViewModel.setDetailsPage(DetailsDestination.EditActivity)
-                                            scope.launch { scaffoldNavigator.navigateTo(
-                                                pane = ListDetailPaneScaffoldRole.Detail
-                                            ) }
+                AnimatedContent(
+                    firstLaunch,
+                    transitionSpec = {
+                        (slideInVertically { it / 16 } + fadeIn(tween(400)))
+                            .togetherWith(fadeOut(tween(200)))
+                    }
+                ) {
+                    if (it) {
+                        OnBoarding { uiViewModel.setFirstLaunch(false) }
+                    } else {
+                        AdaptivePane(
+                            listPane = {
+                                ActivityListScreen(
+                                    onActivityClicked = {
+                                        scope.launch {
+                                            uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
+                                            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                                         }
-                                    ) {
-                                        scope.launch { scaffoldNavigator.navigateBack() }
-                                    }
-                                }
-                                is DetailsDestination.AddActivity -> {
-                                    AddActivityItemScreen {
-                                        scope.launch { scaffoldNavigator.navigateBack() }
-                                    }
-                                }
-                                is DetailsDestination.Settings -> {
-                                    SettingsScreen(
-                                        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-                                        showCrashlyticsChangedSnackbar = { snackbarSumId, show, buttonTxtId, action ->
-                                            showSnackbar(
-                                                this@MainActivity.getString(snackbarSumId),
-                                                show,
-                                                this@MainActivity.getString(buttonTxtId),
-                                                action
+                                    },
+                                    onSettingsClicked = {
+                                        scope.launch {
+                                            uiViewModel.setDetailsPage(DetailsDestination.Settings)
+                                            scaffoldNavigator.navigateTo(
+                                                pane = ListDetailPaneScaffoldRole.Detail
                                             )
                                         }
-                                    ) {
-                                        scope.launch { scaffoldNavigator.navigateBack() }
-                                    }
-                                }
-                                is DetailsDestination.EditActivity -> {
-                                    EditActivityScreen {
+                                    },
+                                    onAddActivity = {
+                                        uiViewModel.setDetailsPage(DetailsDestination.AddActivity)
                                         scope.launch {
-                                            scaffoldNavigator.navigateBack()
+                                            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                                         }
-                                        uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
+                                    }
+                                )
+                            },
+                            detailPane = {
+                                AnimatedContent(targetState = detailsPage) { detailsDestination ->
+                                    when (detailsDestination) {
+                                        is DetailsDestination.ActivityDetails -> {
+                                            ActivityDetailsScreen(
+                                                onEditActivity = {
+                                                    uiViewModel.setDetailsPage(DetailsDestination.EditActivity)
+                                                    scope.launch { scaffoldNavigator.navigateTo(
+                                                        pane = ListDetailPaneScaffoldRole.Detail
+                                                    ) }
+                                                }
+                                            ) {
+                                                scope.launch { scaffoldNavigator.navigateBack() }
+                                            }
+                                        }
+                                        is DetailsDestination.AddActivity -> {
+                                            AddActivityItemScreen {
+                                                scope.launch { scaffoldNavigator.navigateBack() }
+                                            }
+                                        }
+                                        is DetailsDestination.Settings -> {
+                                            SettingsScreen(
+                                                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                                                showCrashlyticsChangedSnackbar = { snackbarSumId, show, buttonTxtId, action ->
+                                                    showSnackbar(
+                                                        this@MainActivity.getString(snackbarSumId),
+                                                        show,
+                                                        this@MainActivity.getString(buttonTxtId),
+                                                        action
+                                                    )
+                                                }
+                                            ) {
+                                                scope.launch { scaffoldNavigator.navigateBack() }
+                                            }
+                                        }
+                                        is DetailsDestination.EditActivity -> {
+                                            EditActivityScreen {
+                                                scope.launch {
+                                                    scaffoldNavigator.navigateBack()
+                                                }
+                                                uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    },
-                    showDetailPane = isWidthAtLeastExpanded,
-                    scaffoldNavigator = scaffoldNavigator
-                )
+                            },
+                            showDetailPane = isWidthAtLeastExpanded,
+                            scaffoldNavigator = scaffoldNavigator
+                        )
+                    }
+                }
 
                 deletionMode?.let { mode ->
                     DeletionDialog(

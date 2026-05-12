@@ -22,12 +22,14 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.design.components.DefaultText
@@ -43,9 +45,26 @@ fun ActivityListItem(
     onCheckInClicked: () -> Unit,
     onItemClick: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     val containerColor = if (activityUi.referenceType != ReferenceType.LIMIT)
         MaterialTheme.colorScheme.primaryContainer
     else MaterialTheme.colorScheme.errorContainer
+
+    val max = activityUi.groupedCheckIns.maxOfOrNull { (_, checkIns) ->
+        checkIns.sumOf { it.amount }
+    } ?: 0
+
+    val unitNames = activityUi.unitId.getLongUnitNamesById(context)
+    val displayUnitName = when (activityUi.referenceType) {
+        ReferenceType.GOAL, ReferenceType.LIMIT -> {
+            if (activityUi.reference == 1) unitNames.singularName
+            else unitNames.pluralName
+        }
+        ReferenceType.MAX -> { if (max == 1) unitNames.singularName else unitNames.pluralName }
+    }
+
+    val referenceType = stringResource(activityUi.referenceType.toStringResource())
 
     Card(
         modifier = modifier
@@ -84,7 +103,7 @@ fun ActivityListItem(
                 AnimatedVisibility(
                     visible = activityUi.referenceType != ReferenceType.MAX && showReference
                 ) {
-                    LargeText(text = "${activityUi.referenceType}: ${activityUi.reference}")
+                    LargeText(text = "$referenceType: ${activityUi.reference} $displayUnitName")
                 }
                 AnimatedVisibility(
                     visible = activityUi.referenceType == ReferenceType.MAX
@@ -92,7 +111,7 @@ fun ActivityListItem(
                             && showMaxAmount
                 ) {
                     LargeText(
-                        text = "Max: ${activityUi.groupedCheckIns.maxOfOrNull { (_, checkIns) -> checkIns.sumOf { it.amount } } ?: 0}",
+                        text = "$referenceType: $max $displayUnitName",
                         )
                 }
 

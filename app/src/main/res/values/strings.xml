@@ -163,6 +163,36 @@
     <string name="host" translatable="false">damier</string>
     <string name="more">More</string>
     <string name="less">Less</string>
+    <string name="goal">Goal</string>
+    <string name="limit">Limit</string>
+    <string name="max">Max</string>
+    <string name="track_what_matters">Track what matters.</string>
+    <string name="twm_text">Whether you want to do more, reach a target, or hold yourself back, Damier keeps it all in one board, one glance away.</string>
+    <string name="next">Next</string>
+    <string name="three_types_of_activities">Three types of activities</string>
+    <string name="goal_desc">Set a daily target. The cell-color gets stronger as you get closer, being fully colored once you reach it.</string>
+    <string name="limit_desc">The cell grows redder as you approach your limit. At the limit, a ! marks that you\'ve hit it.</string>
+    <string name="max_desc">Log as much as you can each day. The cell color gets stronger as your value grows.</string>
+    <string name="example_board">Example board</string>
+    <string name="how_colors_work">How colors work</string>
+    <string name="how_colors_work_expl">The more progress, the stronger the color</string>
+    <string name="max_and_goal"><![CDATA[Max & Goal]]></string>
+    <string name="under_limit">Under limit</string>
+    <string name="at_limit">At limit</string>
+    <string name="how_checking_in_works">How checking in works</string>
+    <string name="how_checking_in_works_desc">There are two ways to log an activity. Both count, they just give you different levels of control.</string>
+    <string name="quick_check_in">Quick check-in</string>
+    <string name="quick_check_in_expl">Tap the bolt on the board or home screen widget. This logs the default amount instantly</string>
+    <string name="default_amount_info">The default amount is set per activity, you can configure it individually when creating or editing an activity.</string>
+    <string name="available_on_quick_check_in">Available on: board, home screen widget</string>
+    <string name="check_in_expl">Tap the bolt on the detail page. Opens a dialog so you can enter the exact amount.</string>
+    <string name="available_on_check_in">Available on: activity details page</string>
+    <string name="youre_all_set">You\'re all set.</string>
+    <string name="youre_all_set_message">That\'s everything you need to know. The rest you\'ll figure out along the way.</string>
+    <string name="done">Done</string>
+    <string name="about_and_help">About &amp; Help</string>
+    <string name="show_onboarding_again">Show onboarding again</string>
+    <string name="show_onboarding_again_summary">Revisit the introduction to Damier</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

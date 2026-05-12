@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.FileOpen
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.ReportGmailerrorred
@@ -253,6 +254,17 @@ fun SettingsScreen(
                 }
 
                 context.startActivity(intent)
+            }
+
+            PreferenceCategoryTitle(
+                title = stringResource(R.string.about_and_help)
+            )
+            Preference(
+                title = stringResource(R.string.show_onboarding_again),
+                summary = stringResource(R.string.show_onboarding_again_summary),
+                iconVector = Icons.Rounded.Info
+            ) {
+                uiViewModel.setFirstLaunch(true)
             }
         }
     }

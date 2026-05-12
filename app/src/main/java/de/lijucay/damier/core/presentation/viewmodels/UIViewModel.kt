@@ -50,6 +50,14 @@ class UIViewModel(
             initialValue = null
         )
 
+    val firstLaunch = dataStore.data
+        .map { it[DataPreferences.Keys.firstLaunch] ?: false }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = false
+        )
+
     private val _isWidthAtLeastExpanded = MutableStateFlow(false)
     val isWidthAtLeastExpanded = _isWidthAtLeastExpanded.asStateFlow()
 
@@ -105,5 +113,13 @@ class UIViewModel(
 
     fun setInfoMode(infoMode: InfoMode?) {
         _infoMode.value = infoMode
+    }
+
+    fun setFirstLaunch(firstLaunch: Boolean) {
+        viewModelScope.launch {
+            dataStore.edit { preferences ->
+                preferences[DataPreferences.Keys.firstLaunch] = firstLaunch
+            }
+        }
     }
 }

@@ -159,6 +159,36 @@
     <string name="insufficient_size">Dieser Chip ist zu klein, um die erforderlichen Daten zu speichern.</string>
     <string name="check_in_done">%1$s eingetragen</string>
     <string name="waiting_for_tag">Warte auf Chip</string>
+    <string name="goal">Ziel</string>
+    <string name="limit">Limit</string>
+    <string name="max">Maximum</string>
+    <string name="track_what_matters">Behalte den Überblick.</string>
+    <string name="twm_text">Ob du mehr erreichen, ein Ziel ansteuern oder dich im Zaum halten willst — Damier hat alles auf einen Blick.</string>
+    <string name="next">Weiter</string>
+    <string name="three_types_of_activities">Drei Arten von Aktivitäten</string>
+    <string name="goal_desc">Lege ein tägliches Ziel fest. Die Zellenfarbe wird stärker, je näher du dem Ziel kommst, und ist voll ausgefärbt, sobald du es erreichst.</string>
+    <string name="limit_desc">Die Zelle wird röter, je mehr du dich deinem Limit näherst. Wenn das Limit erreicht ist, erscheint ein !, das dies anzeigt.</string>
+    <string name="max_desc">Logge jeden Tag so viel wie möglich. Die Zellenfarbe wird stärker, je größer dein Wert wird.</string>
+    <string name="example_board">Beispiel-Board</string>
+    <string name="how_colors_work">So funktionieren die Farben</string>
+    <string name="how_colors_work_expl">Je mehr Fortschritt, desto stärker die Farbe</string>
+    <string name="max_and_goal"><![CDATA[Maximum & Ziel]]></string>
+    <string name="under_limit">Unter dem Limit</string>
+    <string name="at_limit">Limit erreicht</string>
+    <string name="how_checking_in_works">So funktioniert das Einchecken</string>
+    <string name="how_checking_in_works_desc">Es gibt zwei Möglichkeiten, eine Aktivität zu loggen. Beide zählen — sie geben dir nur unterschiedlich viel Kontrolle.</string>
+    <string name="quick_check_in">Schnelles Einchecken</string>
+    <string name="quick_check_in_expl">Tippe auf den Blitz im Board oder im Startbildschirm-Widget. Dadurch wird sofort der Standardwert geloggt.</string>
+    <string name="default_amount_info">Der Standardwert wird pro Aktivität festgelegt und kann beim Erstellen oder Bearbeiten einer Aktivität individuell angepasst werden.</string>
+    <string name="available_on_quick_check_in">Verfügbar auf: Board, Startbildschirm-Widget</string>
+    <string name="check_in_expl">Tippe auf den Blitz auf der Detailseite. Es öffnet sich ein Dialog, in dem du den genauen Wert eingeben kannst.</string>
+    <string name="available_on_check_in">Verfügbar auf: Aktivitäts-Detailseite</string>
+    <string name="youre_all_set">Alles bereit.</string>
+    <string name="youre_all_set_message">Das ist alles, was du wissen musst. Den Rest wirst du unterwegs herausfinden.</string>
+    <string name="done">Fertig</string>
+    <string name="about_and_help">Info &amp; Hilfe</string>
+    <string name="show_onboarding_again">Einführung erneut anzeigen</string>
+    <string name="show_onboarding_again_summary">Die Einführung in Damier erneut ansehen</string>
 
     <string-array name="streak_m_ns">
         <item>Tipp drauf. Einmal reicht.</item>

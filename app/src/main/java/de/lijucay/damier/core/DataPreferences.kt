@@ -13,6 +13,8 @@ object DataPreferences {
         val showMaxAmount = booleanPreferencesKey("show_max_amount")
         val backupDirUri = stringPreferencesKey("backup_dir_uri")
 
+        val firstLaunch = booleanPreferencesKey("first_launch")
+
         val activityId = stringPreferencesKey("selected_activity_id")
         val activityName = stringPreferencesKey("selected_activity_name")
     }

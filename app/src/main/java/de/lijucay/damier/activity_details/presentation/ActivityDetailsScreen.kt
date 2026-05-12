@@ -181,11 +181,13 @@ fun ActivityDetailsScreen(
             showBottomBarContent = isHeightAtLeastExpanded,
             navigationIcon = {
                 if (!isWidthAtLeastExpanded) {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
-                            contentDescription = stringResource(R.string.back)
-                        )
+                    Box(modifier = Modifier.padding(16.dp)) {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBackIosNew,
+                                contentDescription = stringResource(R.string.back)
+                            )
+                        }
                     }
                 }
             },
