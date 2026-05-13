@@ -193,6 +193,12 @@
     <string name="about_and_help">About &amp; Help</string>
     <string name="show_onboarding_again">Show onboarding again</string>
     <string name="show_onboarding_again_summary">Revisit the introduction to Damier</string>
+    <string name="title_eg">E.g. Reading</string>
+    <string name="select_unit">Select unit</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
+    <string name="target">Target</string>
+    <string name="max_ref_disabled_desc">Your personal best across all days automatically becomes the reference.</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>

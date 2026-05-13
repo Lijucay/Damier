@@ -125,7 +125,7 @@ fun getRandomCheckInInfo(
     }
 
     return WaffleDiagramData(
-        reference = 10,
+        reference = 1,
         referenceType = ReferenceType.MAX,
         checkIns = checkIns
     )

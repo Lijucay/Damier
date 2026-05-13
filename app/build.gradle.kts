@@ -20,8 +20,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 37
-        versionCode = 14
-        versionName = "0.6.0-alpha"
+        versionCode = 15
+        versionName = "0.6.1-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +55,10 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
+    implementation(libs.androidx.appfunctions)
+    implementation(libs.androidx.appfunctions.service)
+    ksp(libs.androidx.appfunctions.compiler)
+
     implementation(libs.cue)
 
     implementation(libs.vico.compose.m3)

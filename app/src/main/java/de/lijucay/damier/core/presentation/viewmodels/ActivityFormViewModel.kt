@@ -1,13 +1,12 @@
 package de.lijucay.damier.core.presentation.viewmodels
 
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.UnitId
-import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
+import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,38 +51,17 @@ class ActivityFormViewModel : ViewModel() {
         )
     }
 
-    fun setUseUnits(value: Boolean) = _state.update { it.copy(useUnits = value) }
-
-    fun setShowUnits(value: Boolean) = _state.update { it.copy(showUnits = value) }
-
-    fun setUseDefaultAmount(value: Boolean) = _state.update { it.copy(useDefaultAmount = value) }
-
-    fun setUseReference(value: Boolean) = _state.update { state ->
-        state.copy(
-            useReference = value,
-            checkInInfo = state.checkInInfo?.copy(
-                referenceType = if (!value) ReferenceType.MAX else state.referenceType
-            )
-        )
-    }
-
-    fun setShowReferenceTypes(value: Boolean) = _state.update { it.copy(showReferenceTypes = value) }
-
-    fun focusDefaultAmount(current: TextFieldValue): TextFieldValue =
-        current.copy(selection = TextRange(current.text.length))
-
-    fun focusReference(current: TextFieldValue): TextFieldValue =
-        current.copy(selection = TextRange(current.text.length))
-
     fun buildActivityInfo(): ActivityInfo {
         val s = _state.value
         return ActivityInfo(
             id = activityId,
             activityName = s.title,
-            unit = if (s.useUnits) s.unitId else UnitId.TIMES,
+            unit = s.unitId,
             reference = s.reference.text.toInt(),
-            referenceType = if (s.useReference) s.referenceType else ReferenceType.MAX,
-            defaultAmount = if (s.useDefaultAmount) s.defaultAmount.text.toInt() else 1
+            referenceType = s.referenceType,
+            defaultAmount = s.defaultAmount.text.toInt()
         )
     }
+
+    fun setShowUnitSelectionSheet(show: Boolean) = _state.update { it.copy(showUnitsSelectionDialog = show) }
 }

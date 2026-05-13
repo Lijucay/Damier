@@ -12,12 +12,14 @@ import androidx.compose.ui.unit.dp
 import de.lijucay.damier.design.components.DefaultText
 
 @Composable
-fun UnitBadge(text: String) {
+fun UnitBadge(
+    modifier: Modifier = Modifier,
+    text: String
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(shapes.extraLarge)
             .background(colorScheme.onSecondaryContainer)
-            .padding(end = 4.dp)
     ) {
         DefaultText(
             modifier = Modifier.padding(horizontal = 8.dp),

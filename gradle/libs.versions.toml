@@ -31,6 +31,8 @@ vico = "3.1.0"
 
 cue = "v2.1.0"
 
+appfunctions = "1.0.0-alpha09"
+
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceMaterial3" }
 androidx-glance-appwidget-preview = { module = "androidx.glance:glance-appwidget-preview", version.ref = "glanceMaterial3" }
@@ -78,6 +80,9 @@ androidx-documentfile = { group = "androidx.documentfile", name = "documentfile"
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 cue = { group = "com.github.lijucay.cue", name = "cue", version.ref = "cue" }
 
+androidx-appfunctions = { group = "androidx.appfunctions", name = "appfunctions", version.ref = "appfunctions" }
+androidx-appfunctions-service = { group = "androidx.appfunctions", name = "appfunctions-service", version.ref = "appfunctions" }
+androidx-appfunctions-compiler = { group = "androidx.appfunctions", name = "appfunctions-compiler", version.ref = "appfunctions" }
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]
 room = [ "room-runtime", "room-ktx" ]

@@ -26,7 +26,7 @@ fun TitleField(
             disabledIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        placeholder = { DefaultText(text = stringResource(R.string.title)) },
+        placeholder = { DefaultText(text = stringResource(R.string.title_eg)) },
         value = value,
         onValueChange = onValueChange,
         shape = shapes.extraLargeIncreased,

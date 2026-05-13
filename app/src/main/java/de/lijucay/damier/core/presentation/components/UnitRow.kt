@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
@@ -17,13 +18,14 @@ import de.lijucay.damier.design.components.DefaultText
 
 @Composable
 fun UnitRow(
+    modifier: Modifier = Modifier,
     label: String,
     badge: String,
     selected: Boolean,
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(shapes.extraLarge)
             .clickable(onClick = onClick, role = Role.RadioButton)
     ) {
@@ -31,10 +33,16 @@ fun UnitRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            RadioButton(selected = selected, onClick = null)
-            DefaultText(text = label)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                RadioButton(selected = selected, onClick = null)
+                DefaultText(text = label)
+            }
             UnitBadge(text = badge)
         }
     }

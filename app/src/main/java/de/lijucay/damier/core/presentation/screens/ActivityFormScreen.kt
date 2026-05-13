@@ -1,9 +1,13 @@
 package de.lijucay.damier.core.presentation.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -11,48 +15,74 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedToggleButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
+import de.lijucay.damier.activity_list.presentation.UnitSelectionBottomSheet
 import de.lijucay.damier.core.domain.ActivityFormMode
+import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.core.domain.getLongUnitNamesById
+import de.lijucay.damier.core.presentation.components.ScreenContainer
+import de.lijucay.damier.core.presentation.components.Stepper
+import de.lijucay.damier.core.presentation.components.TitleField
+import de.lijucay.damier.core.presentation.components.cards.PreviewCard
+import de.lijucay.damier.core.presentation.components.cards.UnitCard
 import de.lijucay.damier.core.presentation.viewmodels.ActivityFormViewModel
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
-import de.lijucay.damier.core.presentation.components.cards.DefaultAmountCard
-import de.lijucay.damier.core.presentation.components.cards.PreviewCard
-import de.lijucay.damier.core.presentation.components.cards.ReferenceCard
-import de.lijucay.damier.core.presentation.components.ScreenContainer
-import de.lijucay.damier.core.presentation.components.TitleField
-import de.lijucay.damier.core.presentation.components.cards.UnitCard
 import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.design.components.TitleText
 import de.lijucay.damier.ui.theme.ActivityTheme
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityFormScreen(
     modifier: Modifier = Modifier,
     mode: ActivityFormMode,
     onNavigateBack: () -> Unit
 ) {
+    val context = LocalContext.current
+
     val uiViewModel = koinViewModel<UIViewModel>()
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val formViewModel = koinViewModel<ActivityFormViewModel>()
 
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
     val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
     val state by formViewModel.state.collectAsStateWithLifecycle()
+
+    val labels = ReferenceType.entries.map { stringResource(it.toStringResource()) }
 
     LaunchedEffect(mode) {
         when (mode) {
@@ -65,10 +95,6 @@ fun ActivityFormScreen(
         is ActivityFormMode.Add -> stringResource(R.string.add_activity)
         is ActivityFormMode.Edit -> stringResource(R.string.edit, mode.activity.title)
     }
-
-    val focusManager = LocalFocusManager.current
-    val defaultAmountFocusRequester = remember { FocusRequester() }
-    val referenceFocusRequester = remember { FocusRequester() }
 
     ActivityTheme(state.useLimitTheme) {
         ScreenContainer(
@@ -109,6 +135,13 @@ fun ActivityFormScreen(
 
                 Spacer(Modifier.height(16.dp))
 
+                LargeTitleText(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = stringResource(R.string.title)
+                )
+
+                Spacer(Modifier.height(8.dp))
+
                 TitleField(
                     value = state.title,
                     onValueChange = formViewModel::setTitle
@@ -125,50 +158,146 @@ fun ActivityFormScreen(
 
                 UnitCard(
                     state = state,
-                    onUseUnitsToggle = { formViewModel.setUseUnits(!state.useUnits) },
-                    onShowUnitsToggle = { formViewModel.setShowUnits(!state.showUnits) },
-                    onUnitSelected = formViewModel::setUnitId
+                    onClick = { formViewModel.setShowUnitSelectionSheet(true) }
                 )
 
                 Spacer(Modifier.height(8.dp))
 
-                AnimatedVisibility(visible = state.useUnits) {
-                    DefaultAmountCard(
-                        state = state,
-                        focusRequester = defaultAmountFocusRequester,
-                        onUseDefaultAmountToggle = { formViewModel.setUseDefaultAmount(!state.useDefaultAmount) },
-                        onValueChange = formViewModel::setDefaultAmount,
-                        onFocusRequested = {
-                            focusManager.clearFocus()
-                            formViewModel.setDefaultAmount(
-                                formViewModel.focusDefaultAmount(state.defaultAmount)
-                            )
-                            defaultAmountFocusRequester.requestFocus()
-                        }
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-                }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        TitleText(text = stringResource(R.string.reference_type))
 
-                Spacer(Modifier.height(8.dp))
+                        Column{
+                            Row(
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween)
+                            ) {
+                                val modifiers =
+                                    listOf(Modifier.weight(1f), Modifier.weight(1f), Modifier.weight(1f))
 
-                ReferenceCard(
-                    state = state,
-                    focusRequester = referenceFocusRequester,
-                    onUseReferenceToggle = { formViewModel.setUseReference(!state.useReference) },
-                    onShowReferenceTypesToggle = {
-                        formViewModel.setReference(
-                            formViewModel.focusReference(state.reference)
+                                ReferenceType.entries.forEachIndexed { index, type ->
+                                    ElevatedToggleButton(
+                                        checked = state.referenceType == type,
+                                        onCheckedChange = { formViewModel.setReferenceType(type) },
+                                        modifier = modifiers[index].semantics { role = Role.RadioButton },
+                                        shapes = when (index) {
+                                            0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                                            ReferenceType.entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                                            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                                        }
+                                    ) {
+                                        Text(labels[index])
+                                    }
+                                }
+                            }
+
+                            AnimatedVisibility(visible = !state.referenceType.isMax()) {
+                                Crossfade(targetState = state.referenceType) {
+                                    SmallText(
+                                        text = stringResource(
+                                            id = if (it.isLimit()) {
+                                                R.string.limit_desc
+                                            } else {
+                                                R.string.goal_desc
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onPrimaryContainer)
+
+                        TitleText(
+                            text = stringResource(
+                                id = when (state.referenceType) {
+                                    ReferenceType.GOAL -> R.string.target
+                                    ReferenceType.LIMIT -> R.string.limit
+                                    ReferenceType.MAX -> R.string.max
+                                }
+                            )
                         )
-                        formViewModel.setShowReferenceTypes(!state.showReferenceTypes)
-                    },
-                    onFocusRequested = {
-                        focusManager.clearFocus()
-                        referenceFocusRequester.requestFocus()
-                    },
-                    onReferenceTypeSelected = formViewModel::setReferenceType,
-                    onReferenceValueChange = formViewModel::setReference
-                )
 
-                Spacer(Modifier.height(16.dp))
+                        Column {
+                            Stepper(
+                                value = state.reference.text.toIntOrNull() ?: 0,
+                                onValueChange = { ref ->
+                                    formViewModel.setReference(
+                                        TextFieldValue(
+                                            text = ref.toString(),
+                                            selection = TextRange(ref.toString().length)
+                                        )
+                                    )
+                                },
+                                enabled = !state.referenceType.isMax(),
+                                unit = if ((state.reference.text.toIntOrNull() ?: 0) == 1) {
+                                    state.unitId.getLongUnitNamesById(context).singularName
+                                } else {
+                                    state.unitId.getLongUnitNamesById(context).pluralName
+                                }
+                            )
+
+                            AnimatedVisibility(visible = state.referenceType.isMax()) {
+                                OutlinedCard(
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    shape = MaterialTheme.shapes.medium
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(16.dp),
+                                        text = stringResource(R.string.max_ref_disabled_desc)
+                                    )
+                                }
+                            }
+                        }
+
+                        HorizontalDivider(color = MaterialTheme.colorScheme.onPrimaryContainer)
+
+                        TitleText(
+                            text = stringResource(R.string.default_amount)
+                        )
+
+                        Stepper(
+                            value = state.defaultAmount.text.toIntOrNull() ?: 0,
+                            onValueChange = { defA ->
+                                formViewModel.setDefaultAmount(
+                                    TextFieldValue(
+                                        text = defA.toString(),
+                                        selection = TextRange(defA.toString().length)
+                                    )
+                                )
+                            },
+                            unit = if ((state.defaultAmount.text.toIntOrNull() ?: 0) == 1) {
+                                state.unitId.getLongUnitNamesById(context).singularName
+                            } else {
+                                state.unitId.getLongUnitNamesById(context).pluralName
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        if (state.showUnitsSelectionDialog) {
+            UnitSelectionBottomSheet(
+                sheetState = sheetState,
+                selectedUnit = state.unitId,
+                onUnitSelected = formViewModel::setUnitId
+            ) {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    formViewModel.setShowUnitSelectionSheet(false)
+                }
             }
         }
     }

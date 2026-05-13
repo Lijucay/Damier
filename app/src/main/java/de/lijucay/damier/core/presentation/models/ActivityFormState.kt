@@ -11,13 +11,14 @@ data class ActivityFormState(
     val unitId: UnitId = UnitId.TIMES,
     val defaultAmount: TextFieldValue = TextFieldValue("1", selection = TextRange(1)),
     val reference: TextFieldValue = TextFieldValue("1", selection = TextRange(1)),
-    val referenceType: ReferenceType = ReferenceType.GOAL,
+    val referenceType: ReferenceType = ReferenceType.MAX,
     val useUnits: Boolean = false,
     val showUnits: Boolean = false,
     val useDefaultAmount: Boolean = false,
     val useReference: Boolean = false,
     val showReferenceTypes: Boolean = false,
     val checkInInfo: WaffleDiagramData? = null,
+    val showUnitsSelectionDialog: Boolean = false
 ) {
     val useLimitTheme: Boolean get() = referenceType == ReferenceType.LIMIT
 
