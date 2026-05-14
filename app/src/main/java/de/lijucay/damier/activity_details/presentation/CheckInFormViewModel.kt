@@ -1,6 +1,5 @@
 package de.lijucay.damier.activity_details.presentation
 
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.presentation.models.CheckInUi
@@ -34,7 +33,7 @@ class CheckInFormViewModel : ViewModel() {
         _state.update { it.copy(dateTime = displayableDateTime) }
     }
 
-    fun setAmount(amount: TextFieldValue) = _state.update { it.copy(amount = amount) }
+    fun setAmount(amount: Int) = _state.update { it.copy(amount = amount) }
 
     fun buildCheckInInfo(): CheckInInfo {
         val s = _state.value
@@ -42,7 +41,7 @@ class CheckInFormViewModel : ViewModel() {
             id = checkInId,
             activityId = activityId,
             timestamp = s.dateTime.value,
-            amount = s.amount.text.toInt()
+            amount = s.amount
         )
     }
 

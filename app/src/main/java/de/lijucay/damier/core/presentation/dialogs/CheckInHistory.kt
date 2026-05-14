@@ -33,6 +33,7 @@ import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
 import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText
 import java.time.LocalDate
 
@@ -70,7 +71,12 @@ fun CheckInHistory(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BottomSheetDefaults.DragHandle()
-                TitleText(text = stringResource(R.string.full_history))
+                LargeTitleText(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(R.string.full_history)
+                )
             }
         }
     ) {

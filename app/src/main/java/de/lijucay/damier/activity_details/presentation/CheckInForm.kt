@@ -2,34 +2,32 @@ package de.lijucay.damier.activity_details.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Bolt
-import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SelectableDates
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.getSelectedDate
@@ -43,22 +41,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
-import de.lijucay.damier.core.presentation.components.NumberTextField
+import de.lijucay.damier.core.domain.LongUnitName
+import de.lijucay.damier.core.presentation.bottomPadding
+import de.lijucay.damier.core.presentation.components.Stepper
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
 import de.lijucay.damier.core.presentation.models.toDisplayableTime
 import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeText
-import de.lijucay.damier.ui.theme.ActivityTheme
+import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.design.components.TitleText
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -67,7 +63,9 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckInForm(
+    sheetState: SheetState,
     mode: CheckInFormMode,
+    unit: LongUnitName,
     useLimitTheme: Boolean,
     onDeleteRequest: (CheckInUi) -> Unit,
     onDismissRequest: () -> Unit
@@ -83,6 +81,8 @@ fun CheckInForm(
             is CheckInFormMode.Add -> LocalDateTime.now()
         }
     }
+
+    val amount = state.amount
 
     val dateState = rememberDatePickerState(
         initialSelectedDate = initialDateTime.toLocalDate(),
@@ -101,9 +101,6 @@ fun CheckInForm(
         initialMinute = initialDateTime.toLocalTime().minute
     )
 
-    val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
-
     LaunchedEffect(mode) {
         when (mode) {
             is CheckInFormMode.Add -> formViewModel.initForAdd(mode.activityId)
@@ -116,66 +113,96 @@ fun CheckInForm(
         is CheckInFormMode.Edit -> stringResource(R.string.edit_check_in)
     }
 
-    ActivityTheme(useLimitTheme = useLimitTheme) {
-        BasicAlertDialog(
-            onDismissRequest = onDismissRequest
-        ) {
-            Surface(
-                modifier =
-                    Modifier
-                        .requiredWidth(360.0.dp)
-                        .heightIn(max = 720.0.dp),
-                shape = AlertDialogDefaults.shape,
-                color = if (useLimitTheme) MaterialTheme.colorScheme.errorContainer else AlertDialogDefaults.containerColor
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = onDismissRequest,
+        dragHandle = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .size(AlertDialogDefaults.IconSize),
-                            tint = if (useLimitTheme) {
-                                MaterialTheme.colorScheme.onErrorContainer
-                            } else AlertDialogDefaults.iconContentColor,
-                            imageVector = when (mode) {
-                                is CheckInFormMode.Add -> Icons.Rounded.Bolt
-                                is CheckInFormMode.Edit -> Icons.Rounded.Edit
-                            },
-                            contentDescription = null
-                        )
-                    }
+                BottomSheetDefaults.DragHandle()
 
-                    LargeText(
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    LargeTitleText(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .weight(1f),
                         color = AlertDialogDefaults.titleContentColor,
                         text = dialogTitle
                     )
 
+                    Row {
+                        if (mode is CheckInFormMode.Edit) {
+                            IconButton(onClick = { onDeleteRequest(mode.checkIn) }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Delete,
+                                    contentDescription = stringResource(R.string.delete)
+                                )
+                            }
+                        }
+
+                        IconButton(
+                            enabled = state.isSaveEnabled,
+                            onClick = {
+                                if (timeState.isInputValid) {
+                                    formViewModel.setDateTime(
+                                        LocalDateTime.of(
+                                            dateState.getSelectedDate(),
+                                            LocalTime.of(timeState.hour, timeState.minute)
+                                        )
+                                    )
+
+                                    activityListViewModel.upsert(formViewModel.buildCheckInInfo())
+                                    onDismissRequest()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Save,
+                                contentDescription = stringResource(R.string.save)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    onClick = formViewModel::toggleShowDatePicker
+                ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .verticalScroll(rememberScrollState())
-                            .then(
-                                if (state.showDatePicker || state.showTimePicker) {
-                                    Modifier.weight(1f)
-                                } else Modifier
-                            ),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         Row(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            DefaultText(text = stringResource(R.string.date))
+                            TitleText(text = stringResource(R.string.date))
                             Box(
                                 Modifier
                                     .clip(shape = MaterialTheme.shapes.extraLarge)
@@ -185,7 +212,6 @@ fun CheckInForm(
                                         else
                                             MaterialTheme.colorScheme.tertiaryContainer
                                     )
-                                    .clickable(onClick = formViewModel::toggleShowDatePicker)
                             ) {
                                 DefaultText(
                                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -219,162 +245,101 @@ fun CheckInForm(
                                         dividerColor = MaterialTheme.colorScheme.onErrorContainer,
                                         navigationContentColor = MaterialTheme.colorScheme.onErrorContainer,
                                     )
-                                } else {
-                                    DatePickerDefaults.colors()
-                                },
+                                } else DatePickerDefaults.colors(),
                                 state = dateState,
                                 showModeToggle = false,
                                 title = null,
                                 headline = null
                             )
                         }
+                    }
+                }
 
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            DefaultText(text = stringResource(R.string.time))
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.extraLarge,
+                    onClick = formViewModel::toggleShowTimePicker
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TitleText(text = stringResource(R.string.time))
 
-                            Box(
-                                Modifier
-                                    .clip(shape = MaterialTheme.shapes.extraLarge)
-                                    .background(
-                                        if (useLimitTheme)
-                                            MaterialTheme.colorScheme.onErrorContainer
-                                        else
-                                            MaterialTheme.colorScheme.tertiaryContainer
-                                    )
-                                    .clickable(onClick = formViewModel::toggleShowTimePicker)
-                            ) {
-                                DefaultText(
-                                    modifier = Modifier.padding(horizontal = 8.dp),
-                                    color = if (useLimitTheme)
-                                        MaterialTheme.colorScheme.errorContainer
+                        Box(
+                            Modifier
+                                .clip(shape = MaterialTheme.shapes.extraLarge)
+                                .background(
+                                    if (useLimitTheme)
+                                        MaterialTheme.colorScheme.onErrorContainer
                                     else
-                                        MaterialTheme.colorScheme.onTertiaryContainer,
-                                    text = LocalTime.of(timeState.hour, timeState.minute)
-                                        .toDisplayableTime().formatted
+                                        MaterialTheme.colorScheme.tertiaryContainer
                                 )
-                            }
-                        }
-
-                        AnimatedVisibility(visible = state.showTimePicker) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                TimePicker(
-                                    colors = if (useLimitTheme) {
-                                        TimePickerDefaults.colors(
-                                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                                            timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            timeSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                            timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
-                                            periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            periodSelectorBorderColor = MaterialTheme.colorScheme.errorContainer,
-                                            clockDialSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                            clockDialUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            periodSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                            clockDialColor = MaterialTheme.colorScheme.errorContainer,
-                                            selectorColor = MaterialTheme.colorScheme.onErrorContainer,
-                                            periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
-                                            periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer
-                                        )
-                                    } else TimePickerDefaults.colors(),
-                                    state = timeState
-                                )
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth()
-                                .clickable(
-                                    onClick = {
-                                        focusManager.clearFocus()
-                                        focusRequester.requestFocus()
-                                    }
-                                ),
-                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             DefaultText(
-                                text = stringResource(R.string.amount)
-                            )
-
-                            NumberTextField(
-                                value = state.amount,
-                                onValueChange = formViewModel::setAmount,
-                                focusRequester = focusRequester,
-                                cursorBrush = SolidColor(
-                                    if (useLimitTheme) {
-                                        MaterialTheme.colorScheme.onErrorContainer
-                                    } else MaterialTheme.colorScheme.primary
-                                ),
-                                textColor = if (useLimitTheme) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.primary
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                color = if (useLimitTheme)
+                                    MaterialTheme.colorScheme.errorContainer
+                                else
+                                    MaterialTheme.colorScheme.onTertiaryContainer,
+                                text = LocalTime.of(timeState.hour, timeState.minute)
+                                    .toDisplayableTime().formatted
                             )
                         }
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(vertical = 8.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        TextButton(
-                            onClick = onDismissRequest
+                    AnimatedVisibility(visible = state.showTimePicker) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            DefaultText(
-                                color = if (useLimitTheme) MaterialTheme.colorScheme.onErrorContainer else Color.Unspecified,
-                                text = stringResource(android.R.string.cancel)
-                            )
-                        }
-
-                        Row {
-                            when(mode) {
-                                is CheckInFormMode.Add -> {}
-                                is CheckInFormMode.Edit -> {
-                                    TextButton(onClick = { onDeleteRequest(mode.checkIn) }) {
-                                        DefaultText(
-                                            color = if (useLimitTheme) MaterialTheme.colorScheme.onErrorContainer else Color.Unspecified,
-                                            text = stringResource(R.string.delete)
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                }
-                            }
-
-                            TextButton(
-                                enabled = state.isSaveEnabled,
-                                onClick = {
-                                    if (timeState.isInputValid) {
-                                        formViewModel.setDateTime(
-                                            LocalDateTime.of(
-                                                dateState.getSelectedDate(),
-                                                LocalTime.of(timeState.hour, timeState.minute)
-                                            )
-                                        )
-
-                                        activityListViewModel.upsert(formViewModel.buildCheckInInfo())
-                                        onDismissRequest()
-                                    }
-                                }
-                            ) {
-                                DefaultText(
-                                    color = if (useLimitTheme) MaterialTheme.colorScheme.onErrorContainer else Color.Unspecified,
-                                    text = stringResource(R.string.save)
+                            TimePicker(
+                            colors = if (useLimitTheme) {
+                                TimePickerDefaults.colors(
+                                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
+                                    timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
+                                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    periodSelectorBorderColor = MaterialTheme.colorScheme.errorContainer,
+                                    clockDialSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
+                                    clockDialUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
+                                    clockDialColor = MaterialTheme.colorScheme.errorContainer,
+                                    selectorColor = MaterialTheme.colorScheme.onErrorContainer,
+                                    periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
+                                    periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer
                                 )
-                            }
+                            } else TimePickerDefaults.colors(),
+                                state = timeState
+                            )
                         }
                     }
                 }
+
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                ) {
+                    TitleText(text = stringResource(R.string.amount))
+
+                    Stepper(
+                        value = amount,
+                        onValueChange = { formViewModel.setAmount(it) },
+                        unit = if (amount == 1) unit.singularName else unit.pluralName
+                    )
+                }
             }
+
+            Spacer(Modifier.height(bottomPadding()))
         }
     }
 }

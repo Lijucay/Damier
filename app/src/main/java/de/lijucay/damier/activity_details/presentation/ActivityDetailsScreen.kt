@@ -64,6 +64,7 @@ import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
+import de.lijucay.damier.core.domain.getLongUnitNamesById
 import de.lijucay.damier.core.domain.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.DamierMenu
 import de.lijucay.damier.core.presentation.components.Cell
@@ -108,6 +109,8 @@ fun ActivityDetailsScreen(
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val activityFormSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val nfcSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val host = stringResource(R.string.host)
 
@@ -143,24 +146,6 @@ fun ActivityDetailsScreen(
         }
     }
 
-    when (val writeState = state.nfcWriteState) {
-        NfcWriteState.Idle -> {}
-        is NfcWriteState.Success -> {
-            LaunchedEffect(writeState) {
-                selectedActivity?.let { activity ->
-                    activityListViewModel.updateNfcChipId(activity.id, writeState.chipId)
-                }
-                detailsViewModel.dismissNfcWrite()
-            }
-        }
-        else -> {
-            NfcWriteDialog(
-                writeState = writeState,
-                onDismiss = { detailsViewModel.dismissNfcWrite() }
-            )
-        }
-    }
-
     ActivityTheme(useLimitTheme = state.useLimitTheme) {
         ScreenContainer(
             modifier = modifier,
@@ -181,13 +166,11 @@ fun ActivityDetailsScreen(
             showBottomBarContent = isHeightAtLeastExpanded,
             navigationIcon = {
                 if (!isWidthAtLeastExpanded) {
-                    Box(modifier = Modifier.padding(16.dp)) {
-                        IconButton(onClick = onNavigateBack) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBackIosNew,
-                                contentDescription = stringResource(R.string.back)
-                            )
-                        }
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             },
@@ -303,10 +286,20 @@ fun ActivityDetailsScreen(
         state.checkInFormMode?.let { mode ->
             selectedActivity?.let { activity ->
                 CheckInForm(
-                    onDismissRequest = { detailsViewModel.setCheckInFormMode(null) },
+                    sheetState = activityFormSheetState,
                     mode = mode,
                     useLimitTheme = state.useLimitTheme,
-                    onDeleteRequest = { uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) }
+                    onDeleteRequest = {
+                        scope.launch { activityFormSheetState.hide() }.invokeOnCompletion {
+                            detailsViewModel.setCheckInFormMode(null)
+                        }
+                        uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) },
+                    onDismissRequest = {
+                        scope.launch { activityFormSheetState.hide() }.invokeOnCompletion {
+                            detailsViewModel.setCheckInFormMode(null)
+                        }
+                    },
+                    unit = activity.unitId.getLongUnitNamesById(context)
                 )
             }
         }
@@ -340,6 +333,21 @@ fun ActivityDetailsScreen(
                     }
                 }
             )
+        }
+
+        when (val writeState = state.nfcWriteState) {
+            NfcWriteState.Idle -> {}
+            else -> {
+                NfcWriteDialog(
+                    writeState = writeState,
+                    sheetState = nfcSheetState,
+                    onDismissRequest = {
+                        scope.launch { nfcSheetState.hide() }.invokeOnCompletion {
+                            detailsViewModel.dismissNfcWrite()
+                        }
+                    }
+                )
+            }
         }
     }
 }

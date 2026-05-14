@@ -10,4 +10,13 @@ sealed interface NfcWriteState {
     data object NotNdefCompatible : NfcWriteState
     data object Unknown : NfcWriteState
     data class Success(val chipId: String) : NfcWriteState
+
+    val NfcWriteState.isAutoClosing: Boolean
+        get() = this is Success || this in setOf(
+            InsufficientSize,
+            NotNdefCompatible,
+            NotWriteable,
+            TagLost,
+            Unknown
+        )
 }

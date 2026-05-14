@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
 import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.SmallText
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,11 +44,16 @@ fun StatsBottomSheet(
         onDismissRequest = onDismissRequest,
         dragHandle = {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 BottomSheetDefaults.DragHandle()
-                LargeText(text = stringResource(R.string.statistics))
+                LargeTitleText(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.statistics)
+                )
             }
         }
     ) {
