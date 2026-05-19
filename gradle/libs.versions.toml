@@ -1,5 +1,5 @@
 [versions]
-adaptive = "1.3.0-beta01"
+adaptive = "1.3.0-beta02"
 agp = "9.2.1"
 datastore = "1.2.1"
 datastorePreferencesAndroid = "1.2.1"
@@ -12,8 +12,8 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-composeBom = "2026.05.00"
-materialAlpha = "1.5.0-alpha19"
+composeBom = "2026.05.01"
+materialAlpha = "1.5.0-alpha20"
 materialIconsCore = "1.7.8"
 
 koin = "4.2.1"
