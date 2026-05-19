@@ -70,23 +70,26 @@ class DamierWidget : GlanceAppWidget() {
         provideContent {
             val prefs = currentState<Preferences>()
             val rawId = prefs[DataPreferences.Keys.activityId]
+            val activityName = prefs[DataPreferences.Keys.activityName]
 
             val activityId = runCatching { UUID.fromString(rawId) }.getOrNull()
             val activityFlow = activityId?.let { repo.observeActivity(it) } ?: flowOf(null)
             val activityData by activityFlow.collectAsState(initial = null)
 
             GlanceTheme {
-                if (activityData == null) {
-                    Scaffold(modifier = GlanceModifier.fillMaxSize()) {
-                        Box(
-                            modifier = GlanceModifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(context.getString(R.string.no_activity_selected))
+                when {
+                    activityData != null -> WidgetLayout(context, activityData!!)
+                    rawId != null -> LoadingLayout(context, activityName)
+                    else -> {
+                        Scaffold(modifier = GlanceModifier.fillMaxSize()) {
+                            Box(
+                                modifier = GlanceModifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(context.getString(R.string.no_activity_selected))
+                            }
                         }
                     }
-                } else {
-                    WidgetLayout(context, activityData!!)
                 }
             }
         }
@@ -203,6 +206,33 @@ class DamierWidget : GlanceAppWidget() {
                                         activityData.activityInfo.id.toString()
                             )
                         ),
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun LoadingLayout(context: Context, activityName: String?) {
+        Scaffold(modifier = GlanceModifier.fillMaxSize()) {
+            Box(
+                modifier = GlanceModifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (activityName != null) {
+                        Text(
+                            text = activityName,
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = GlanceTheme.colors.onBackground
+                            )
+                        )
+                        Spacer(GlanceModifier.height(8.dp))
+                    }
+                    Text(
+                        text = context.getString(R.string.loading),
+                        style = TextStyle(color = GlanceTheme.colors.onBackground)
                     )
                 }
             }

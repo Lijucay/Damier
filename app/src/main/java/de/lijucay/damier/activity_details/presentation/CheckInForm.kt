@@ -226,26 +226,24 @@ fun CheckInForm(
 
                         AnimatedVisibility(visible = state.showDatePicker) {
                             DatePicker(
-                                colors = if (useLimitTheme) {
-                                    DatePickerDefaults.colors(
-                                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                                        weekdayContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        yearContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        currentYearContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        disabledYearContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(0.5f),
-                                        selectedYearContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        selectedYearContentColor = MaterialTheme.colorScheme.errorContainer,
-                                        dayContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        selectedDayContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        selectedDayContentColor = MaterialTheme.colorScheme.errorContainer,
-                                        disabledDayContentColor = MaterialTheme.colorScheme.onErrorContainer.copy(0.5f),
-                                        todayDateBorderColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        todayContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        subheadContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        dividerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                        navigationContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    )
-                                } else DatePickerDefaults.colors(),
+                                colors = DatePickerDefaults.colors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    weekdayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    yearContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    currentYearContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    disabledYearContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.5f),
+                                    selectedYearContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedYearContentColor = MaterialTheme.colorScheme.primaryContainer,
+                                    dayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedDayContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedDayContentColor = MaterialTheme.colorScheme.primaryContainer,
+                                    disabledDayContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.5f),
+                                    todayDateBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    todayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    subheadContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    dividerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    navigationContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                ),
                                 state = dateState,
                                 showModeToggle = false,
                                 title = null,
@@ -300,24 +298,22 @@ fun CheckInForm(
                             contentAlignment = Alignment.Center
                         ) {
                             TimePicker(
-                            colors = if (useLimitTheme) {
-                                TimePickerDefaults.colors(
-                                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                    timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
-                                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    periodSelectorBorderColor = MaterialTheme.colorScheme.errorContainer,
-                                    clockDialSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                    clockDialUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.errorContainer,
-                                    clockDialColor = MaterialTheme.colorScheme.errorContainer,
-                                    selectorColor = MaterialTheme.colorScheme.onErrorContainer,
-                                    periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.errorContainer,
-                                    periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onErrorContainer
-                                )
-                            } else TimePickerDefaults.colors(),
+                                colors = TimePickerDefaults.colors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
+                                    timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    periodSelectorBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                                    clockDialSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
+                                    clockDialUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
+                                    clockDialColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            ),
                                 state = timeState
                             )
                         }

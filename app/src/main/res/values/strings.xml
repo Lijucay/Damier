@@ -199,6 +199,7 @@
     <string name="increase">Increase</string>
     <string name="target">Target</string>
     <string name="max_ref_disabled_desc">Your personal best across all days automatically becomes the reference.</string>
+    <string name="loading">Loading…</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>
