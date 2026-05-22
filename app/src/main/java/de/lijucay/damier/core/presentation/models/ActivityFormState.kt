@@ -1,7 +1,5 @@
 package de.lijucay.damier.core.presentation.models
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.shared.UnitId
@@ -9,8 +7,8 @@ import de.lijucay.damier.shared.UnitId
 data class ActivityFormState(
     val title: String = "",
     val unitId: UnitId = UnitId.TIMES,
-    val defaultAmount: TextFieldValue = TextFieldValue("1", selection = TextRange(1)),
-    val reference: TextFieldValue = TextFieldValue("1", selection = TextRange(1)),
+    val defaultAmount: Int = 1,
+    val reference: Int = 1,
     val referenceType: ReferenceType = ReferenceType.MAX,
     val useUnits: Boolean = false,
     val showUnits: Boolean = false,
@@ -24,19 +22,15 @@ data class ActivityFormState(
 
     val isSaveEnabled: Boolean get() =
         title.isNotBlank()
-                && reference.text.toIntOrNull().let { it != null && it > 0 }
-                && (!useDefaultAmount || defaultAmount.text.toIntOrNull() != null)
+                && reference > 0
+                && useDefaultAmount
 
     companion object {
         fun fromExisting(activity: ActivityUi) = ActivityFormState(
             title = activity.title,
             unitId = activity.unitId,
-            defaultAmount = activity.defaultAmount.toString().let {
-                TextFieldValue(it, selection = TextRange(it.length))
-            },
-            reference = activity.reference.toString().let {
-                TextFieldValue(it, selection = TextRange(it.length))
-            },
+            defaultAmount = activity.defaultAmount,
+            reference = activity.reference,
             referenceType = activity.referenceType,
             useUnits = true,
             showUnits = true,

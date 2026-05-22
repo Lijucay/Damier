@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
@@ -40,8 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
@@ -100,6 +99,14 @@ fun ActivityFormScreen(
         is ActivityFormMode.Add -> stringResource(R.string.add_activity)
         is ActivityFormMode.Edit -> stringResource(R.string.edit, mode.activity.title)
     }
+
+    val referenceState = rememberTextFieldState(
+        initialText = if (state.reference == 1) "" else state.reference.toString()
+    )
+
+    val defaultAmountState = rememberTextFieldState(
+        initialText = if (state.defaultAmount == 1) "" else state.reference.toString()
+    )
 
     ActivityTheme(state.useLimitTheme) {
         ScreenContainer(
@@ -237,17 +244,14 @@ fun ActivityFormScreen(
 
                         Column {
                             Stepper(
-                                value = state.reference.text.toIntOrNull() ?: 0,
-                                onValueChange = { ref ->
-                                    formViewModel.setReference(
-                                        TextFieldValue(
-                                            text = ref.toString(),
-                                            selection = TextRange(ref.toString().length)
-                                        )
+                                state = referenceState,
+                                onValidationChange = { isValid ->
+                                    if (isValid) formViewModel.setReference(
+                                        referenceState.text.toString().toIntOrNull() ?: 1
                                     )
                                 },
                                 enabled = !state.referenceType.isMax(),
-                                unit = if ((state.reference.text.toIntOrNull() ?: 0) == 1) {
+                                unit = if ((referenceState.text.toString().toIntOrNull() ?: 1) == 1) {
                                     state.unitId.getLongUnitNamesById(context).singularName
                                 } else {
                                     state.unitId.getLongUnitNamesById(context).pluralName
@@ -274,16 +278,13 @@ fun ActivityFormScreen(
                         )
 
                         Stepper(
-                            value = state.defaultAmount.text.toIntOrNull() ?: 0,
-                            onValueChange = { defA ->
-                                formViewModel.setDefaultAmount(
-                                    TextFieldValue(
-                                        text = defA.toString(),
-                                        selection = TextRange(defA.toString().length)
-                                    )
+                            state = defaultAmountState,
+                            onValidationChange = { isValid ->
+                                if (isValid) formViewModel.setDefaultAmount(
+                                    defaultAmountState.text.toString().toIntOrNull() ?: 1
                                 )
                             },
-                            unit = if ((state.defaultAmount.text.toIntOrNull() ?: 0) == 1) {
+                            unit = if ((defaultAmountState.text.toString().toIntOrNull() ?: 1) == 1) {
                                 state.unitId.getLongUnitNamesById(context).singularName
                             } else {
                                 state.unitId.getLongUnitNamesById(context).pluralName

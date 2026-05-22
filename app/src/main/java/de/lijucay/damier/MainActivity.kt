@@ -128,7 +128,9 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     if (it) {
-                        OnBoarding { uiViewModel.setFirstLaunch(false) }
+                        OnBoarding(uiViewModel = uiViewModel) {
+                            uiViewModel.setFirstLaunch(false)
+                        }
                     } else {
                         AdaptivePane(
                             listPane = {

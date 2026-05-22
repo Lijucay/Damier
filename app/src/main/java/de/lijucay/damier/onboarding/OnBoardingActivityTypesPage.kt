@@ -51,7 +51,7 @@ fun OnBoardingActivityTypesPage(modifier: Modifier = Modifier) {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .padding(top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             LargeTitleText(text = stringResource(R.string.three_types_of_activities))

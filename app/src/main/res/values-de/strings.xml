@@ -194,6 +194,8 @@
     <string name="target">Ziel</string>
     <string name="max_ref_disabled_desc">Dein persönlicher Bestwert über alle Tage wird automatisch zur Referenz.</string>
     <string name="loading">Lädt…</string>
+    <string name="welcome">Willkommen zu Damier</string>
+    <string name="skip">Überspringen</string>
 
     <string-array name="streak_m_ns">
         <item>Tipp drauf. Einmal reicht.</item>

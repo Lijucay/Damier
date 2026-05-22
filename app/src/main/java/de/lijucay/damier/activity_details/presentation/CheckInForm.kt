@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
@@ -82,7 +83,9 @@ fun CheckInForm(
         }
     }
 
-    val amount = state.amount
+    val amountState = rememberTextFieldState(
+        initialText = if (state.amount == 1) "" else state.amount.toString()
+    )
 
     val dateState = rememberDatePickerState(
         initialSelectedDate = initialDateTime.toLocalDate(),
@@ -328,9 +331,11 @@ fun CheckInForm(
                     TitleText(text = stringResource(R.string.amount))
 
                     Stepper(
-                        value = amount,
-                        onValueChange = { formViewModel.setAmount(it) },
-                        unit = if (amount == 1) unit.singularName else unit.pluralName
+                        state = amountState,
+                        onValidationChange = { isValid ->
+                            if (isValid) formViewModel.setAmount(amountState.text.toString().toIntOrNull() ?: 1)
+                        },
+                        unit = if ((amountState.text.toString().toIntOrNull() ?: 1) == 1) unit.singularName else unit.pluralName
                     )
                 }
             }

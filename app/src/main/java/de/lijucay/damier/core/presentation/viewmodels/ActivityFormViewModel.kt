@@ -1,6 +1,5 @@
 package de.lijucay.damier.core.presentation.viewmodels
 
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
@@ -35,12 +34,12 @@ class ActivityFormViewModel : ViewModel() {
 
     fun setUnitId(value: UnitId) = _state.update { it.copy(unitId = value) }
 
-    fun setDefaultAmount(value: TextFieldValue) = _state.update { it.copy(defaultAmount = value) }
+    fun setDefaultAmount(value: Int) = _state.update { it.copy(defaultAmount = value) }
 
-    fun setReference(value: TextFieldValue) = _state.update { state ->
+    fun setReference(value: Int) = _state.update { state ->
         state.copy(
             reference = value,
-            checkInInfo = state.checkInInfo?.copy(reference = value.text.toIntOrNull() ?: 10)
+            checkInInfo = state.checkInInfo?.copy(reference = value)
         )
     }
 
@@ -57,9 +56,9 @@ class ActivityFormViewModel : ViewModel() {
             id = activityId,
             activityName = s.title,
             unit = s.unitId,
-            reference = s.reference.text.toInt(),
+            reference = s.reference,
             referenceType = s.referenceType,
-            defaultAmount = s.defaultAmount.text.toInt()
+            defaultAmount = s.defaultAmount
         )
     }
 

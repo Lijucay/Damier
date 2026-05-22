@@ -34,11 +34,11 @@ fun OnBoardingCheckingIn(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         LargeTitleText(
+            modifier = Modifier.padding(top = 16.dp),
             text = stringResource(R.string.how_checking_in_works)
         )
 
