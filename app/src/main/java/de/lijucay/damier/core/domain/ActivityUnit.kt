@@ -1,5 +1,7 @@
 package de.lijucay.damier.core.domain
 
+import de.lijucay.damier.shared.UnitId
+
 
 data class ActivityUnit(
     val unitId: UnitId,

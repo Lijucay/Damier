@@ -55,9 +55,7 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.appfunctions)
-    implementation(libs.androidx.appfunctions.service)
-    ksp(libs.androidx.appfunctions.compiler)
+    implementation(project(":shared"))
 
     implementation(libs.cue)
 

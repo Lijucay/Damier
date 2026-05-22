@@ -20,7 +20,7 @@ koin = "4.2.1"
 processPhoenix = "3.0.0"
 room = "2.8.4"
 
-ksp = "2.3.2"
+ksp = "2.3.5"
 
 composeGraph = "0.2.5"
 navigationCompose = "2.9.8"
@@ -29,9 +29,10 @@ documentfile = "1.1.0"
 
 vico = "3.1.0"
 
-cue = "v2.1.0"
+cue = "1.0.0"
 
-appfunctions = "1.0.0-alpha09"
+appcompat = "1.7.1"
+material = "1.14.0"
 
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceMaterial3" }
@@ -78,11 +79,10 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
-cue = { group = "com.github.lijucay.cue", name = "cue", version.ref = "cue" }
+cue = { group = "de.lijucay", name = "cue", version.ref = "cue" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-androidx-appfunctions = { group = "androidx.appfunctions", name = "appfunctions", version.ref = "appfunctions" }
-androidx-appfunctions-service = { group = "androidx.appfunctions", name = "appfunctions-service", version.ref = "appfunctions" }
-androidx-appfunctions-compiler = { group = "androidx.appfunctions", name = "appfunctions-compiler", version.ref = "appfunctions" }
 [bundles]
 koin = [ "koin-androidx-compose", "koin-androidx-compose-navigation" ]
 room = [ "room-runtime", "room-ktx" ]
@@ -92,4 +92,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 

@@ -12,6 +12,7 @@ import de.lijucay.damier.core.data.daos.CheckInDao
 import de.lijucay.damier.core.data.daos.StreakDao
 import de.lijucay.damier.core.domain.DataUtil
 import de.lijucay.damier.core.domain.ExportUtil
+import de.lijucay.damier.shared.CustomGson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -36,7 +37,7 @@ class ExportUtilImpl(
                 DataUtil.STREAKS_KEY to streaks
             )
 
-            val exportDataJson = buildGson().toJson(exportData)
+            val exportDataJson = CustomGson.buildGson().toJson(exportData)
 
             val currentDate = LocalDateTime.now()
             val dateTimeFormatted = currentDate.format(

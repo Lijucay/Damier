@@ -8,6 +8,7 @@ import java.util.UUID
 
 interface ActivityRepository {
     fun getActivities(): Flow<List<Activity>>
+    suspend fun getActivitiesWithCheckIns(): List<Activity>
     fun observeActivity(id: UUID): Flow<Activity?>
     suspend fun getActivityById(id: UUID): ActivityInfo?
     suspend fun upsertActivity(activity: ActivityInfo)

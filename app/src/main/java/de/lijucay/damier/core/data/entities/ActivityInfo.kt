@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import de.lijucay.damier.core.data.converter.ReferenceTypeConverter
 import de.lijucay.damier.core.data.converter.UnitIdConverter
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 import java.util.UUID
 
 @Entity

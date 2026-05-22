@@ -1,7 +1,7 @@
 package de.lijucay.damier.core.presentation.models
 
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 import java.time.LocalDate
 import java.util.UUID
 

@@ -41,9 +41,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -63,9 +64,9 @@ import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
+import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.getShortUnitNamesById
 import de.lijucay.damier.core.domain.DeletionMode
-import de.lijucay.damier.core.domain.getLongUnitNamesById
-import de.lijucay.damier.core.domain.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.DamierMenu
 import de.lijucay.damier.core.presentation.components.Cell
 import de.lijucay.damier.core.presentation.components.CookieButton
@@ -103,14 +104,24 @@ fun ActivityDetailsScreen(
     val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
     val state by detailsViewModel.state.collectAsStateWithLifecycle()
 
-    val statsDialogState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
+    val statsDialogState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
     )
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val activityFormSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val nfcSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
+    val activityFormSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
+    val nfcSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
 
     val host = stringResource(R.string.host)
 

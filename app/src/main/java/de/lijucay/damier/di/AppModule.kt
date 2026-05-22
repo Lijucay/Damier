@@ -62,6 +62,5 @@ val appModule = module {
     viewModelOf(::ActivityFormViewModel)
     viewModelOf(::ActivityDetailsViewModel)
     viewModelOf(::CheckInFormViewModel)
-
     singleOf(::NfcManager)
 }

@@ -14,9 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.core.domain.WaffleDiagramData
-import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.presentation.models.DisplayableDate
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
+import de.lijucay.damier.shared.ReferenceType
 import java.time.DayOfWeek
 import java.time.LocalDate
 

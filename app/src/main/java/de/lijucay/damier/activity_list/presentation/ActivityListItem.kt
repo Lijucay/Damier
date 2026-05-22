@@ -27,14 +27,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
+import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.toStringResource
 import de.lijucay.damier.core.domain.WaffleDiagramData
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeText
 import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.shared.ReferenceType
 
 @Composable
 fun ActivityListItem(

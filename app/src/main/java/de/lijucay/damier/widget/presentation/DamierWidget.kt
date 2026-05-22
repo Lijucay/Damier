@@ -49,7 +49,7 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.CheckInInfo
-import de.lijucay.damier.core.domain.ReferenceType
+import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.widget.data.LogCheckInAction
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.CoroutineScope

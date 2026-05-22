@@ -36,6 +36,10 @@ interface ActivityInfoDao {
 
     @Transaction
     @Query("SELECT * FROM ActivityInfo")
+    suspend fun getActivitiesWithCheckIns(): List<Activity>
+
+    @Transaction
+    @Query("SELECT * FROM ActivityInfo")
     fun getActivities(): Flow<List<Activity>>
 
     @Delete

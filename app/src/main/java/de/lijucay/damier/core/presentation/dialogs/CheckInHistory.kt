@@ -27,14 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
-import de.lijucay.damier.core.domain.UnitId
-import de.lijucay.damier.core.domain.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
 import de.lijucay.damier.design.components.LargeText
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.shared.UnitId
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)

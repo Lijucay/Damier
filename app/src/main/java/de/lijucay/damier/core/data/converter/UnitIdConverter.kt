@@ -1,7 +1,7 @@
 package de.lijucay.damier.core.data.converter
 
 import androidx.room.TypeConverter
-import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.shared.UnitId
 
 class UnitIdConverter {
     @TypeConverter

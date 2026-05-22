@@ -14,6 +14,7 @@ import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.entities.Streak
 import de.lijucay.damier.core.domain.DataUtil
 import de.lijucay.damier.core.domain.ImportUtil
+import de.lijucay.damier.shared.CustomGson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStreamReader
@@ -63,7 +64,7 @@ class ImportUtilImpl(
         onCurrentCountUpdate: (Int) -> Unit,
         onComplete: (Boolean) -> Unit
     ) {
-        val gson = buildGson()
+        val gson = CustomGson.buildGson()
         var currentCount = 0
 
         withContext(Dispatchers.IO) {

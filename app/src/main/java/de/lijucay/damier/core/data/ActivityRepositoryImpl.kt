@@ -5,25 +5,30 @@ import de.lijucay.damier.core.data.daos.CheckInDao
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.ActivityRepository
-import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.domain.StreakDataSource
+import de.lijucay.damier.shared.ReferenceType
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 class ActivityRepositoryImpl(
     private val activityDao: ActivityInfoDao,
     private val checkInDao: CheckInDao,
-    private val streakDataSource: StreakDataSource
+    private val streakDataSource: StreakDataSource,
 ) : ActivityRepository {
     override fun getActivities(): Flow<List<Activity>> = activityDao.getActivities()
+    override suspend fun getActivitiesWithCheckIns() = activityDao.getActivitiesWithCheckIns()
 
     override fun observeActivity(id: UUID): Flow<Activity?> = activityDao.observeSelectedActivity(id)
 
     override suspend fun getActivityById(id: UUID): ActivityInfo? = activityDao.getActivityInfoById(id)
 
-    override suspend fun upsertActivity(activity: ActivityInfo) = activityDao.upsert(activity)
+    override suspend fun upsertActivity(activity: ActivityInfo) {
+        activityDao.upsert(activity)
+    }
 
-    override suspend fun deleteActivity(activity: ActivityInfo) = activityDao.deleteActivity(activity)
+    override suspend fun deleteActivity(activity: ActivityInfo) {
+        activityDao.deleteActivity(activity)
+    }
 
     override suspend fun upsertCheckIn(checkIn: CheckInInfo) {
         checkInDao.upsert(checkIn)

@@ -17,9 +17,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.core.domain.WaffleDiagramData
-import de.lijucay.damier.core.domain.ReferenceType
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
+import de.lijucay.damier.shared.ReferenceType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID

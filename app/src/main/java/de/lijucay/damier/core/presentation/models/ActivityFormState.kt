@@ -3,8 +3,8 @@ package de.lijucay.damier.core.presentation.models
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import de.lijucay.damier.core.domain.WaffleDiagramData
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 
 data class ActivityFormState(
     val title: String = "",

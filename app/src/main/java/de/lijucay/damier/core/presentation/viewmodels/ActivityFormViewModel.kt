@@ -3,11 +3,11 @@ package de.lijucay.damier.core.presentation.viewmodels
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
 import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.core.presentation.models.ActivityUi
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

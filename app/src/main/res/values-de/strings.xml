@@ -110,10 +110,8 @@
     <string name="lap">Runde</string>
     <string name="laps">Runden</string>
     <string name="no_activity_selected">Keine Aktivität ausgewählt</string>
-    <string name="use_units">Einheiten verwenden</string>
     <string name="unit">Einheit</string>
     <string name="override_default_amount">Standardmenge überschreiben</string>
-    <string name="use_units_explanation">Fortschritt mit einer Einheit messen – z.B. Seiten, Minuten oder Mal</string>
     <string name="tracking_options">Tracking-Optionen</string>
     <string name="use_default_amount_explanation">Wenn aktiviert, wird beim Eintragen diese Menge automatisch erfasst, ohne nachzufragen.</string>
     <string name="override_reference_type">Referenztyp überschreiben</string>

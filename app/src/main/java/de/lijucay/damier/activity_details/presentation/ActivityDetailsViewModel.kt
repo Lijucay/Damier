@@ -69,16 +69,16 @@ class ActivityDetailsViewModel(
         _state.update { it.copy(nfcWriteState = NfcWriteState.Writing) }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val (result, chip) = nfcWriteManager.write(tag, host, activityId)
+            val result = nfcWriteManager.write(tag, host, activityId)
 
-            if (result == WriteResult.Success && chip != null) {
-                activityRepository.updateNfcChipId(activityId, chip.chipId)
+            if (result is WriteResult.Success) {
+                activityRepository.updateNfcChipId(activityId, result.chip.chipId)
             }
 
             _state.update {
                 it.copy(
                     nfcWriteState = when (result) {
-                        WriteResult.Success -> NfcWriteState.Success(chip!!.chipId)
+                        is WriteResult.Success -> NfcWriteState.Success(result.chip.chipId)
                         WriteResult.TagLost -> NfcWriteState.TagLost
                         WriteResult.NotWriteable -> NfcWriteState.NotWriteable
                         WriteResult.InsufficientSize -> NfcWriteState.InsufficientSize

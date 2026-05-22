@@ -27,8 +27,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,8 +48,8 @@ import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.activity_list.presentation.UnitSelectionBottomSheet
 import de.lijucay.damier.core.domain.ActivityFormMode
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.toStringResource
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.Stepper
 import de.lijucay.damier.core.presentation.components.TitleField
@@ -59,6 +60,7 @@ import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -76,7 +78,10 @@ fun ActivityFormScreen(
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val formViewModel = koinViewModel<ActivityFormViewModel>()
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.PartiallyExpanded, SheetValue.Expanded)
+    )
     val scope = rememberCoroutineScope()
 
     val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()

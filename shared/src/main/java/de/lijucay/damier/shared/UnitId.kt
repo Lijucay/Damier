@@ -1,0 +1,33 @@
+package de.lijucay.damier.shared
+
+enum class UnitId {
+    CALORIES,
+    TIMES,
+    STEPS,
+    PAGES,
+    CHAPTERS,
+    BOOKS,
+    REPETITIONS,
+    SETS,
+    LAPS,
+    HOURS,
+    MINUTES,
+    SECONDS,
+    KILOMETERS,
+    METERS,
+    MILES,
+    FOOT,
+    YARD,
+    LITERS,
+    MILLILITERS,
+    CENTILITERS,
+    GALLONS,
+    FLUID_OUNCES,
+    GLASSES,
+    CUPS,
+    KILOGRAMS,
+    GRAMS,
+    MILLIGRAMS,
+    POUNDS,
+    OUNCE
+}

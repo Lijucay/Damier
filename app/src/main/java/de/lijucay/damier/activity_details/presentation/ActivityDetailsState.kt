@@ -1,12 +1,12 @@
 package de.lijucay.damier.activity_details.presentation
 
-import de.lijucay.damier.core.domain.ReferenceType
-import de.lijucay.damier.core.domain.UnitId
 import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.StreakUi
 import de.lijucay.damier.cue.NfcWriteState
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 import java.time.LocalDate
 
 data class ActivityDetailsState(

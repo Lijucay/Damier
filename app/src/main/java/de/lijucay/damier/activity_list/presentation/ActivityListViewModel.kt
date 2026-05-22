@@ -161,10 +161,4 @@ class ActivityListViewModel(
             }
         }
     }
-
-    fun updateNfcChipId(activityId: UUID, chipId: String?) {
-        viewModelScope.launch {
-            repository.updateNfcChipId(activityId, chipId)
-        }
-    }
 }

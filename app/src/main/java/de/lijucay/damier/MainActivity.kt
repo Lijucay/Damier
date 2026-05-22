@@ -237,36 +237,8 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-//        handleNfcIntent(intent)
-
         lifecycleScope.launch {
             nfcManager.handleNfcIntent(intent)
         }
     }
-
-//    private fun handleNfcIntent(intent: Intent) {
-//        when (intent.action) {
-//            NfcAdapter.ACTION_NDEF_DISCOVERED,
-//            NfcAdapter.ACTION_TECH_DISCOVERED -> {
-//                if (detailsViewModel.state.value.nfcWriteState is NfcWriteState.WaitingForTag) {
-//                    val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) ?: return
-//                    val activityId = listViewModel.selectedActivity.value?.id ?: return
-//                    detailsViewModel.onTagDiscovered(tag, activityId)
-//                    return
-//                }
-//
-//                if (intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
-//                    lifecycleScope.launch { handleNfcRead(intent) }
-//                }
-//            }
-//        }
-//    }
-//
-//    private suspend fun handleNfcRead(intent: Intent) {
-//        val result = withContext(Dispatchers.IO) { CueReadManager().read(intent) }
-//
-//        if (result !is ReadResult.Success) return
-//        if (result.host != "damier") return
-//        listViewModel.checkInByNfcChipId(result.chipId)
-//    }
 }

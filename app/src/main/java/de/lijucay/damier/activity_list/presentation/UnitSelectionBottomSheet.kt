@@ -31,11 +31,11 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
-import de.lijucay.damier.core.domain.UnitId
-import de.lijucay.damier.core.domain.getShortUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.getShortUnitNamesById
 import de.lijucay.damier.core.domain.units
 import de.lijucay.damier.core.presentation.components.UnitRow
 import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.shared.UnitId
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable

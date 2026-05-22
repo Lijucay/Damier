@@ -32,7 +32,7 @@ import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
 import de.lijucay.damier.core.data.wrapper.toScrollableChartEntries
-import de.lijucay.damier.core.domain.getLongUnitNamesById
+import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
