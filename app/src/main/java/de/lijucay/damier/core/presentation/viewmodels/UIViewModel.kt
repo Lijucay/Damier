@@ -51,7 +51,7 @@ class UIViewModel(
         )
 
     val firstLaunch = dataStore.data
-        .map { it[DataPreferences.Keys.firstLaunch] ?: false }
+        .map { it[DataPreferences.Keys.firstLaunch] ?: true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
