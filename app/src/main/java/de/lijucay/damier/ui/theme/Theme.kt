@@ -54,13 +54,6 @@ fun DamierTheme(
         else -> LightColorScheme
     }
 
-    val context = LocalContext.current
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val light = dynamicLightColorScheme(context).tertiaryContainer
-        val dark = dynamicDarkColorScheme(context).tertiaryContainer
-        Log.d("DamierTheme", "light=$light dark=$dark")
-    }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
@@ -76,11 +69,6 @@ fun ActivityTheme(
 ) {
     val base = MaterialTheme.colorScheme
     val target = if (useLimitTheme) base.toErrorScheme() else base
-
-
-    Log.d("ActivityTheme", "useLimitTheme=$useLimitTheme")
-    Log.d("ActivityTheme", "base.tertiaryContainer=${base.tertiaryContainer}")
-    Log.d("ActivityTheme", "target.tertiaryContainer=${target.tertiaryContainer}")
 
     val primary by animateColorAsState(target.primary, label = "primary")
     val onPrimary by animateColorAsState(target.onPrimary, label = "onPrimary")

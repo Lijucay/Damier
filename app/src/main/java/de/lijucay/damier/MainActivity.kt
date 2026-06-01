@@ -39,13 +39,18 @@ import de.lijucay.damier.core.presentation.components.AdaptivePane
 import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.debug.DebugDataSeeder
 import de.lijucay.damier.nfc.NfcManager
 import de.lijucay.damier.onboarding.OnBoarding
 import de.lijucay.damier.settings.presentation.SettingsScreen
+import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitId
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
+import org.koin.java.KoinJavaComponent.get
 import java.util.UUID
 
 class MainActivity : ComponentActivity() {
@@ -58,6 +63,12 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             nfcManager.handleNfcIntent(intent)
+
+            if (BuildConfig.DEBUG) {
+                lifecycleScope.launch {
+                    DebugDataSeeder(get()).seed()
+                }
+            }
         }
 
         val activityId = intent.getStringExtra("activityId")?.let { id ->

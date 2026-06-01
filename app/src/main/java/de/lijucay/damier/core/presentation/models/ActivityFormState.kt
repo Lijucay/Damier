@@ -23,7 +23,7 @@ data class ActivityFormState(
     val isSaveEnabled: Boolean get() =
         title.isNotBlank()
                 && reference > 0
-                && useDefaultAmount
+                && defaultAmount > 0
 
     companion object {
         fun fromExisting(activity: ActivityUi) = ActivityFormState(

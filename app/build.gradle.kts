@@ -20,8 +20,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 37
-        versionCode = 19
-        versionName = "1.0.1"
+        versionCode = 20
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,6 +56,7 @@ configure<ApplicationExtension> {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(libs.androidx.compose.runtime)
 
     implementation(libs.cue)
 
