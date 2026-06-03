@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+<!--    <uses-permission android:name="android.permission.INTERNET"-->
+<!--        android:purposeString="@string/permission_internet_purpose"/>-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.NFC"/>
-
     <uses-feature android:name="android.hardware.nfc"
         android:required="false"/>
 
@@ -26,14 +26,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".nfc.NfcDispatchActivity"
+            android:exported="true"
+            android:permission="android.permission.DISPATCH_NFC_MESSAGE">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="cue" android:host="@string/host"/>
             </intent-filter>
         </activity>
-        
         <activity android:name=".widget.presentation.DamierWidgetConfigActivity"
             android:exported="true">
             <intent-filter>
