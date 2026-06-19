@@ -29,6 +29,7 @@ import de.lijucay.damier.cue.NfcWriteState
 import de.lijucay.damier.cue.NfcWriteState.Idle.isAutoClosing
 import de.lijucay.damier.design.components.LargeText
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -39,7 +40,7 @@ fun NfcWriteDialog(
 ) {
     if (writeState.isAutoClosing) {
         LaunchedEffect(writeState) {
-            delay(2000L)
+            delay(2000L.milliseconds)
             onDismissRequest()
         }
     }

@@ -11,16 +11,17 @@ import java.util.UUID
 import kotlin.random.Random
 
 class DebugDataSeeder(private val repository: ActivityRepository) {
+    private val uuid1 = UUID.fromString("00000000-0000-0000-0000-000000000001")
+    private val uuid2 = UUID.fromString("00000000-0000-0000-0000-000000000002")
+    private val uuid3 = UUID.fromString("00000000-0000-0000-0000-000000000003")
 
     suspend fun seed() {
+        if (repository.getActivityById(uuid1) != null) return
+
         val now = LocalDateTime.now()
         val random = Random(seed = 42)
         val startOfYear = LocalDateTime.of(now.year, 1, 1, 0, 0)
         val daysSoFar = ChronoUnit.DAYS.between(startOfYear, now).toInt()
-
-        val uuid1 = UUID.randomUUID()
-        val uuid2 = UUID.randomUUID()
-        val uuid3 = UUID.randomUUID()
 
         val activities = listOf(
             ActivityInfo(

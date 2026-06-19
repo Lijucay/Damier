@@ -6,11 +6,15 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.google.gson.annotations.SerializedName
 import de.lijucay.damier.core.data.converter.LocalDateTimeConverter
+import de.lijucay.damier.core.data.converter.LocalDateTimeSerializer
+import de.lijucay.damier.core.data.converter.UUIDSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.UUID
 
+@Serializable
 @Entity(
     foreignKeys = [
         ForeignKey(
@@ -24,9 +28,13 @@ import java.util.UUID
 )
 @TypeConverters(LocalDateTimeConverter::class)
 data class CheckInInfo(
-    @PrimaryKey(autoGenerate = false) val id: UUID = UUID.randomUUID(),
+    @PrimaryKey(autoGenerate = false)
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID = UUID.randomUUID(),
+    @Serializable(with = UUIDSerializer::class)
     val activityId: UUID,
+    @Serializable(with = LocalDateTimeSerializer::class)
     val timestamp: LocalDateTime,
-    @SerializedName("checkInCount", alternate = ["amount"])
+    @SerialName("checkInCount")
     @ColumnInfo(defaultValue = "0") val amount: Int
 )

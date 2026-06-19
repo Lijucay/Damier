@@ -16,10 +16,13 @@ interface ActivityInfoDao {
     fun getActivityInfo(): Flow<List<ActivityInfo>>
 
     @Query("SELECT * FROM ActivityInfo")
-    fun getActivityInfoList(): List<ActivityInfo>
+    suspend fun getActivityInfoList(): List<ActivityInfo>
 
     @Upsert
     suspend fun upsert(activity: ActivityInfo)
+
+    @Upsert
+    suspend fun upsertAll(activities: List<ActivityInfo>)
 
     @Transaction
     @Query("SELECT * FROM ActivityInfo where id = :id")
@@ -28,6 +31,7 @@ interface ActivityInfoDao {
     @Query("SELECT * FROM ActivityInfo WHERE id = :id LIMIT 1")
     suspend fun getActivityInfoById(id: UUID): ActivityInfo?
 
+    @Transaction
     @Query("SELECT * FROM ActivityInfo WHERE id = :id LIMIT 1")
     suspend fun getActivityById(id: UUID): Activity?
 

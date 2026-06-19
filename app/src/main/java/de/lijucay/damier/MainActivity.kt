@@ -43,23 +43,24 @@ import de.lijucay.damier.debug.DebugDataSeeder
 import de.lijucay.damier.nfc.NfcManager
 import de.lijucay.damier.onboarding.OnBoarding
 import de.lijucay.damier.settings.presentation.SettingsScreen
-import de.lijucay.damier.shared.ReferenceType
-import de.lijucay.damier.shared.UnitId
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
-import org.koin.java.KoinJavaComponent.get
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     val nfcManager: NfcManager by inject()
+    private val uiViewModel: UIViewModel by viewModel()
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        handleActivityIdIntent(intent)
 
         lifecycleScope.launch {
             nfcManager.handleNfcIntent(intent)
@@ -76,7 +77,6 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val uiViewModel = koinViewModel<UIViewModel>()
             val activityListViewModel = koinViewModel<ActivityListViewModel>()
 
             val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
@@ -249,9 +249,18 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
 
         lifecycleScope.launch {
             nfcManager.handleNfcIntent(intent)
         }
+
+        handleActivityIdIntent(intent)
+    }
+
+    private fun handleActivityIdIntent(intent: Intent?) {
+        intent?.getStringExtra("activityId")
+            ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
+            ?.let { uiViewModel.setPendingActivityId(it) }
     }
 }

@@ -64,8 +64,6 @@ import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
-import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
-import de.lijucay.damier.core.domain.DataUtil.getShortUnitNamesById
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.presentation.DamierMenu
 import de.lijucay.damier.core.presentation.components.Cell
@@ -73,6 +71,8 @@ import de.lijucay.damier.core.presentation.components.CookieButton
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
+import de.lijucay.damier.core.presentation.getLongUnitNamesById
+import de.lijucay.damier.core.presentation.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.cue.NfcWriteState
@@ -131,11 +131,15 @@ fun ActivityDetailsScreen(
         } ?: detailsViewModel.clear()
     }
 
+    val shouldEnableReaderMode = remember(state.nfcWriteState) {
+        state.nfcWriteState is NfcWriteState.WaitingForTag ||
+        state.nfcWriteState is NfcWriteState.Writing
+    }
 
-    DisposableEffect(state.nfcWriteState) {
+    DisposableEffect(shouldEnableReaderMode) {
         val activity = context as? Activity ?: return@DisposableEffect onDispose {}
 
-        if (state.nfcWriteState is NfcWriteState.WaitingForTag) {
+        if (shouldEnableReaderMode) {
             nfcAdapter?.enableReaderMode(
                 activity,
                 { tag ->

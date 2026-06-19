@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
-import de.lijucay.damier.core.domain.LongUnitName
+import de.lijucay.damier.core.presentation.LongUnitName
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.components.Stepper
 import de.lijucay.damier.core.presentation.models.CheckInUi

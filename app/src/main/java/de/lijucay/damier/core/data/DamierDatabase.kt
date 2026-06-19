@@ -17,7 +17,7 @@ import de.lijucay.damier.core.domain.DataUtil
         Streak::class
     ],
     version = DataUtil.DATABASE_SCHEME_VERSION,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class DamierDatabase : RoomDatabase() {
     abstract fun activityInfoDao(): ActivityInfoDao

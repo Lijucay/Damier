@@ -7,6 +7,7 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.updateAll
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.widget.domain.WidgetActivityState
 import de.lijucay.damier.widget.domain.WidgetRepository
 import de.lijucay.damier.widget.presentation.DamierWidget
 import kotlinx.coroutines.flow.first
@@ -30,7 +31,7 @@ class LogCheckInAction : ActionCallback {
             CheckInInfo(
                 activityId = activityId,
                 timestamp = LocalDateTime.now(),
-                amount = activity?.activityInfo?.defaultAmount ?: 1
+                amount = (activity as? WidgetActivityState.Loaded)?.activity?.activityInfo?.defaultAmount ?: 0
             )
         )
 

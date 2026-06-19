@@ -8,6 +8,11 @@ plugins {
     alias(libs.plugins.serialization)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    alias(libs.plugins.room.plugin)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 configure<ApplicationExtension> {
@@ -43,6 +48,7 @@ configure<ApplicationExtension> {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -56,6 +62,7 @@ configure<ApplicationExtension> {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime)
 
     implementation(libs.cue)
@@ -67,7 +74,6 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
 
-    implementation (libs.compose.graph)
     implementation(libs.process.phoenix)
 
     implementation(platform(libs.firebase.bom))
@@ -80,6 +86,7 @@ dependencies {
     implementation(libs.compose.graph)
 
     implementation(libs.bundles.koin)
+
     implementation(libs.bundles.room)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.documentfile)
@@ -107,4 +114,5 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(kotlin("test"))
 }

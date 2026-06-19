@@ -17,9 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
-import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
-import de.lijucay.damier.core.domain.DataUtil.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.components.UnitBadge
+import de.lijucay.damier.core.presentation.getLongUnitNamesById
+import de.lijucay.damier.core.presentation.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText

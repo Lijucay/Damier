@@ -47,13 +47,13 @@ import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.activity_list.presentation.UnitSelectionBottomSheet
 import de.lijucay.damier.core.domain.ActivityFormMode
-import de.lijucay.damier.core.domain.DataUtil.getLongUnitNamesById
-import de.lijucay.damier.core.domain.DataUtil.toStringResource
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.Stepper
 import de.lijucay.damier.core.presentation.components.TitleField
 import de.lijucay.damier.core.presentation.components.cards.PreviewCard
 import de.lijucay.damier.core.presentation.components.cards.UnitCard
+import de.lijucay.damier.core.presentation.getLongUnitNamesById
+import de.lijucay.damier.core.presentation.toStringResource
 import de.lijucay.damier.core.presentation.viewmodels.ActivityFormViewModel
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.design.components.LargeTitleText

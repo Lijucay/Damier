@@ -51,6 +51,7 @@ import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.widget.data.LogCheckInAction
+import de.lijucay.damier.widget.domain.WidgetActivityState
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,22 +75,14 @@ class DamierWidget : GlanceAppWidget() {
 
             val activityId = runCatching { UUID.fromString(rawId) }.getOrNull()
             val activityFlow = activityId?.let { repo.observeActivity(it) } ?: flowOf(null)
-            val activityData by activityFlow.collectAsState(initial = null)
+            val state by activityFlow.collectAsState(initial = WidgetActivityState.Loading)
 
             GlanceTheme {
                 when {
-                    activityData != null -> WidgetLayout(context, activityData!!)
-                    rawId != null -> LoadingLayout(context, activityName)
-                    else -> {
-                        Scaffold(modifier = GlanceModifier.fillMaxSize()) {
-                            Box(
-                                modifier = GlanceModifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(context.getString(R.string.no_activity_selected))
-                            }
-                        }
-                    }
+                    activityId == null -> NoActivitySelectedLayout(context)
+                    state is WidgetActivityState.Loaded -> WidgetLayout(context, (state as WidgetActivityState.Loaded).activity)
+                    state is WidgetActivityState.Deleted -> DeletedActivityLayout(context)
+                    else -> LoadingLayout(context, activityName)
                 }
             }
         }
@@ -235,6 +228,52 @@ class DamierWidget : GlanceAppWidget() {
                         style = TextStyle(color = GlanceTheme.colors.onBackground)
                     )
                 }
+            }
+        }
+    }
+
+    @Composable
+    fun DeletedActivityLayout(context: Context) {
+        Scaffold(
+            modifier = GlanceModifier
+                .appWidgetBackground()
+                .clickable(
+                    onClick = actionRunCallback<ClearDeletedActivityAction>()
+                )
+        ) {
+            Box(
+                modifier = GlanceModifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = context.getString(R.string.activity_no_longer_exists),
+                        style = TextStyle(
+                            textAlign = TextAlign.Center,
+                            color = GlanceTheme.colors.onBackground
+                        )
+                    )
+                    Spacer(GlanceModifier.height(8.dp))
+                    Text(
+                        text = context.getString(R.string.tap_to_reconfigure),
+                        style = TextStyle(
+                            textAlign = TextAlign.Center,
+                            color = GlanceTheme.colors.onSurfaceVariant
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun NoActivitySelectedLayout(context: Context) {
+        Scaffold(modifier = GlanceModifier.fillMaxSize()) {
+            Box(
+                modifier = GlanceModifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(context.getString(R.string.no_activity_selected))
             }
         }
     }

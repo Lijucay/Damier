@@ -3,6 +3,7 @@ package de.lijucay.damier.core.data.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
 import de.lijucay.damier.core.data.entities.Streak
@@ -21,14 +22,27 @@ interface StreakDao {
     fun getLongest(activityId: UUID): Flow<Int?>
 
     @Query("SELECT * FROM streak")
-    fun getAllStreaks(): List<Streak>
+    suspend fun getAllStreaks(): List<Streak>
 
     @Upsert
     suspend fun upsert(streak: Streak)
+
+    @Upsert
+    suspend fun upsertAll(streaks: List<Streak>)
 
     @Update
     suspend fun update(streak: Streak)
 
     @Delete
     suspend fun delete(streak: Streak)
+
+    @Query("DELETE FROM streak WHERE activityId = :activityId")
+    suspend fun deleteAllForActivity(activityId: UUID)
+
+    @Transaction
+    suspend fun replaceAllForActivity(activityId: UUID, newStreaks: List<Streak>) {
+        deleteAllForActivity(activityId)
+
+        if (newStreaks.isNotEmpty()) upsertAll(newStreaks)
+    }
 }

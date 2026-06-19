@@ -7,8 +7,10 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import de.lijucay.damier.core.DataPreferences
 import java.util.UUID
 
-object DamierWidgetState {
-    suspend fun updateWidgetForActivity(context: Context, activityId: UUID) {
+class DamierWidgetState(
+    private val context: Context
+) {
+    suspend fun updateWidgetForActivity(activityId: UUID) {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(DamierWidget::class.java)
 

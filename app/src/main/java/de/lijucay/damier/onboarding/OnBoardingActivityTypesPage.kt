@@ -26,10 +26,10 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
-import de.lijucay.damier.core.domain.DataUtil.toStringResource
 import de.lijucay.damier.core.presentation.components.cards.PreviewCard
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
 import de.lijucay.damier.core.presentation.models.ActivityFormState
+import de.lijucay.damier.core.presentation.toStringResource
 import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText

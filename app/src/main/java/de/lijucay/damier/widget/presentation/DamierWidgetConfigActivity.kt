@@ -3,7 +3,6 @@ package de.lijucay.damier.widget.presentation
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -33,15 +33,15 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.lifecycle.lifecycleScope
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
-import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.ui.theme.DamierTheme
+import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 
 class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
-    private val activityDao: ActivityInfoDao by inject()
+    private val widgetRepository: WidgetRepository by inject()
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,15 +84,11 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
                 }
             }
 
-            Log.d("DamierWidgetConfig", "State updated, calling widget update")
-
             DamierWidget().update(
                 context =this@DamierWidgetConfigActivity,
                 id = GlanceAppWidgetManager(this@DamierWidgetConfigActivity)
                     .getGlanceIdBy(appWidgetId)
             )
-
-            Log.d("DamierWidgetConfig", "Widget update called")
 
             val resultIntent = Intent().apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -102,6 +98,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun ActivityPickerScreen(
         onActivitySelected: (ActivityInfo) -> Unit,
@@ -109,8 +106,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
     ) {
         val activities = remember { mutableStateListOf<ActivityInfo>() }
         LaunchedEffect(Unit) {
-            Log.e("ActivityWidgetConfig", "Loading activities")
-            activities.addAll(activityDao.getActivitiesForWidgetConfig())
+            activities.addAll(widgetRepository.getAllActivities())
         }
 
         Scaffold(
@@ -139,6 +135,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
             ) {
                 items(activities) { activity ->
                     Card(
+                        modifier = Modifier.padding(horizontal = 16.dp),
                         onClick = { onActivitySelected(activity) },
                         shape = RoundedCornerShape(
                             topStart = if (activities.first() == activity) 40.dp else 4.dp,

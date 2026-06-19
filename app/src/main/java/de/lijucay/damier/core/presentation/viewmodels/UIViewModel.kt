@@ -15,12 +15,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class UIViewModel(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
     private val _title = MutableStateFlow("Damier")
     val title = _title.asStateFlow()
+
+    private val _pendingActivityId = MutableStateFlow<UUID?>(null)
+    val pendingActivityId = _pendingActivityId.asStateFlow()
 
     private val _detailsPage =
         MutableStateFlow<DetailsDestination>(DetailsDestination.ActivityDetails)
@@ -55,7 +59,7 @@ class UIViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = false
+            initialValue = true
         )
 
     private val _isWidthAtLeastExpanded = MutableStateFlow(false)
@@ -121,5 +125,9 @@ class UIViewModel(
                 preferences[DataPreferences.Keys.firstLaunch] = firstLaunch
             }
         }
+    }
+
+    fun setPendingActivityId(id: UUID?) {
+        _pendingActivityId.value = id
     }
 }

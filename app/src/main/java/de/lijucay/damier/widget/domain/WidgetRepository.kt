@@ -8,5 +8,5 @@ import java.util.UUID
 interface WidgetRepository {
     suspend fun getActivityById(id: UUID): Activity?
     suspend fun getAllActivities(): List<ActivityInfo>
-    fun observeActivity(id: UUID): Flow<Activity?>
+    fun observeActivity(id: UUID): Flow<WidgetActivityState>
 }

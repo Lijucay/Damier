@@ -1,15 +1,14 @@
 package de.lijucay.damier.core.data.wrapper
 
 import de.lijucay.damier.core.data.entities.Streak
-import de.lijucay.damier.core.presentation.models.StreakUi
-import de.lijucay.damier.core.presentation.models.toDisplayableDate
+import de.lijucay.damier.core.domain.models.StreakDomain
 
-fun Streak.toStreakUi(): StreakUi {
-    return StreakUi(
+fun Streak.toStreakDomain(): StreakDomain {
+    return StreakDomain(
         id = id,
         activityId = activityId,
-        startDate = startDate.toDisplayableDate(),
-        endDate = endDate.toDisplayableDate(),
+        startDate = startDate,
+        endDate = endDate,
         length = length
     )
 }

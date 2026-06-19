@@ -50,7 +50,7 @@
             />
 
         <receiver
-            android:name=".core.domain.services.DamierWidgetRebootHelper"
+            android:name=".widget.presentation.DamierWidgetRebootHelper"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

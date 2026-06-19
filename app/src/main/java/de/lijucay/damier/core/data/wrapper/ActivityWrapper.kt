@@ -2,33 +2,31 @@ package de.lijucay.damier.core.data.wrapper
 
 import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.presentation.models.ActivityUi
-import de.lijucay.damier.core.presentation.models.toCheckInUi
+import de.lijucay.damier.core.domain.models.ActivityDomain
 
-fun Activity.toActivityUi(): ActivityUi {
-    val groupedCheckIns = checkIns
-        .map { it.toCheckInUi() }
-        .groupBy {
-            it.dateTime.value.toLocalDate()
-        }
-
-    return ActivityUi(
+/**
+ * Maps the Room relation POJO [Activity] to the pure domain model [ActivityDomain].
+ */
+fun Activity.toActivityDomain(): ActivityDomain {
+    return ActivityDomain(
         id = activityInfo.id,
         title = activityInfo.activityName,
         unitId = activityInfo.unit,
         reference = activityInfo.reference,
         referenceType = activityInfo.referenceType,
         defaultAmount = activityInfo.defaultAmount,
-        groupedCheckIns = groupedCheckIns,
-        streaks = streaks.map { it.toStreakUi() },
+        checkIns = checkIns.map { it.toCheckInDomain() },
+        streaks = streaks.map { it.toStreakDomain() },
         nfcChipId = activityInfo.nfcChipId
     )
 }
 
-fun List<Activity>.toActivityUis(): List<ActivityUi> =
-    this.map { it.toActivityUi() }
+fun List<Activity>.toActivityDomains(): List<ActivityDomain> = this.map { it.toActivityDomain() }
 
-fun ActivityUi.toActivityInfo(): ActivityInfo {
+/**
+ * Reverse mapping for the write path (e.g. ActivityFormViewModel saving an edited activity).
+ * */
+fun ActivityDomain.toActivityInfo(): ActivityInfo {
     return ActivityInfo(
         id = id,
         activityName = title,

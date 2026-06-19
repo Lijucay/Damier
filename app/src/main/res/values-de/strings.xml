@@ -111,11 +111,7 @@
     <string name="laps">Runden</string>
     <string name="no_activity_selected">Keine Aktivität ausgewählt</string>
     <string name="unit">Einheit</string>
-    <string name="override_default_amount">Standardmenge überschreiben</string>
     <string name="tracking_options">Tracking-Optionen</string>
-    <string name="use_default_amount_explanation">Wenn aktiviert, wird beim Eintragen diese Menge automatisch erfasst, ohne nachzufragen.</string>
-    <string name="override_reference_type">Referenztyp überschreiben</string>
-    <string name="override_reference_type_explanation">Wenn aktiviert, werden das Board und die Zellen basierend auf diesem Typ eingefärbt. Andernfalls richtet sich die Färbung nach dem höchsten aktuell sichtbaren Wert auf dem Board.</string>
     <string name="reference_type">Referenztyp</string>
     <string name="default_amount">Standardmenge</string>
     <string name="show_reference_explanation">Wenn aktiviert, wird der Referenztyp und -wert als Beschriftung auf der Karte angezeigt (z.B. Limit: 10)</string>
@@ -196,6 +192,8 @@
     <string name="loading">Lädt…</string>
     <string name="welcome">Willkommen zu Damier</string>
     <string name="skip">Überspringen</string>
+    <string name="activity_no_longer_exists">Diese Aktivität existiert nicht mehr</string>
+    <string name="tap_to_reconfigure">Tippen zum Neukonfigurieren</string>
 
     <string-array name="streak_m_ns">
         <item>Tipp drauf. Einmal reicht.</item>

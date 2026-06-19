@@ -17,10 +17,13 @@ interface CheckInDao {
     suspend fun getCheckIns(activityId: UUID): List<CheckInInfo>
 
     @Query("SELECT * FROM CheckInInfo")
-    fun getAllCheckIns(): List<CheckInInfo>
+    suspend fun getAllCheckIns(): List<CheckInInfo>
 
     @Upsert
     suspend fun upsert(checkInInfo: CheckInInfo)
+
+    @Upsert
+    suspend fun upsertAll(checkIns: List<CheckInInfo>)
 
     @Delete
     suspend fun deleteCheckIn(checkInInfo: CheckInInfo): Int

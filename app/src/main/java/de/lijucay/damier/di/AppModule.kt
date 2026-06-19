@@ -3,7 +3,6 @@ package de.lijucay.damier.di
 import android.content.Context
 import androidx.room.Room
 import de.lijucay.cue_write.NfcWriteManager
-import de.lijucay.damier.DamierApplication
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsViewModel
 import de.lijucay.damier.activity_details.presentation.CheckInFormViewModel
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
@@ -23,10 +22,9 @@ import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.nfc.NfcManager
 import de.lijucay.damier.widget.data.WidgetRepositoryImpl
 import de.lijucay.damier.widget.domain.WidgetRepository
-import org.koin.android.ext.koin.androidApplication
+import de.lijucay.damier.widget.presentation.DamierWidgetState
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -56,8 +54,9 @@ val appModule = module {
     singleOf(::StreakDataSourceImpl).bind<StreakDataSource>()
     singleOf(::ActivityRepositoryImpl).bind<ActivityRepository>()
     singleOf(::WidgetRepositoryImpl).bind<WidgetRepository>()
+    singleOf(::DamierWidgetState)
 
-    viewModel { ActivityListViewModel(get(), get(), get(), androidApplication() as DamierApplication) }
+    viewModelOf(::ActivityListViewModel)
     viewModelOf(::UIViewModel)
     viewModelOf(::ActivityFormViewModel)
     viewModelOf(::ActivityDetailsViewModel)

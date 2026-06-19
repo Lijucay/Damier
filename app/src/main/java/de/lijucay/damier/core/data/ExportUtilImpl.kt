@@ -12,9 +12,12 @@ import de.lijucay.damier.core.data.daos.CheckInDao
 import de.lijucay.damier.core.data.daos.StreakDao
 import de.lijucay.damier.core.domain.DataUtil
 import de.lijucay.damier.core.domain.ExportUtil
-import de.lijucay.damier.shared.CustomGson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.put
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -24,28 +27,27 @@ class ExportUtilImpl(
     private val checkInDao: CheckInDao,
     private val streakDao: StreakDao
 ) : ExportUtil {
+    private val json = Json { encodeDefaults = false }
+
     override suspend fun prepareFileData(): Map<String, String> {
         return withContext(Dispatchers.IO) {
             val activities = activityInfoDao.getActivityInfoList()
             val checkIns = checkInDao.getAllCheckIns()
             val streaks = streakDao.getAllStreaks()
 
-            val exportData = mapOf(
-                DataUtil.VERSION_KEY to DataUtil.DATABASE_SCHEME_VERSION,
-                DataUtil.ACTIVITIES_KEY to activities,
-                DataUtil.CHECK_INS_KEY to checkIns,
-                DataUtil.STREAKS_KEY to streaks
-            )
+            val exportData = buildJsonObject {
+                put(BackupConstants.VERSION_KEY, DataUtil.DATABASE_SCHEME_VERSION)
+                put(BackupConstants.ACTIVITIES_KEY, json.encodeToJsonElement(activities))
+                put(BackupConstants.CHECK_INS_KEY, json.encodeToJsonElement(checkIns))
+                put(BackupConstants.STREAKS_KEY, json.encodeToJsonElement(streaks))
+            }
 
-            val exportDataJson = CustomGson.buildGson().toJson(exportData)
+            val exportDataJson = exportData.toString()
 
-            val currentDate = LocalDateTime.now()
-            val dateTimeFormatted = currentDate.format(
-                DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss_SSS")
-            )
-
-            val fileName = "damier_backup_${dateTimeFormatted}.dmr"
-            mapOf(DataUtil.FILENAME to fileName, DataUtil.DATA to exportDataJson)
+            val fileName = "damier_backup_${LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_ss_SSS")
+            )}.dmr"
+            mapOf(BackupConstants.FILENAME to fileName, BackupConstants.DATA to exportDataJson)
         }
     }
 
@@ -58,16 +60,20 @@ class ExportUtilImpl(
                 return@withContext Pair(false, context.getString(R.string.invalid_directory))
             }
 
-            var backupFolder = directory.findFile(DataUtil.DAMIER_DIR_KEY)
+            var backupFolder = directory.findFile(BackupConstants.DAMIER_DIR_KEY)
             if (backupFolder == null || !backupFolder.isDirectory)
-                backupFolder = directory.createDirectory(DataUtil.DAMIER_DIR_KEY)
+                backupFolder = directory.createDirectory(BackupConstants.DAMIER_DIR_KEY)
 
-            val backupFile = backupFolder?.createFile(DataUtil.FILE_TYPE, preparedData[DataUtil.FILENAME] ?: DataUtil.FALLBACK_NAME)
+            val backupFile = backupFolder?.createFile(
+                BackupConstants.FILE_TYPE,
+                preparedData[BackupConstants.FILENAME]
+                    ?: BackupConstants.FALLBACK_NAME
+            )
             if (backupFile == null)
                 return@withContext Pair(false, context.getString(R.string.failed_to_create_backup))
 
             return@withContext try {
-                preparedData[DataUtil.DATA]?.let { backupData ->
+                preparedData[BackupConstants.DATA]?.let { backupData ->
                     context.contentResolver.openOutputStream(backupFile.uri)?.buffered()?.use { os ->
                         os.write(backupData.toByteArray())
                     }
@@ -77,7 +83,7 @@ class ExportUtilImpl(
             } catch (e: Exception) {
                 Firebase.crashlytics.recordException(e) {
                     key("backup_uri", backupFile.uri.toString())
-                    key("data_size_byte", preparedData[DataUtil.DATA]?.length ?: -1)
+                    key("data_size_byte", preparedData[BackupConstants.DATA]?.length ?: -1)
                 }
                 Pair(false, context.getString(R.string.failed_to_create_backup))
             }
