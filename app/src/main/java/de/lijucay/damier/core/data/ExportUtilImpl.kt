@@ -11,6 +11,7 @@ import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
 import de.lijucay.damier.core.data.daos.StreakDao
 import de.lijucay.damier.core.domain.DataUtil
+import de.lijucay.damier.core.domain.ExportResult
 import de.lijucay.damier.core.domain.ExportUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,13 +52,13 @@ class ExportUtilImpl(
         }
     }
 
-    override suspend fun exportData(uri: Uri): Pair<Boolean, String?> {
+    override suspend fun exportData(uri: Uri): ExportResult {
         return withContext(Dispatchers.IO) {
             val preparedData = prepareFileData()
             val directory = DocumentFile.fromTreeUri(context, uri)
 
             if (directory == null || !directory.isDirectory) {
-                return@withContext Pair(false, context.getString(R.string.invalid_directory))
+                return@withContext ExportResult.Failure(context.getString(R.string.invalid_directory))
             }
 
             var backupFolder = directory.findFile(BackupConstants.DAMIER_DIR_KEY)
@@ -70,7 +71,7 @@ class ExportUtilImpl(
                     ?: BackupConstants.FALLBACK_NAME
             )
             if (backupFile == null)
-                return@withContext Pair(false, context.getString(R.string.failed_to_create_backup))
+                return@withContext ExportResult.Failure(context.getString(R.string.failed_to_create_backup))
 
             return@withContext try {
                 preparedData[BackupConstants.DATA]?.let { backupData ->
@@ -79,13 +80,13 @@ class ExportUtilImpl(
                     }
                 }
 
-                Pair(true, null)
+                ExportResult.Success
             } catch (e: Exception) {
                 Firebase.crashlytics.recordException(e) {
                     key("backup_uri", backupFile.uri.toString())
                     key("data_size_byte", preparedData[BackupConstants.DATA]?.length ?: -1)
                 }
-                Pair(false, context.getString(R.string.failed_to_create_backup))
+                ExportResult.Failure(context.getString(R.string.failed_to_create_backup))
             }
         }
     }

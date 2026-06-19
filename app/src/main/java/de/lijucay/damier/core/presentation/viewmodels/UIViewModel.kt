@@ -9,8 +9,11 @@ import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.InfoMode
 import de.lijucay.damier.core.presentation.DetailsDestination
+import de.lijucay.damier.core.presentation.SnackbarEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -73,6 +76,13 @@ class UIViewModel(
 
     private val _infoMode = MutableStateFlow<InfoMode?>(null)
     val infoMode = _infoMode.asStateFlow()
+
+    private val _snackbarEvent = MutableSharedFlow<SnackbarEvent>(extraBufferCapacity = 1)
+    val snackbarEvent = _snackbarEvent.asSharedFlow()
+
+    fun emitSnackbar(event: SnackbarEvent) {
+        _snackbarEvent.tryEmit(event)
+    }
 
     fun setDetailsPage(destination: DetailsDestination) {
         _detailsPage.value = destination

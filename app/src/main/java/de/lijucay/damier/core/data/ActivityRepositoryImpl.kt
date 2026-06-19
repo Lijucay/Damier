@@ -8,6 +8,7 @@ import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.wrapper.toActivityDomain
 import de.lijucay.damier.core.data.wrapper.toActivityDomains
 import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.core.domain.CheckInFactory
 import de.lijucay.damier.core.domain.NfcCheckInResult
 import de.lijucay.damier.core.domain.StreakDataSource
 import de.lijucay.damier.core.domain.models.ActivityDomain
@@ -68,11 +69,7 @@ class ActivityRepositoryImpl(
     override suspend fun checkInByNfcChipId(chipId: String): NfcCheckInResult? {
         val activity = activityDao.getActivityByNfcChipId(chipId) ?: return null
 
-        val checkIn = CheckInInfo(
-            activityId = activity.id,
-            amount = activity.defaultAmount,
-            timestamp = LocalDateTime.now()
-        )
+        val checkIn = CheckInFactory.createQuickCheckIn(activity.id, activity.defaultAmount)
 
         upsertCheckIn(checkIn)
         return NfcCheckInResult(activity.id, activity.activityName)

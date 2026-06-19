@@ -57,8 +57,11 @@ import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText
 import org.koin.androidx.compose.koinViewModel
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,11 +94,12 @@ fun CheckInForm(
         initialSelectedDate = initialDateTime.toLocalDate(),
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                val date = Date().apply {
-                    time = utcTimeMillis
-                }
-                val currentDate = Date()
-                return date.before(currentDate)
+                val selectedDate = Instant.ofEpochMilli(utcTimeMillis)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+
+                val today = LocalDate.now()
+                return !selectedDate.isAfter(today)
             }
         }
     )

@@ -1,5 +1,6 @@
 package de.lijucay.damier.core.domain
 
+import de.lijucay.damier.shared.UnitGroup
 import de.lijucay.damier.shared.UnitId
 
 

@@ -194,6 +194,13 @@
     <string name="skip">Überspringen</string>
     <string name="activity_no_longer_exists">Diese Aktivität existiert nicht mehr</string>
     <string name="tap_to_reconfigure">Tippen zum Neukonfigurieren</string>
+    <string name="invalid_version">Dieses Backup wurde mit einer älteren Version von Damier erstellt und wird nicht mehr unterstützt. Ich entschuldige mich für die Unannehmlichkeiten, zukünftige Backups bleiben dauerhaft kompatibel.</string>
+    <string name="unit_group_time">Zeit</string>
+    <string name="unit_group_distance">Distanz</string>
+    <string name="unit_group_volume">Volumen</string>
+    <string name="unit_group_weight">Gewicht</string>
+    <string name="unit_group_health">Gesundheit</string>
+    <string name="unit_group_count">Anzahl</string>
 
     <string-array name="streak_m_ns">
         <item>Tipp drauf. Einmal reicht.</item>

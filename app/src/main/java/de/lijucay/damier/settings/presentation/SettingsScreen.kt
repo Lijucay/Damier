@@ -35,6 +35,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.processphoenix.ProcessPhoenix
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
+import de.lijucay.damier.core.domain.ExportResult
 import de.lijucay.damier.core.domain.InfoMode
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.SwitchPreference
@@ -88,6 +89,7 @@ fun SettingsScreen(
     }
 
     val invalidDirStr = stringResource(R.string.invalid_directory)
+    val invalidVersionStr = stringResource(R.string.invalid_version)
 
     val directoryPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocumentTree()
@@ -100,11 +102,10 @@ fun SettingsScreen(
             backupUri = uri
 
             // Starte Export sofort nach Auswahl
-            activityListViewModel.exportData(uri) { success, errorMessage ->
-                if (success) {
-                    uiViewModel.setInfoMode(InfoMode.BackupSuccess)
-                } else {
-                    uiViewModel.setInfoMode(InfoMode.BackupError(errorMessage))
+            activityListViewModel.exportData(uri) { result ->
+                when (result) {
+                    is ExportResult.Success -> uiViewModel.setInfoMode(InfoMode.BackupSuccess)
+                    is ExportResult.Failure -> uiViewModel.setInfoMode(InfoMode.BackupError(result.message))
                 }
             }
         }
@@ -125,6 +126,9 @@ fun SettingsScreen(
                         if (result) {
                             uiViewModel.setInfoMode(InfoMode.ImportSuccess)
                         }
+                    },
+                    onIncompatibleVersion = {
+                        uiViewModel.setInfoMode(InfoMode.ImportError(invalidVersionStr))
                     }
                 )
             }
@@ -186,16 +190,17 @@ fun SettingsScreen(
             ) {
                 val currentUri = backupUri
                 if (currentUri != null) {
-                    activityListViewModel.exportData(currentUri) { success, errorMessage ->
-                        if (success) {
-                            uiViewModel.setInfoMode(InfoMode.BackupSuccess)
-                        } else {
-                            if (errorMessage == invalidDirStr) {
-                                uiViewModel.setSavedDirUri(null)
-                                backupUri = null
-                                directoryPicker.launch(null)
-                            } else {
-                                uiViewModel.setInfoMode(InfoMode.BackupError(errorMessage))
+                    activityListViewModel.exportData(currentUri) { result ->
+                        when (result) {
+                            is ExportResult.Success -> uiViewModel.setInfoMode(InfoMode.BackupSuccess)
+                            is ExportResult.Failure -> {
+                                if (result.message == invalidDirStr) {
+                                    uiViewModel.setSavedDirUri(null)
+                                    backupUri = null
+                                    directoryPicker.launch(null)
+                                } else {
+                                    uiViewModel.setInfoMode(InfoMode.BackupError(result.message))
+                                }
                             }
                         }
                     }

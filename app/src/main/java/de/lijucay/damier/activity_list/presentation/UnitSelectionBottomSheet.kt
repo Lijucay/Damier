@@ -34,6 +34,7 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.units
 import de.lijucay.damier.core.presentation.components.UnitRow
 import de.lijucay.damier.core.presentation.getShortUnitNamesById
+import de.lijucay.damier.core.presentation.toStringResource
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.shared.UnitId
 
@@ -84,12 +85,7 @@ fun UnitSelectionBottomSheet(
                             else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                         }
                     ) {
-                        Text(
-                            text = groups[index]
-                                .name
-                                .lowercase()
-                                .replaceFirstChar { it.uppercase() }
-                        )
+                        Text(text = stringResource(groups[index].toStringResource()))
                     }
                 }
             }
@@ -98,14 +94,11 @@ fun UnitSelectionBottomSheet(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(groupedUnits[selectedGroup] ?: emptyList()) { unit ->
+                    val unitName = unit.unitId.getShortUnitNamesById(context)
+
                     UnitRow(
-                        label = unit.unitId.name.lowercase()
-                            .replaceFirstChar { it.uppercase() },
-                        badge = "${
-                            unit.unitId.getShortUnitNamesById(context).shortUnitSingular
-                        }/${
-                            unit.unitId.getShortUnitNamesById(context).shortUnitPlural
-                        }",
+                        label = stringResource(unit.unitId.toStringResource()),
+                        badge = "${unitName.shortUnitSingular}/${unitName.shortUnitPlural}",
                         selected = selectedUnit == unit.unitId,
                         onClick = { onUnitSelected(unit.unitId) }
                     )

@@ -8,6 +8,8 @@ import de.lijucay.cue_read.CueReadManager
 import de.lijucay.cue_read.ReadResult
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.core.presentation.SnackbarEvent
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.widget.presentation.DamierWidgetState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +17,8 @@ import kotlinx.coroutines.withContext
 class NfcManager(
     private val activityRepository: ActivityRepository,
     private val widgetState: DamierWidgetState,
-    private val context: Context
+    private val uiViewModel: UIViewModel,
+    private val context: Context,
 ) {
     suspend fun handleNfcIntent(intent: Intent) {
         if (intent.action == NfcAdapter.ACTION_NDEF_DISCOVERED) {
@@ -35,12 +38,8 @@ class NfcManager(
 
         widgetState.updateWidgetForActivity(checkInResult.activityId)
 
-        withContext(Dispatchers.Main) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.check_in_done, checkInResult.activityName),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        uiViewModel.emitSnackbar(
+            SnackbarEvent(context.getString(R.string.check_in_done, checkInResult.activityName))
+        )
     }
 }

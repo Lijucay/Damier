@@ -1,6 +1,8 @@
 package de.lijucay.damier.activity_details.presentation
 
 import de.lijucay.damier.core.domain.WaffleDiagramData
+import de.lijucay.damier.core.domain.currentStreakLength
+import de.lijucay.damier.core.domain.longestStreakLength
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.StreakUi
@@ -48,13 +50,8 @@ data class ActivityDetailsState(
                 streaks = activity.streaks,
                 todaysCheckIns = todaysCheckIns,
                 todaysTotal = todaysCheckIns.sumOf { it.amount },
-                currentStreakLength = activity.streaks
-                    .maxByOrNull { it.endDate.value }
-                    ?.takeIf { streak ->
-                        val end = streak.endDate.value
-                        end == today || end == today.minusDays(1)
-                    }?.length ?: 0,
-                longestStreakLength = activity.streaks.maxByOrNull { it.length }?.length ?: 0,
+                currentStreakLength = activity.streaks.currentStreakLength(today),
+                longestStreakLength = activity.streaks.longestStreakLength(),
                 nfcChipId = activity.nfcChipId
             )
         }

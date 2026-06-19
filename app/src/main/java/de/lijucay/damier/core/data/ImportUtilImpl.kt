@@ -3,9 +3,7 @@ package de.lijucay.damier.core.data
 import android.content.Context
 import android.net.Uri
 import androidx.room.withTransaction
-import com.google.firebase.Firebase
-import com.google.firebase.crashlytics.crashlytics
-import com.google.firebase.crashlytics.recordException
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.stream.JsonReader
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
@@ -14,7 +12,6 @@ import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.entities.Streak
 import de.lijucay.damier.core.domain.ImportUtil
-import de.lijucay.damier.shared.CustomGson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -41,7 +38,8 @@ class ImportUtilImpl(
         fileUri: Uri,
         onTotalCountUpdate: (Int) -> Unit,
         onCurrentCountUpdate: (Int) -> Unit,
-        onComplete: (Boolean) -> Unit
+        onComplete: (Boolean) -> Unit,
+        onIncompatibleVersion: () -> Unit
     ) {
         withContext(Dispatchers.IO) {
             val contentResolver = context.contentResolver
@@ -62,87 +60,9 @@ class ImportUtilImpl(
             }
 
             when (fileVersion) {
-                1,2,3 -> importDataFromV1(fileUri, onTotalCountUpdate, onCurrentCountUpdate, onComplete)
+                1,2,3 -> onIncompatibleVersion()
                 4 -> importDataFromV4(fileUri, onTotalCountUpdate, onComplete)
                 else -> onComplete(false)
-            }
-        }
-    }
-
-    private suspend fun importDataFromV1(
-        fileUri: Uri,
-        onTotalCountUpdate: (Int) -> Unit,
-        onCurrentCountUpdate: (Int) -> Unit,
-        onComplete: (Boolean) -> Unit
-    ) {
-        var currentCount = 0
-
-        withContext(Dispatchers.IO) {
-            try {
-                calculateCount(fileUri, onTotalCountUpdate)
-
-                contentResolver.openInputStream(fileUri)?.use { inputStream ->
-                    val gson = CustomGson.buildGson()
-
-                    val jsonReader = JsonReader(InputStreamReader(inputStream))
-                    jsonReader.beginObject()
-
-                    while (jsonReader.hasNext()) {
-                        when (jsonReader.nextName()) {
-                            BackupConstants.ACTIVITIES_KEY -> {
-                                jsonReader.beginArray()
-                                while (jsonReader.hasNext()) {
-                                    val activity = gson.fromJson<ActivityInfo>(jsonReader, ActivityInfo::class.java)
-                                    activityInfoDao.upsert(activity)
-                                    currentCount++
-                                    onCurrentCountUpdate(currentCount)
-                                }
-                                jsonReader.endArray()
-                            }
-
-                            BackupConstants.CHECK_INS_KEY -> {
-                                jsonReader.beginArray()
-                                while (jsonReader.hasNext()) {
-                                    val checkIn = gson.fromJson<CheckInInfo>(
-                                        jsonReader,
-                                        CheckInInfo::class.java
-                                    )
-
-                                    checkInDao.upsert(checkIn)
-                                    currentCount++
-                                    onCurrentCountUpdate(currentCount)
-                                }
-                                jsonReader.endArray()
-                            }
-
-                            BackupConstants.STREAKS_KEY -> {
-                                jsonReader.beginArray()
-                                while (jsonReader.hasNext()) {
-                                    val streak = gson.fromJson<Streak>(
-                                        jsonReader,
-                                        Streak::class.java
-                                    )
-
-                                    streakDao.upsert(streak)
-                                    currentCount++
-                                    onCurrentCountUpdate(currentCount)
-                                }
-                                jsonReader.endArray()
-                            }
-
-                            else -> jsonReader.skipValue()
-                        }
-                    }
-
-                    jsonReader.endObject()
-                    onComplete(true)
-                }
-            } catch (e: Exception) {
-                Firebase.crashlytics.recordException(e) {
-                    key("file_uri", fileUri.toString())
-                    key("current_count", currentCount)
-                }
-                onComplete(false)
             }
         }
     }
@@ -177,7 +97,11 @@ class ImportUtilImpl(
 
                     onComplete(true)
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().apply {
+                    setCustomKey("import_version", 4)
+                    recordException(e)
+                }
                 onComplete(false)
             }
         }

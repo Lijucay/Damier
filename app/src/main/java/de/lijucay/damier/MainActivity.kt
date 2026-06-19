@@ -71,10 +71,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        val activityId = intent.getStringExtra("activityId")?.let { id ->
-            UUID.fromString(id)
-        }
+//
+//        val activityId = intent.getStringExtra("activityId")?.let { id ->
+//            UUID.fromString(id)
+//        }
 
         setContent {
             val activityListViewModel = koinViewModel<ActivityListViewModel>()
@@ -103,10 +103,13 @@ class MainActivity : ComponentActivity() {
                 )
             )
 
-            LaunchedEffect(activityId) {
-                activityId?.let { id ->
+            val pendingActivityId by uiViewModel.pendingActivityId.collectAsStateWithLifecycle()
+
+            LaunchedEffect(pendingActivityId) {
+                pendingActivityId?.let { id ->
                     activityListViewModel.observeSelectedActivity(id)
                     scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                    uiViewModel.setPendingActivityId(null)
                 }
             }
 
@@ -127,6 +130,17 @@ class MainActivity : ComponentActivity() {
 
                         if (result == SnackbarResult.ActionPerformed) action?.invoke()
                     }
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                uiViewModel.snackbarEvent.collect { event ->
+                    showSnackbar(
+                        event.message,
+                        event.showButton,
+                        event.buttonText,
+                        event.action
+                    )
                 }
             }
 

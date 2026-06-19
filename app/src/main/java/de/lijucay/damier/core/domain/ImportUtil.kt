@@ -7,7 +7,8 @@ interface ImportUtil {
         fileUri: Uri,
         onTotalCountUpdate: (Int) -> Unit,
         onCurrentCountUpdate: (Int) -> Unit,
-        onComplete: (Boolean) -> Unit
+        onComplete: (Boolean) -> Unit,
+        onIncompatibleVersion: () -> Unit
     )
 
     suspend fun calculateCount(fileUri: Uri, onTotalCountUpdate: (Int) -> Unit)

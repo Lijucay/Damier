@@ -3,6 +3,7 @@ package de.lijucay.damier.core.presentation
 import android.content.Context
 import de.lijucay.damier.R
 import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitGroup
 import de.lijucay.damier.shared.UnitId
 
 data class ShortUnitName(val shortUnitSingular: String, val shortUnitPlural: String)
@@ -256,5 +257,50 @@ fun ReferenceType.toStringResource(): Int {
         ReferenceType.GOAL -> R.string.goal
         ReferenceType.LIMIT -> R.string.limit
         ReferenceType.MAX -> R.string.max
+    }
+}
+
+fun UnitGroup.toStringResource(): Int {
+    return when (this) {
+        UnitGroup.TIME -> R.string.unit_group_time
+        UnitGroup.DISTANCE -> R.string.unit_group_distance
+        UnitGroup.VOLUME -> R.string.unit_group_volume
+        UnitGroup.WEIGHT -> R.string.unit_group_weight
+        UnitGroup.HEALTH -> R.string.unit_group_health
+        UnitGroup.COUNT -> R.string.unit_group_count
+    }
+}
+
+fun UnitId.toStringResource(): Int {
+    return when (this) {
+        UnitId.CALORIES -> R.string.calorie
+        UnitId.TIMES -> R.string.time
+        UnitId.STEPS -> R.string.step
+        UnitId.PAGES -> R.string.page
+        UnitId.CHAPTERS -> R.string.chapter
+        UnitId.BOOKS -> R.string.book
+        UnitId.REPETITIONS -> R.string.repetition
+        UnitId.SETS -> R.string.set
+        UnitId.LAPS -> R.string.lap
+        UnitId.HOURS -> R.string.hour
+        UnitId.MINUTES -> R.string.minute
+        UnitId.SECONDS -> R.string.second
+        UnitId.KILOMETERS -> R.string.kilometer
+        UnitId.METERS -> R.string.meter
+        UnitId.MILES -> R.string.mile
+        UnitId.FOOT -> R.string.foot
+        UnitId.YARD -> R.string.yard
+        UnitId.LITERS -> R.string.liter
+        UnitId.MILLILITERS -> R.string.milliliter
+        UnitId.CENTILITERS -> R.string.centiliter
+        UnitId.GALLONS -> R.string.gallon
+        UnitId.FLUID_OUNCES -> R.string.fluid_ounce
+        UnitId.GLASSES -> R.string.glass
+        UnitId.CUPS -> R.string.cup
+        UnitId.KILOGRAMS -> R.string.kilogram
+        UnitId.GRAMS -> R.string.gram
+        UnitId.MILLIGRAMS -> R.string.milligram
+        UnitId.POUNDS -> R.string.pound
+        UnitId.OUNCE -> R.string.ounce
     }
 }

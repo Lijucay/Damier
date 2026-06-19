@@ -64,8 +64,7 @@ fun TimelineGraph(
         }
     }
 
-    val singularUnit = state.unitId.getLongUnitNamesById(context).singularName
-    val pluralUnit = state.unitId.getLongUnitNamesById(context).pluralName
+    val unitName = state.unitId.getLongUnitNamesById(context)
 
     val bottomAxisValueFormatter = CartesianValueFormatter { _, x, _ ->
         startDate.plusDays(x.toLong())
@@ -83,7 +82,7 @@ fun TimelineGraph(
             val value = target.points.firstOrNull()?.entry?.y
                 ?.let { if (it % 1.0 == 0.0) it.toInt().toString() else it.toString() }
                 ?: "0"
-            "$formattedDate\n$value ${if (value.toDouble() == 1.0) singularUnit else pluralUnit}"
+            "$formattedDate\n$value ${if (value.toDouble() == 1.0) unitName.singularName else unitName.pluralName}"
         }
     }
 

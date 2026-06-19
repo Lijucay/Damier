@@ -8,6 +8,7 @@ import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.data.wrapper.toActivityInfo
 import de.lijucay.damier.core.data.wrapper.toCheckInInfo
 import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.core.domain.ExportResult
 import de.lijucay.damier.core.domain.ExportUtil
 import de.lijucay.damier.core.domain.ImportUtil
 import de.lijucay.damier.core.presentation.models.ActivityUi
@@ -86,8 +87,8 @@ class ActivityListViewModel(
         val checkIn = checkInUi.toCheckInDomain().toCheckInInfo()
 
         viewModelScope.launch {
-            repository.deleteCheckIn(checkIn)
-            widgetState.updateWidgetForActivity(checkInUi.activityId)
+            runCatching { repository.deleteCheckIn(checkIn) }
+                .onSuccess { widgetState.updateWidgetForActivity(checkInUi.activityId) }
         }
     }
 
@@ -95,25 +96,26 @@ class ActivityListViewModel(
         fileUri: Uri,
         onTotalCountUpdate: (Int) -> Unit,
         onCurrentCountUpdate: (Int) -> Unit,
-        onComplete: (Boolean) -> Unit
+        onComplete: (Boolean) -> Unit,
+        onIncompatibleVersion: () -> Unit
     ) {
         viewModelScope.launch {
             importUtil.importData(
                 fileUri,
                 onTotalCountUpdate,
                 onCurrentCountUpdate,
-                onComplete
+                onComplete,
+                onIncompatibleVersion
             )
         }
     }
 
     fun exportData(
         dirUri: Uri,
-        onComplete: (Boolean, String?) -> Unit
+        onComplete: (ExportResult) -> Unit
     ) {
         viewModelScope.launch {
-            val result = exportUtil.exportData(dirUri)
-            onComplete(result.first, result.second)
+            onComplete(exportUtil.exportData(dirUri))
         }
     }
 }

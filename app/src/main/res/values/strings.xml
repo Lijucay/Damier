@@ -198,6 +198,12 @@
     <string name="welcome">Welcome to Damier</string>
     <string name="activity_no_longer_exists">This activity no longer exists</string>
     <string name="tap_to_reconfigure">Tap to reconfigure</string>
+    <string name="invalid_version">This backup was created with an older version of Damier and is no longer supported. I\'m sorry for the inconvenience, future backups will always remain compatible.</string>    <string name="unit_group_time">Time</string>
+    <string name="unit_group_distance">Distance</string>
+    <string name="unit_group_volume">Volume</string>
+    <string name="unit_group_weight">Weight</string>
+    <string name="unit_group_health">Health</string>
+    <string name="unit_group_count">Count</string>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>
