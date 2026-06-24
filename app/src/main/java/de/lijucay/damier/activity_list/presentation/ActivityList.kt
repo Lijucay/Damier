@@ -39,7 +39,7 @@ fun ActivityList(
     val uiViewModel = koinViewModel<UIViewModel>()
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
 
-    val activities by activityListViewModel.activities.collectAsStateWithLifecycle()
+    val activities by activityListViewModel.activities.collectAsStateWithLifecycle(initialValue = listOf())
 
     val showReference by uiViewModel.showReference.collectAsStateWithLifecycle()
     val showMaxAmount by uiViewModel.showMaxAmount.collectAsStateWithLifecycle()

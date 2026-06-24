@@ -24,4 +24,10 @@ object Migrations {
             db.execSQL("ALTER TABLE ActivityInfo ADD COLUMN nfcChipId TEXT DEFAULT NULL")
         }
     }
+
+    val Migration_3_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            /* no-op */
+        }
+    }
 }

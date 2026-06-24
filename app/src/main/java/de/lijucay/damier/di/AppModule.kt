@@ -35,9 +35,11 @@ val appModule = module {
             androidContext(),
             DamierDatabase::class.java,
             "damier_data"
-        )
-            .addMigrations(Migrations.Migration_1_2, Migrations.Migration_2_3)
-            .build()
+        ).addMigrations(
+            Migrations.Migration_1_2,
+            Migrations.Migration_2_3,
+            Migrations.Migration_3_4
+        ).build()
     }
 
     single { get<DamierDatabase>().activityInfoDao() }
