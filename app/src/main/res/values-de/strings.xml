@@ -180,7 +180,7 @@
     <string name="youre_all_set">Alles bereit.</string>
     <string name="youre_all_set_message">Das ist alles, was du wissen musst. Den Rest wirst du unterwegs herausfinden.</string>
     <string name="done">Fertig</string>
-    <string name="about_and_help">Info &amp; Hilfe</string>
+    <string name="about_and_more">Info &amp; Mehr</string>
     <string name="show_onboarding_again">Einführung erneut anzeigen</string>
     <string name="show_onboarding_again_summary">Die Einführung in Damier erneut ansehen</string>
     <string name="title_eg">Z.B. Lesen</string>
@@ -201,6 +201,123 @@
     <string name="unit_group_weight">Gewicht</string>
     <string name="unit_group_health">Gesundheit</string>
     <string name="unit_group_count">Anzahl</string>
+    <string name="undo">Rückgängig</string>
+    <string name="update_timeline">Update-Verlauf</string>
+    <string name="show_update_history">Update-Verlauf anzeigen</string>
+    <string name="closed_beta">Closed Beta</string>
+    <string name="closed_beta_started">Eine kleine Gruppe von 4 bis 6 Testern erhält zum ersten Mal frühen Zugang zu Damier.</string>
+    <string name="closed_beta_2">Zweite Closed Beta</string>
+    <string name="closed_beta_2_started">Eine zweite Gruppe von 15 Testern kommt dazu, um Damier vor dem öffentlichen Launch mitzugestalten.</string>
+    <string name="play_store_release">Play Store Release</string>
+    <string name="play_store_release_text">Damier ist jetzt öffentlich im Google Play Store verfügbar. Danke, dass du von Anfang an dabei bist.</string>
+
+    <string-array name="v0_1_1_notes">
+        <item>Behebt mehrere Fehler, die nach der ersten Veröffentlichung gemeldet wurden.</item>
+    </string-array>
+
+    <string-array name="v0_2_0_notes">
+        <item>Damier ist jetzt vollständig auf Deutsch verfügbar.</item>
+        <item>Das Einchecken über die Detailseite öffnet jetzt einen eigenen Dialog.</item>
+    </string-array>
+
+    <string-array name="v0_2_1_notes">
+        <item>Behebt einen Fehler, bei dem der Eincheck-Dialog nicht dem App-Design folgte.</item>
+    </string-array>
+
+    <string-array name="v0_3_0_notes">
+        <item>Statistiken sind da — behalte deine Gewohnheiten besser im Blick.</item>
+        <item>Ein Diagramm zeigt deine gesamten Check-ins über die Zeit auf einen Blick.</item>
+        <item>Ein zweites Diagramm vergleicht die Check-ins dieser Woche mit der letzten.</item>
+    </string-array>
+
+    <string-array name="v0_3_1_notes">
+        <item>Behebt einen Fehler, bei dem die Textfarbe im Vergleichsdiagramm im Dunkelmodus nicht angepasst wurde.</item>
+        <item>Der Check-in-Verlauf hat jetzt eine Überschrift.</item>
+    </string-array>
+
+    <string-array name="v0_3_2_a_0_3_3_notes">
+        <item>Behebt ein Problem mit der Datenintegrität in der Datenbank, das zu unerwartetem Verhalten führen konnte.</item>
+    </string-array>
+
+    <string-array name="v0_4_1_notes">
+        <item>NFC-Chips können jetzt mit Aktivitäten verknüpft werden, um mit einem einzigen Tippen einzuchecken.</item>
+        <item>Behebt ein Datenbankmigrationsprobelm, das beim App-Start zu Abstürzen führte.</item>
+    </string-array>
+
+    <string-array name="v0_4_2_notes">
+        <item>Behebt ein weiteres Datenbankmigrationsproblem, das beim App-Start zu Abstürzen führen konnte.</item>
+    </string-array>
+
+    <string-array name="v0_4_3_notes">
+        <item>Damier unterstützt jetzt Android 8 (Oreo) und höher und erreicht damit mehr Geräte.</item>
+        <item>Auf kleineren Geräten ohne untere Navigationsleiste erscheint jetzt ein eigener Eincheck-Button auf der Detailseite.</item>
+        <item>Das Statistik-Sheet ist jetzt scrollbar.</item>
+        <item>Dem NFC-Dialog wurde ein Abbrechen-Button hinzugefügt.</item>
+        <item>Widgets laden jetzt nach einem Neustart des Geräts korrekt neu.</item>
+    </string-array>
+
+    <string-array name="v0_5_2_notes">
+        <item>Verschiedene visuelle und Bedienbarkeitsverbesserungen in der gesamten App.</item>
+        <item>Das Waffle-Diagramm enthält jetzt eine Legende.</item>
+        <item>Die Streak-Karte hat ein überarbeitetes Design erhalten.</item>
+        <item>NFC-Tags speichern jetzt die ID der Aktivität statt ihres Namens, sodass mehrere Tags mit derselben Aktivität verknüpft werden können.</item>
+    </string-array>
+
+    <string-array name="v0_6_0_notes">
+        <item>Neue Nutzer werden jetzt mit einem Onboarding durch die wichtigsten Funktionen von Damier geführt.</item>
+    </string-array>
+
+    <string-array name="v0_6_1_notes">
+        <item>Das Layout zum Erstellen und Bearbeiten von Aktivitäten wurde für ein aufgeräumteres Erscheinungsbild überarbeitet.</item>
+    </string-array>
+
+    <string-array name="v0_7_0_notes">
+        <item>Menüs und Formulare öffnen sich jetzt als Bottom Sheets für ein natürlicheres Gefühl auf Android.</item>
+        <item>Beim Hinzufügen mehrerer Check-ins wird jetzt ein Stepper statt eines Textfelds verwendet.</item>
+        <item>Das NFC-Schreib-Feedback reagiert schneller und der Dialog schließt sich automatisch, sobald der Schreibvorgang abgeschlossen ist.</item>
+    </string-array>
+
+    <string-array name="v0_7_1_notes">
+        <item>Behebt einen Fehler, bei dem der Datums- und Uhrzeitpicker nicht dem App-Design folgte.</item>
+        <item>Das Startbildschirm-Widget zeigt jetzt einen Ladeindikator, während die Aktivitätsdaten geladen werden.</item>
+    </string-array>
+
+    <string-array name="v1_0_2_notes">
+        <item>Behebt einen Fehler, bei dem das Onboarding beim allerersten Start nicht angezeigt wurde.</item>
+        <item>Behebt einen Fehler, bei dem neu erstellte oder bearbeitete Aktivitäten nicht gespeichert wurden.</item>
+    </string-array>
+
+    <string-array name="v1_0_4_notes">
+        <item>Behebt ein NFC-Problem, das durch Berechtigungsänderungen in Android 17 verursacht wurde.</item>
+    </string-array>
+
+    <string-array name="v1_1_0_notes">
+        <item>Das Backup-System wurde von Grund auf neu geschrieben und ist jetzt zuverlässig über App-Updates hinweg.</item>
+        <item>Die Bestätigung eines NFC-Check-ins wird jetzt als Snackbar angezeigt.</item>
+        <item>Behebt einen Fehler, bei dem Streaks bei der Neuberechnung fälschlicherweise gelöscht wurden.</item>
+        <item>Behebt einen Fehler, bei dem der Datumspicker auf UTC+-Geräten den heutigen Tag als nicht wählbar anzeigte.</item>
+        <item>Behebt einen Fehler, bei dem das Startbildschirm-Widget nach dem Löschen einer Aktivität auf „Wird geladen" hängen blieb.</item>
+        <item>Behebt ein Problem mit dem NFC-Lesemodus und einem damit verbundenen Speicherleck.</item>
+        <item>Backups aus v1.0.x werden nicht mehr unterstützt. Zukünftige Backups bleiben immer kompatibel.</item>
+    </string-array>
+
+    <string-array name="v1_1_1_notes">
+        <item>Allgemeine Stabilitätsverbesserungen und Fehlerbehebungen.</item>
+    </string-array>
+
+    <string-array name="v1_2_0_notes">
+        <item>Die gesamte Update-Historie ist jetzt direkt in der App verfügbar, vom ersten Alpha bis heute.</item>
+        <item>Damier verwendet ab sofort Tabler Icons in der gesamten App, für ein einheitlicheres und aufgeräumteres Erscheinungsbild.</item>
+        <item>Dein längster Streak wird jetzt auf der Streak-Karte angezeigt, damit du deinen persönlichen Rekord immer im Blick hast.</item>
+        <item>Check-ins können jetzt per Snackbar rückgängig gemacht werden, kein versehentlicher Check-in ohne Ausweg mehr.</item>
+        <item>Aktivitäten mit einem Limit zeigen jetzt einen visuellen Hinweis, wenn das Limit überschritten wird.</item>
+        <item>Damiers Sprache kann jetzt unabhängig von der Systemsprache in den App-Einstellungen geändert werden.</item>
+    </string-array>
+
+    <plurals name="personal_best">
+        <item quantity="one">Persönlicher Rekord: %1$d Tag</item>
+        <item quantity="other">Persönlicher Rekord: %1$d Tage</item>
+    </plurals>
 
     <string-array name="streak_m_ns">
         <item>Tipp drauf. Einmal reicht.</item>

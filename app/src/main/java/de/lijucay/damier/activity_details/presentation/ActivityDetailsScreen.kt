@@ -25,13 +25,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.Bolt
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.QueryStats
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -59,6 +52,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowNarrowLeft
+import compose.icons.tablericons.ArrowNarrowRight
+import compose.icons.tablericons.Bolt
+import compose.icons.tablericons.ChartBar
+import compose.icons.tablericons.Edit
+import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
@@ -183,7 +183,7 @@ fun ActivityDetailsScreen(
                 if (!isWidthAtLeastExpanded) {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            imageVector = TablerIcons.ArrowNarrowLeft,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -202,7 +202,7 @@ fun ActivityDetailsScreen(
                             }
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.Bolt,
+                                imageVector = TablerIcons.Bolt,
                                 contentDescription = null
                             )
                         }
@@ -218,7 +218,7 @@ fun ActivityDetailsScreen(
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Rounded.QueryStats,
+                                    imageVector = TablerIcons.ChartBar,
                                     contentDescription = null
                                 )
                             },
@@ -233,7 +233,7 @@ fun ActivityDetailsScreen(
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Rounded.Edit,
+                                    imageVector = TablerIcons.Edit,
                                     contentDescription = null
                                 )
                             },
@@ -248,7 +248,7 @@ fun ActivityDetailsScreen(
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Rounded.Delete,
+                                    imageVector = TablerIcons.Trash,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.error
                                 )
@@ -488,7 +488,7 @@ private fun LazyListScope.streakItem(state: ActivityDetailsState) {
                     .animateItem()
                     .padding(top = 8.dp),
                 currentStreak = state.currentStreakLength,
-//                longestStreak = state.longestStreakLength
+                longestStreak = state.longestStreakLength
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
@@ -612,7 +612,7 @@ private fun LazyListScope.checkInHistory(
                 )
 
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowForwardIos,
+                    imageVector = TablerIcons.ArrowNarrowRight,
                     contentDescription = null
                 )
             }
@@ -666,7 +666,7 @@ private fun LazyListScope.nfcChipItem(
                 }
 
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowForwardIos,
+                    imageVector = TablerIcons.ArrowNarrowRight,
                     contentDescription = null
                 )
             }

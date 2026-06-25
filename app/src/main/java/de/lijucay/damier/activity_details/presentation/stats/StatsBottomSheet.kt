@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.CompareArrows
-import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowsLeftRight
+import compose.icons.tablericons.ChartLine
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
 import de.lijucay.damier.design.components.DefaultText
@@ -54,6 +54,7 @@ fun StatsBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.statistics)
                 )
+                Spacer(Modifier.height(8.dp))
             }
         }
     ) {
@@ -80,7 +81,7 @@ fun StatsBottomSheet(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.Timeline,
+                            imageVector = TablerIcons.ChartLine,
                             contentDescription = null
                         )
                         DefaultText(
@@ -117,7 +118,7 @@ fun StatsBottomSheet(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.CompareArrows,
+                            imageVector = TablerIcons.ArrowsLeftRight,
                             contentDescription = null
                         )
                         DefaultText(

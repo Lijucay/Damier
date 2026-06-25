@@ -10,12 +10,12 @@ import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.InfoMode
 import de.lijucay.damier.core.presentation.DetailsDestination
 import de.lijucay.damier.core.presentation.SnackbarEvent
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -77,11 +77,14 @@ class UIViewModel(
     private val _infoMode = MutableStateFlow<InfoMode?>(null)
     val infoMode = _infoMode.asStateFlow()
 
-    private val _snackbarEvent = MutableSharedFlow<SnackbarEvent>(extraBufferCapacity = 1)
-    val snackbarEvent = _snackbarEvent.asSharedFlow()
+    private val _snackbarEvent = Channel<SnackbarEvent>(Channel.BUFFERED)
+    val snackbarEvent = _snackbarEvent.receiveAsFlow()
+
+    private val _showUpdateTimeline = MutableStateFlow(false)
+    val showUpdateTimeline = _showUpdateTimeline.asStateFlow()
 
     fun emitSnackbar(event: SnackbarEvent) {
-        _snackbarEvent.tryEmit(event)
+        viewModelScope.launch { _snackbarEvent.send(event) }
     }
 
     fun setDetailsPage(destination: DetailsDestination) {
@@ -135,6 +138,10 @@ class UIViewModel(
                 preferences[DataPreferences.Keys.firstLaunch] = firstLaunch
             }
         }
+    }
+
+    fun setShowUpdateTimeline(show: Boolean) {
+        _showUpdateTimeline.value = show
     }
 
     fun setPendingActivityId(id: UUID?) {

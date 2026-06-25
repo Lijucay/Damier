@@ -20,7 +20,6 @@ import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
 import de.lijucay.damier.shared.ReferenceType
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
@@ -90,20 +89,6 @@ fun Modifier.paddingWithSafeNavigationBar(all: Dp = 0.dp): Modifier {
 
 @Composable
 fun bottomPadding() = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-
-fun Map<LocalDate, List<CheckInUi>>.getCurrentStreak(from: LocalDate, reference: Int = 1): Int {
-    var current = if ((this[from]?.sumOf { it.amount } ?: 0) >= reference) from else from.minusDays(1)
-    var streak = 0
-
-    while (true) {
-        val reached = this[current]?.sumOf { it.amount } ?: 0
-        if (reached < reference) break
-        streak++
-        current = current.minusDays(1)
-    }
-
-    return streak
-}
 
 fun getRandomCheckInInfo(
     from: Int = 0,

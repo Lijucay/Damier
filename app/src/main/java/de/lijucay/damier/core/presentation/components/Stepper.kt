@@ -18,9 +18,6 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.then
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +32,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Minus
+import compose.icons.tablericons.Plus
 import de.lijucay.damier.R
 import de.lijucay.damier.design.components.SmallText
 
@@ -69,7 +69,7 @@ fun Stepper(
             shape = MaterialTheme.shapes.medium
         ) {
             Icon(
-                imageVector = Icons.Rounded.Remove,
+                imageVector = TablerIcons.Minus,
                 contentDescription = stringResource(R.string.decrease)
             )
         }
@@ -132,7 +132,7 @@ fun Stepper(
             shape = MaterialTheme.shapes.medium
         ) {
             Icon(
-                imageVector = Icons.Rounded.Add,
+                imageVector = TablerIcons.Plus,
                 contentDescription = stringResource(R.string.increase)
             )
         }

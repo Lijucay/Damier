@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.SelfImprovement
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.motionScheme
@@ -22,9 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Artboard
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.core.presentation.SnackbarEvent
 import de.lijucay.damier.core.presentation.bottomPadding
+import de.lijucay.damier.core.presentation.models.toCheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.design.components.LargeText
 import org.koin.androidx.compose.koinViewModel
@@ -54,7 +56,7 @@ fun ActivityList(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.SelfImprovement,
+                    imageVector = TablerIcons.Artboard,
                     contentDescription = null,
                     modifier = Modifier.size(96.dp),
                     tint = colorScheme.onSurfaceVariant
@@ -77,6 +79,8 @@ fun ActivityList(
                     activities,
                     key = { it.id }
                 ) { activityUi ->
+                    val checkInDone = stringResource(R.string.check_in_done, activityUi.title)
+                    val undo = stringResource(R.string.undo)
                     ActivityListItem(
                         modifier = Modifier.animateItem(fadeInSpec = motionScheme.defaultSpatialSpec()),
                         activityUi = activityUi,
@@ -88,6 +92,17 @@ fun ActivityList(
                             )
 
                             activityListViewModel.upsert(checkIn)
+
+                            val checkInSnackbarEvent = SnackbarEvent(
+                                message = checkInDone,
+                                showButton = true,
+                                buttonText = undo,
+                                action = {
+                                    activityListViewModel.deleteCheckIn(checkIn.toCheckInUi())
+                                }
+                            )
+
+                            uiViewModel.emitSnackbar(checkInSnackbarEvent)
                         },
                         showReference = showReference,
                         showMaxAmount = showMaxAmount,

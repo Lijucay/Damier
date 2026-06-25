@@ -25,8 +25,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 37
-        versionCode = 23
-        versionName = "1.1.1"
+        versionCode = 24
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,10 +58,17 @@ configure<ApplicationExtension> {
         compose = true
         buildConfig = true
     }
+
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 dependencies {
     implementation(project(":shared"))
+
+    implementation(libs.compose.tabler.icons)
+
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime)
 
@@ -93,8 +100,6 @@ dependencies {
 
     ksp(libs.room.compiler)
 
-    implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.compose.adaptive)
     implementation(libs.androidx.compose.adaptive.layout)

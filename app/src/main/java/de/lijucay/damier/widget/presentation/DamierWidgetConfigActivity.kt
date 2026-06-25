@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +29,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.lifecycle.lifecycleScope
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowLeft
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.entities.ActivityInfo
@@ -120,7 +120,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
                             onClick = onCancel
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.ArrowBackIosNew,
+                                imageVector = TablerIcons.ArrowLeft,
                                 contentDescription = null
                             )
                         }

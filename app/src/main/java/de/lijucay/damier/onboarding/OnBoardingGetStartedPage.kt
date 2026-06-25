@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,6 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Check
 import de.lijucay.damier.R
 import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.HeadlineText
@@ -41,7 +41,7 @@ fun OnBoardingGetStartedPage(modifier: Modifier = Modifier) {
         ) {
             Icon(
                 modifier = Modifier.size(90.dp),
-                imageVector = Icons.Rounded.Done,
+                imageVector = TablerIcons.Check,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

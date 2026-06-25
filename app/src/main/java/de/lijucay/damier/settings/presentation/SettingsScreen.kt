@@ -9,30 +9,35 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.FileOpen
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.IosShare
-import androidx.compose.material.icons.rounded.PrivacyTip
-import androidx.compose.material.icons.rounded.ReportGmailerrorred
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.processphoenix.ProcessPhoenix
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowLeft
+import compose.icons.tablericons.Bug
+import compose.icons.tablericons.CalendarEvent
+import compose.icons.tablericons.ChartBar
+import compose.icons.tablericons.FileExport
+import compose.icons.tablericons.FileImport
+import compose.icons.tablericons.InfoCircle
+import compose.icons.tablericons.PlayerPlay
+import compose.icons.tablericons.ShieldCheck
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.ExportResult
@@ -41,8 +46,11 @@ import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.SwitchPreference
 import de.lijucay.damier.core.presentation.components.VersionInfo
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.settings.presentation.update.UpdateTimelineDialog
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
@@ -68,6 +76,14 @@ fun SettingsScreen(
     var crashlyticsEnabled by remember {
         mutableStateOf(crashlytics.isCrashlyticsCollectionEnabled)
     }
+
+    val showUpdateTimeline by uiViewModel.showUpdateTimeline.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+
+    val updateTimelineSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
 
     LaunchedEffect(savedDirUri) {
         savedDirUri?.let { savedDirUriStr ->
@@ -101,7 +117,6 @@ fun SettingsScreen(
             uiViewModel.setSavedDirUri(uri.toString())
             backupUri = uri
 
-            // Starte Export sofort nach Auswahl
             activityListViewModel.exportData(uri) { result ->
                 when (result) {
                     is ExportResult.Success -> uiViewModel.setInfoMode(InfoMode.BackupSuccess)
@@ -149,7 +164,7 @@ fun SettingsScreen(
                     onClick = onNavigateBack
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.ArrowBackIosNew,
+                        imageVector = TablerIcons.ArrowLeft,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -166,7 +181,7 @@ fun SettingsScreen(
             SwitchPreference(
                 title = stringResource(R.string.enable_crashlytics),
                 subTitle = stringResource(R.string.crashlytics_info),
-                icon = Icons.Rounded.ReportGmailerrorred,
+                icon = TablerIcons.Bug,
                 checked = crashlyticsEnabled
             ) {
                 crashlytics.isCrashlyticsCollectionEnabled = !crashlytics.isCrashlyticsCollectionEnabled
@@ -186,7 +201,7 @@ fun SettingsScreen(
             Preference(
                 title = stringResource(R.string.backup_data),
                 summary = stringResource(R.string.backup_data_summary),
-                iconVector = Icons.Rounded.IosShare
+                iconVector = TablerIcons.FileExport
             ) {
                 val currentUri = backupUri
                 if (currentUri != null) {
@@ -211,7 +226,7 @@ fun SettingsScreen(
             Preference(
                 title = stringResource(R.string.import_data),
                 summary = stringResource(R.string.import_data_summary),
-                iconVector = Icons.Rounded.FileOpen
+                iconVector = TablerIcons.FileImport
             ) {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     type = "application/octet-stream"
@@ -228,7 +243,7 @@ fun SettingsScreen(
                 title = stringResource(R.string.show_reference),
                 subTitle = stringResource(id = R.string.show_reference_explanation),
                 checked = showReference,
-                icon = ImageVector.vectorResource(R.drawable.rounded_counter_ref)
+                icon = TablerIcons.InfoCircle
             ) { checked ->
                 uiViewModel.changeShowReference(checked)
             }
@@ -239,7 +254,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.show_max),
                     subTitle = stringResource(R.string.show_max_explanation),
                     checked = showMaxAmount,
-                    icon = ImageVector.vectorResource(R.drawable.rounded_counter_max)
+                    icon = TablerIcons.ChartBar
                 ) { checked ->
                     uiViewModel.changeShowMaxAmount(checked)
                 }
@@ -252,7 +267,7 @@ fun SettingsScreen(
             Preference(
                 title = stringResource(R.string.privacy_policy),
                 summary = stringResource(R.string.privacy_policy_sum),
-                iconVector = Icons.Rounded.PrivacyTip
+                iconVector = TablerIcons.ShieldCheck
             ) {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     data = "https://damier.lijucay.de/privacy".toUri()
@@ -262,14 +277,29 @@ fun SettingsScreen(
             }
 
             PreferenceCategoryTitle(
-                title = stringResource(R.string.about_and_help)
+                title = stringResource(R.string.about_and_more)
             )
             Preference(
                 title = stringResource(R.string.show_onboarding_again),
                 summary = stringResource(R.string.show_onboarding_again_summary),
-                iconVector = Icons.Rounded.Info
+                iconVector = TablerIcons.PlayerPlay
             ) {
                 uiViewModel.setFirstLaunch(true)
+            }
+            Preference(
+                title = stringResource(R.string.update_timeline),
+                summary = stringResource(R.string.show_update_history),
+                iconVector = TablerIcons.CalendarEvent
+            ) {
+                uiViewModel.setShowUpdateTimeline(true)
+            }
+        }
+    }
+
+    if (showUpdateTimeline) {
+        UpdateTimelineDialog(sheetState = updateTimelineSheetState) {
+            scope.launch { updateTimelineSheetState.hide() }.invokeOnCompletion {
+                uiViewModel.setShowUpdateTimeline(false)
             }
         }
     }

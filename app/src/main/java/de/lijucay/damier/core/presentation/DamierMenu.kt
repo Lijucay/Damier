@@ -2,8 +2,6 @@ package de.lijucay.damier.core.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -11,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import compose.icons.TablerIcons
+import compose.icons.tablericons.DotsVertical
 import de.lijucay.damier.R
 
 @Composable
@@ -25,7 +25,7 @@ fun DamierMenu(
             onClick = { onShowMenu(true) }
         ) {
             Icon(
-                imageVector = Icons.Rounded.MoreVert,
+                imageVector = TablerIcons.DotsVertical,
                 contentDescription = stringResource(R.string.menu)
             )
         }

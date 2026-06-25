@@ -77,6 +77,7 @@ fun CheckInHistory(
                         .fillMaxWidth(),
                     text = stringResource(R.string.full_history)
                 )
+                Spacer(Modifier.height(8.dp))
             }
         }
     ) {

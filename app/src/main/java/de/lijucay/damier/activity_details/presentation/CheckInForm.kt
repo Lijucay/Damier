@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
@@ -45,6 +42,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import compose.icons.TablerIcons
+import compose.icons.tablericons.DeviceFloppy
+import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.presentation.LongUnitName
@@ -62,7 +62,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,7 +148,7 @@ fun CheckInForm(
                         if (mode is CheckInFormMode.Edit) {
                             IconButton(onClick = { onDeleteRequest(mode.checkIn) }) {
                                 Icon(
-                                    imageVector = Icons.Rounded.Delete,
+                                    imageVector = TablerIcons.Trash,
                                     contentDescription = stringResource(R.string.delete)
                                 )
                             }
@@ -172,12 +171,14 @@ fun CheckInForm(
                             }
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.Save,
+                                imageVector = TablerIcons.DeviceFloppy,
                                 contentDescription = stringResource(R.string.save)
                             )
                         }
                     }
                 }
+
+                Spacer(Modifier.height(8.dp))
             }
         }
     ) {

@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
@@ -23,6 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Check
+import compose.icons.tablericons.X
 import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText
 
@@ -83,9 +83,9 @@ fun SwitchPreference(
                     ) { isChecked ->
                         Icon(
                             imageVector = if (isChecked)
-                                Icons.Rounded.Check
+                                TablerIcons.Check
                             else
-                                Icons.Rounded.Close,
+                                TablerIcons.X,
                             contentDescription = null
                         )
                     }

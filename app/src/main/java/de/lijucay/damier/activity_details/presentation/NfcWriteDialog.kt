@@ -7,11 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Error
-import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -24,6 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.AlertCircle
+import compose.icons.tablericons.AlertTriangle
+import compose.icons.tablericons.CircleCheck
 import de.lijucay.damier.R
 import de.lijucay.damier.cue.NfcWriteState
 import de.lijucay.damier.cue.NfcWriteState.Idle.isAutoClosing
@@ -70,7 +69,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.Error,
+                                imageVector = TablerIcons.AlertCircle,
                                 contentDescription = null
                             )
 
@@ -89,7 +88,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.Error,
+                                imageVector = TablerIcons.AlertCircle,
                                 contentDescription = null
                             )
 
@@ -108,7 +107,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.Error,
+                                imageVector = TablerIcons.AlertCircle,
                                 contentDescription = null
                             )
 
@@ -127,7 +126,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.Warning,
+                                imageVector = TablerIcons.AlertTriangle,
                                 contentDescription = null
                             )
 
@@ -146,7 +145,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.ErrorOutline,
+                                imageVector = TablerIcons.AlertCircle,
                                 contentDescription = null
                             )
 
@@ -199,7 +198,7 @@ fun NfcWriteDialog(
                         ) {
                             Icon(
                                 modifier = Modifier.size(128.dp),
-                                imageVector = Icons.Rounded.CheckCircle,
+                                imageVector = TablerIcons.CircleCheck,
                                 contentDescription = null
                             )
 

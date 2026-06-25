@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,6 +40,9 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import compose.icons.TablerIcons
+import compose.icons.tablericons.ArrowLeft
+import compose.icons.tablericons.Check
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.activity_list.presentation.UnitSelectionBottomSheet
@@ -122,7 +122,7 @@ fun ActivityFormScreen(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.Check,
+                        imageVector = TablerIcons.Check,
                         contentDescription = stringResource(R.string.save)
                     )
                 }
@@ -131,7 +131,7 @@ fun ActivityFormScreen(
                 if (!isWidthAtLeastExpanded) {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            imageVector = TablerIcons.ArrowLeft,
                             contentDescription = stringResource(R.string.back)
                         )
                     }

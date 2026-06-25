@@ -17,14 +17,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Flame
 import de.lijucay.damier.R
 import de.lijucay.damier.design.components.HeadlineText
 import de.lijucay.damier.design.components.LargeText
@@ -35,7 +42,7 @@ import de.lijucay.damier.design.components.TitleText
 fun StreakCard(
     modifier: Modifier = Modifier,
     currentStreak: Int,
-//    longestStreak: Int
+    longestStreak: Int
 ) {
     val resources = LocalResources.current
 
@@ -106,26 +113,26 @@ fun StreakCard(
                 )
             }
 
-//            HorizontalDivider()
-//
-//            Row(
-//                horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Icon(
-//                    imageVector = ImageVector.vectorResource(R.drawable.reward),
-//                    contentDescription = null
-//                )
-//
-//                Text(
-//                    text = pluralStringResource(
-//                        R.plurals.personal_best,
-//                        longestStreak,
-//                        longestStreak
-//                    ),
-//                    fontWeight = FontWeight.Bold
-//                )
-//            }
+            HorizontalDivider()
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = TablerIcons.Flame,
+                    contentDescription = null
+                )
+
+                Text(
+                    text = pluralStringResource(
+                        R.plurals.personal_best,
+                        longestStreak,
+                        longestStreak
+                    ),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

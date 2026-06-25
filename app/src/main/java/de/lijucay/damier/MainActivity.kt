@@ -71,10 +71,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-//
-//        val activityId = intent.getStringExtra("activityId")?.let { id ->
-//            UUID.fromString(id)
-//        }
 
         setContent {
             val activityListViewModel = koinViewModel<ActivityListViewModel>()
@@ -125,7 +121,7 @@ class MainActivity : ComponentActivity() {
                         val result = snackbarHostState.showSnackbar(
                             message = message,
                             actionLabel = if (showButton) buttonText else null,
-                            duration = SnackbarDuration.Long
+                            duration = SnackbarDuration.Short
                         )
 
                         if (result == SnackbarResult.ActionPerformed) action?.invoke()
@@ -160,6 +156,7 @@ class MainActivity : ComponentActivity() {
                         AdaptivePane(
                             listPane = {
                                 ActivityListScreen(
+                                    snackbarHost = { SnackbarHost(snackbarHostState) },
                                     onActivityClicked = {
                                         scope.launch {
                                             uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
@@ -257,6 +254,8 @@ class MainActivity : ComponentActivity() {
                 infoMode?.let {
                     InfoDialog(it) { uiViewModel.setInfoMode(null) }
                 }
+
+
             }
         }
     }

@@ -5,17 +5,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import de.lijucay.damier.R
 import de.lijucay.damier.shared.ReferenceType
 import java.time.LocalDate
 
@@ -51,8 +57,18 @@ fun Cell(
                         shape = MaterialShapes.Square.toShape()
                     )
                 } else Modifier
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        if (type == ReferenceType.LIMIT && checkInCount > reference) {
+            Icon(
+                modifier = Modifier.fillMaxSize(),
+                imageVector = ImageVector.vectorResource(R.drawable.exclamation_mark),
+                contentDescription = null,
+                tint = contentColorFor(cellColor)
             )
-    )
+        }
+    }
 }
 
 @Composable

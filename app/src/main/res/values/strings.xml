@@ -184,7 +184,7 @@
     <string name="youre_all_set">You\'re all set.</string>
     <string name="youre_all_set_message">That\'s everything you need to know. The rest you\'ll figure out along the way.</string>
     <string name="done">Done</string>
-    <string name="about_and_help">About &amp; Help</string>
+    <string name="about_and_more">About &amp; More</string>
     <string name="show_onboarding_again">Show onboarding again</string>
     <string name="show_onboarding_again_summary">Revisit the introduction to Damier</string>
     <string name="title_eg">E.g. Reading</string>
@@ -204,6 +204,114 @@
     <string name="unit_group_weight">Weight</string>
     <string name="unit_group_health">Health</string>
     <string name="unit_group_count">Count</string>
+    <string name="undo">Undo</string>
+    <string name="update_timeline">Update timeline</string>
+    <string name="show_update_history">Show the update history</string>
+    <plurals name="personal_best">
+        <item quantity="one">Personal best: %1$d Day</item>
+        <item quantity="other">Personal best: %1$d Days</item>
+    </plurals>
+
+    <string name="closed_beta">Closed Beta</string>
+    <string name="closed_beta_started">A small group of 4–6 testers gets early access to Damier for the first time.</string>
+    <string name="closed_beta_2">Second closed beta started</string>
+    <string name="closed_beta_2_started">A second wave of 15 testers joins to help shape Damier before its public launch.</string>
+    <string name="play_store_release">Play Store Release</string>
+    <string name="play_store_release_text">Damier is now publicly available on Google Play. Thank you for being here from the start.</string>
+
+    <string-array name="v0_1_1_notes">
+        <item>Fixes several bugs reported after the initial release.</item>
+    </string-array>
+    <string-array name="v0_2_0_notes">
+        <item>Damier is now fully available in German.</item>
+        <item>Checking in through the details page now opens a dedicated dialog for a cleaner experience.</item>
+    </string-array>
+    <string-array name="v0_2_1_notes">
+        <item>Fixes the check-in dialog not following the app\'s theme correctly.</item>
+    </string-array>
+    <string-array name="v0_3_0_notes">
+        <item>Statistics are here — get a better picture of your habits over time</item>
+        <item>A graph shows your total check-ins over time at a glance.</item>
+        <item>A second graph lets you compare this week\'s check-ins with last week\'s</item>
+    </string-array>
+    <string-array name="v0_3_1_notes">
+        <item>Fixes the comparison chart\'s text color not adapting correctly in dark mode.</item>
+        <item>The check-in history now has a proper title.</item>
+    </string-array>
+    <string-array name="v0_3_2_a_0_3_3_notes">
+        <item>Fixes a data integrity issue in the database that could cause unexpected behavior.</item>
+    </string-array>
+    <string-array name="v0_4_1_notes">
+        <item>You can now link NFC chips to activities and check in with a single tap.</item>
+        <item>Fixes a database migration issue that was causing the app to crash on launch.</item>
+    </string-array>
+    <string-array name="v0_4_2_notes">
+        <item>Fixes another database migration issue that could cause crashes on launch.</item>
+    </string-array>
+    <string-array name="v0_4_3_notes">
+        <item>Damier now supports Android 8 (Oreo) and above, reaching more devices.</item>
+        <item>A dedicated check-in button now appears on the details page on smaller devices where the bottom bar is hidden.</item>
+        <item>The statistics sheet is now scrollable.</item>
+        <item>A cancel button has been added to the NFC dialog.</item>
+        <item>Widgets now reload correctly after a device reboot.</item>
+    </string-array>
+    <string-array name="v0_5_2_notes">
+        <item>A range of visual and usability improvements across the app.</item>
+        <item>The waffle diagram now includes a legend.</item>
+        <item>The streak card has a refreshed design.</item>
+        <item>NFC tags now store the activity\'s ID instead of its name, making it possible to assign multiple tags to the same activity.</item>
+    </string-array>
+
+    <string-array name="v0_6_0_notes">
+        <item>New users are now welcomed with an on-boarding flow that guides them through Damier\'s key features.</item>
+    </string-array>
+
+    <string-array name="v0_6_1_notes">
+        <item>The layout for adding and editing activities has been redesigned for a cleaner look.</item>
+    </string-array>
+
+    <string-array name="v0_7_0_notes">
+        <item>Menus and forms now open as bottom sheets for a more natural feel on Android.</item>
+        <item>Adding multiple check-ins at once now uses a stepper instead of a text field.</item>
+        <item>NFC write feedback is more responsive and the dialog closes automatically once writing is complete.</item>
+    </string-array>
+
+    <string-array name="v0_7_1_notes">
+        <item>Fixes the date and time picker not following the app\'s theme.</item>
+        <item>The home screen widget now shows a loading indicator while the activity data is being fetched.</item>
+    </string-array>
+
+    <string-array name="v1_0_2_notes">
+        <item>Fixes the on-boarding not appearing on the very first launch.</item>
+        <item>Fixes a bug where newly created or edited activities would not be saved.</item>
+    </string-array>
+
+    <string-array name="v1_0_4_notes">
+        <item>Fixes an NFC issue introduced by permission changes in Android 17.</item>
+    </string-array>
+
+    <string-array name="v1_1_0_notes">
+        <item>The backup system has been rewritten from the ground up and is now reliable across app updates.</item>
+        <item>NFC check-in confirmation is now shown as a Snackbar.</item>
+        <item>Fixes a bug where streaks were incorrectly deleted during recalculation.</item>
+        <item>Fixes the date picker showing today as unavailable on UTC+ devices.</item>
+        <item>Fixes the home screen widget getting stuck on "Loading" after deleting an activity.</item>
+        <item>Fixes an NFC reader mode issue and a related memory leak.</item>
+        <item>Backups from v1.0.x are no longer supported. Future backups will always stay compatible.</item>
+    </string-array>
+
+    <string-array name="v1_1_1_notes">
+        <item>General stability improvements and bug fixes.</item>
+    </string-array>
+
+    <string-array name="v1_2_0_notes">
+        <item>The full update history is now available directly in the app, from the very first alpha all the way to today.</item>
+        <item>Damier now uses Tabler Icons throughout the app for a cleaner, more consistent look.</item>
+        <item>Your longest streak is now shown on the streak card, so your personal best is always visible.</item>
+        <item>Check-ins can now be undone via a Snackbar — no more accidental check-ins with no way back.</item>
+        <item>Activities with a limit now show a visual indicator when the limit is exceeded.</item>
+        <item>You can now change Damier\'s language independently from your system language in the app settings.</item>
+    </string-array>
 
     <string-array name="streak_m_ns">
         <item>Tap. Just once.</item>
