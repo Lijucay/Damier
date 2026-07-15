@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.BrandGooglePlay
 import compose.icons.tablericons.Planet
+import compose.icons.tablericons.TestPipe
 import compose.icons.tablericons.User
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.bottomPadding
@@ -67,6 +68,31 @@ fun UpdateTimelineDialog(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(bottom = bottomPadding())
         ) {
+            item {
+                val date = LocalDate.of(2026, 7, 15)
+
+                UpdateItem(
+                    version = "2.1.2",
+                    date = date.toDisplayableDate().formatted,
+                    releaseNotes = stringArrayResource(R.array.v2_1_2_notes).toList()
+                )
+            }
+
+            item {
+                val date = LocalDate.of(2026, 7, 14)
+
+                UpdateItem(
+                    version = "2.1.1-beta",
+                    date = date.toDisplayableDate().formatted,
+                    highlightUpdate = HighlightUpdate(
+                        title = stringResource(R.string.first_public_beta),
+                        text = stringResource(R.string.first_public_beta_text),
+                        icon = TablerIcons.TestPipe
+                    ),
+                    releaseNotes = stringArrayResource(R.array.v2_1_1_notes).toList()
+                )
+            }
+
             item {
                 val date = LocalDate.of(2026, 6, 25)
 

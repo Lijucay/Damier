@@ -232,6 +232,8 @@
     <string name="name_your_tag">Name your NFC Tag</string>
     <string name="name_your_tag_info">You can give your NFC Tag a name to differentiate it from your other tags. By default, it will be "Untitled"</string>
     <string name="link_nfc_tag">Link NFC Tag</string>
+    <string name="first_public_beta">First public beta</string>
+    <string name="first_public_beta_text">Damier now offers users to join the public beta channel inside the Play Store. Before signing up, keep in mind that public beta\'s contain bugs and might not work reliably.</string>
     <string-array name="v0_1_1_notes">
         <item>Fixes several bugs reported after the initial release.</item>
     </string-array>
@@ -328,6 +330,26 @@
     <string-array name="v1_2_2_notes">
         <item>Fixes a bug where the exclamation mark indicator would not appear after hitting a limit.</item>
         <item>You can now choose whether a snackbar is shown after a quick check-in.</item>
+    </string-array>
+
+    <string-array name="v2_1_1_notes">
+        <item>Damier now shows you a list of connected NFC tags (if you connected multiple tags in the past, only one will be shown. You can disconnect the one shown in the list and reconnect every tag)</item>
+        <item>You can now name your NFC tags</item>
+        <item>You can now unlink or erase NFC tags easily</item>
+        <item>There is now a checkmark when you reached your goal</item>
+        <item>The unit-selection dialog now respects your choice and opens the group of the selected unit by default</item>
+        <item>The amount fields now respect the activities set default amount when editing an activity</item>
+        <item>The check-in field now uses the activities default amount when checking in, you can still edit the check-in amount</item>
+        <item>The streak card now recalculates the streak more reliable</item>
+        <item>The streak card now shows a short note to explain, how the streak system works</item>
+        <item>Damier now waits 2 seconds before letting an NFC tag add a check-in, preventing automatic check-ins after writing the tag</item>
+        <item>The widget should now work more reliable</item>
+        <item>The select-activity screen for widgets has received a UI overhaul</item>
+        <item>Damier had some minor UI changes</item>
+    </string-array>
+
+    <string-array name="v2_1_2_notes">
+        <item>The select-activity screen for widgets now respects edge-to-edge</item>
     </string-array>
 
     <string-array name="streak_m_ns">

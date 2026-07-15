@@ -224,6 +224,8 @@
     <string name="name_your_tag">Benenne deinen NFC-Tag</string>
     <string name="name_your_tag_info">Du kannst deinem NFC-Tag einen Namen geben, um ihn von deinen anderen Tags zu unterscheiden. Standardmäßig lautet er "Unbenannt".</string>
     <string name="link_nfc_tag">NFC-Tag verknüpfen</string>
+    <string name="first_public_beta">Erste öffentliche Beta</string>
+    <string name="first_public_beta_text">Damier bietet Nutzern jetzt die Möglichkeit, dem öffentlichen Beta-Kanal im Play Store beizutreten. Bedenke vor der Anmeldung, dass öffentliche Betas Fehler enthalten könnten und möglicherweise nicht zuverlässig funktionieren.</string>
 
     <string-array name="v0_1_1_notes">
         <item>Behebt mehrere Fehler, die nach der ersten Veröffentlichung gemeldet wurden.</item>
@@ -325,6 +327,26 @@
         <item>Dein längster Streak wird jetzt auf der Streak-Karte angezeigt, damit du deinen persönlichen Rekord immer im Blick hast.</item>
         <item>Check-ins können jetzt per Snackbar rückgängig gemacht werden, kein versehentlicher Check-in ohne Ausweg mehr.</item>
         <item>Damiers Sprache kann jetzt unabhängig von der Systemsprache in den App-Einstellungen geändert werden.</item>
+    </string-array>
+
+    <string-array name="v2_1_1_notes">
+        <item>Damier zeigt dir jetzt eine Liste deiner verknüpften NFC-Tags an (wenn du in der Vergangenheit mehrere Tags verknüpft hast, wird nur eines angezeigt. Du kannst das angezeigte Tag entfernen und alle Tags erneut verknüpfen)</item>
+        <item>Du kannst deinen NFC-Tags jetzt einen Namen geben</item>
+        <item>Du kannst NFC-Tags jetzt einfach entfernen oder löschen</item>
+        <item>Damier zeigt jetzt ein Häkchen an, wenn du dein Ziel erreicht hast</item>
+        <item>Der Unit-Auswahldialog berücksichtigt jetzt deine Wahl und öffnet standardmäßig die Gruppe der ausgewählten Unit</item>
+        <item>Die Mengenfelder berücksichtigen beim Bearbeiten einer Aktivität jetzt die voreingestellte Standardmenge</item>
+        <item>Das Check-in-Feld verwendet beim Check-in jetzt die Standardmenge der Aktivität, du kannst die Check-in-Menge weiterhin bearbeiten</item>
+        <item>Die Streak-Karte berechnet die Serie jetzt zuverlässiger neu</item>
+        <item>Die Streak-Karte zeigt jetzt einen kurzen Hinweis, der erklärt, wie das Streak-System funktioniert</item>
+        <item>Damier wartet jetzt 2 Sekunden, bevor ein NFC-Tag ein Check-in auslösen kann, um automatische Check-ins direkt nach dem Beschreiben des Tags zu verhindern</item>
+        <item>Das Widget sollte jetzt zuverlässiger funktionieren</item>
+        <item>Der Aktivitätsauswahl-Bildschirm für Widgets hat ein UI-Overhaul erhalten</item>
+        <item>Damier hat einige kleinere UI-Änderungen erhalten</item>
+    </string-array>
+
+    <string-array name="v2_1_2_notes">
+        <item>Der Aktivitätsauswahl-Bildschirm für Widgets berücksichtigt jetzt Edge-to-Edge</item>
     </string-array>
 
     <plurals name="personal_best">
