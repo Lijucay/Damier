@@ -3,6 +3,7 @@ package de.lijucay.damier.settings.presentation
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.nfc.NfcAdapter
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -15,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +32,14 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.processphoenix.ProcessPhoenix
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowLeft
+import compose.icons.tablericons.Bell
 import compose.icons.tablericons.Bug
 import compose.icons.tablericons.CalendarEvent
 import compose.icons.tablericons.ChartBar
 import compose.icons.tablericons.FileExport
 import compose.icons.tablericons.FileImport
 import compose.icons.tablericons.InfoCircle
+import compose.icons.tablericons.Nfc
 import compose.icons.tablericons.PlayerPlay
 import compose.icons.tablericons.ShieldCheck
 import de.lijucay.damier.R
@@ -46,28 +50,38 @@ import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.SwitchPreference
 import de.lijucay.damier.core.presentation.components.VersionInfo
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.cue.NfcWriteState
+import de.lijucay.damier.nfc.NfcManager
+import de.lijucay.damier.nfc.NfcViewModel
 import de.lijucay.damier.settings.presentation.update.UpdateTimelineDialog
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.scope.Scope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
+    scope: Scope,
     snackbarHost: @Composable (() -> Unit),
     showCrashlyticsChangedSnackbar: (Int, Boolean, Int, () -> Unit) -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
 
-    val uiViewModel = koinViewModel<UIViewModel>()
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
+    val nfcViewModel = koinViewModel<NfcViewModel>(scope = scope)
+    val uiViewModel = koinViewModel<UIViewModel>()
+
+    val nfcManager = koinInject<NfcManager>(scope = scope)
 
     val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
 
     val showReference by uiViewModel.showReference.collectAsStateWithLifecycle()
     val showMaxAmount by uiViewModel.showMaxAmount.collectAsStateWithLifecycle()
     val savedDirUri by uiViewModel.savedDirUri.collectAsStateWithLifecycle()
+    val showSnackbar by uiViewModel.showSnackbar.collectAsStateWithLifecycle()
 
     var backupUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -78,12 +92,42 @@ fun SettingsScreen(
     }
 
     val showUpdateTimeline by uiViewModel.showUpdateTimeline.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
     val updateTimelineSheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
     )
+
+    val nfcAdapter = remember { NfcAdapter.getDefaultAdapter(context) }
+
+    val nfcWriteState by nfcViewModel.nfcWriteState.collectAsStateWithLifecycle()
+
+    val shouldEnableReaderMode = remember(nfcWriteState) {
+        nfcWriteState is NfcWriteState.WaitingForTag ||
+                nfcWriteState is NfcWriteState.Erasing
+    }
+
+    val nfcSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
+
+    DisposableEffect(shouldEnableReaderMode) {
+        val activity = context as? Activity ?: return@DisposableEffect onDispose {}
+
+        if (shouldEnableReaderMode) {
+            nfcManager.enableReaderMode(
+                activity
+            ) { tag -> nfcViewModel.eraseNfcChip(tag) }
+        } else {
+            nfcAdapter?.disableReaderMode(activity)
+        }
+
+        onDispose {
+            nfcAdapter?.disableReaderMode(activity)
+        }
+    }
 
     LaunchedEffect(savedDirUri) {
         savedDirUri?.let { savedDirUriStr ->
@@ -179,6 +223,14 @@ fun SettingsScreen(
                 title = stringResource(R.string.app_settings)
             )
             SwitchPreference(
+                title = stringResource(R.string.show_snackbar),
+                subTitle = stringResource(R.string.show_snackbar_expl),
+                icon = TablerIcons.Bell,
+                checked = showSnackbar
+            ) { checked ->
+                uiViewModel.changeShowSnackbar(checked)
+            }
+            SwitchPreference(
                 title = stringResource(R.string.enable_crashlytics),
                 subTitle = stringResource(R.string.crashlytics_info),
                 icon = TablerIcons.Bug,
@@ -234,6 +286,14 @@ fun SettingsScreen(
                 }
 
                 filePickerLauncher.launch(intent)
+            }
+
+            Preference(
+                title = stringResource(R.string.format_nfc_chip),
+                summary = stringResource(R.string.format_nfc_chip_explanation),
+                iconVector = TablerIcons.Nfc
+            ) {
+                nfcViewModel.startNfcWrite()
             }
 
             PreferenceCategoryTitle(
@@ -298,9 +358,24 @@ fun SettingsScreen(
 
     if (showUpdateTimeline) {
         UpdateTimelineDialog(sheetState = updateTimelineSheetState) {
-            scope.launch { updateTimelineSheetState.hide() }.invokeOnCompletion {
+            coroutineScope.launch { updateTimelineSheetState.hide() }.invokeOnCompletion {
                 uiViewModel.setShowUpdateTimeline(false)
             }
+        }
+    }
+
+    when (val writeState = nfcWriteState) {
+        NfcWriteState.Idle -> {}
+        else -> {
+            NfcResetDialog(
+                writeState = writeState,
+                sheetState = nfcSheetState,
+                onDismissRequest = {
+                    coroutineScope.launch { nfcSheetState.hide() }.invokeOnCompletion {
+                        nfcViewModel.dismissNfcWrite()
+                    }
+                }
+            )
         }
     }
 }

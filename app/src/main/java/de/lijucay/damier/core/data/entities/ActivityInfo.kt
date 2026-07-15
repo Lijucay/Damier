@@ -23,5 +23,4 @@ data class ActivityInfo(
     val reference:Int,
     val referenceType: ReferenceType,
     val defaultAmount: Int,
-    val nfcChipId: String? = null
 )

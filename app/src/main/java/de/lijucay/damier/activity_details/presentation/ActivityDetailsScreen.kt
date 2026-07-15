@@ -1,7 +1,6 @@
 package de.lijucay.damier.activity_details.presentation
 
 import android.app.Activity
-import android.nfc.NfcAdapter
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -49,7 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.TablerIcons
@@ -62,6 +60,7 @@ import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
+import de.lijucay.damier.activity_details.presentation.components.nfcChipItem
 import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
@@ -71,38 +70,54 @@ import de.lijucay.damier.core.presentation.components.CookieButton
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
+import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
+import de.lijucay.damier.core.presentation.dialogs.NameNfcTagDialog
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.getShortUnitNamesById
+import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.cue.NfcWriteState
 import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeText
-import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.nfc.NfcManager
+import de.lijucay.damier.nfc.NfcViewModel
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.scope.Scope
 import java.time.LocalDate
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ActivityDetailsScreen(
-    modifier: Modifier = Modifier,
-    onEditActivity: () -> Unit,
+    activityId: String,
+    scope: Scope,
+    onEditActivity: (ActivityUi) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val nfcAdapter = remember { NfcAdapter.getDefaultAdapter(context) }
-
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
-    val uiViewModel = koinViewModel<UIViewModel>()
     val detailsViewModel = koinViewModel<ActivityDetailsViewModel>()
+    val nfcViewModel = koinViewModel<NfcViewModel>(scope = scope)
+    val uiViewModel = koinViewModel<UIViewModel>()
+    val nfcManager = koinInject<NfcManager>(scope = scope)
+
+    LaunchedEffect(Unit) {
+        activityListViewModel.observeSelectedActivity(UUID.fromString(activityId))
+    }
+
+    val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
 
     val isWidthAtLeastExpanded by uiViewModel.isWidthAtLeastExpanded.collectAsStateWithLifecycle()
     val isHeightAtLeastExpanded by uiViewModel.isHeightAtLeastExpanded.collectAsStateWithLifecycle()
-    val selectedActivity by activityListViewModel.selectedActivity.collectAsStateWithLifecycle()
+
     val state by detailsViewModel.state.collectAsStateWithLifecycle()
+    val nfcWriteState by nfcViewModel.nfcWriteState.collectAsStateWithLifecycle()
 
     val statsDialogState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -122,6 +137,13 @@ fun ActivityDetailsScreen(
         initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
     )
+    val nfcChipListSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
+
+    val deletionMode by detailsViewModel.deletionDialogMode.collectAsStateWithLifecycle()
+    val nfcLabelState by nfcViewModel.nfcLabelState.collectAsStateWithLifecycle()
 
     val host = stringResource(R.string.host)
 
@@ -131,39 +153,30 @@ fun ActivityDetailsScreen(
         } ?: detailsViewModel.clear()
     }
 
-    val shouldEnableReaderMode = remember(state.nfcWriteState) {
-        state.nfcWriteState is NfcWriteState.WaitingForTag ||
-        state.nfcWriteState is NfcWriteState.Writing
+    val shouldEnableReaderMode = remember(nfcWriteState) {
+        nfcWriteState is NfcWriteState.WaitingForTag ||
+        nfcWriteState is NfcWriteState.Writing
     }
 
     DisposableEffect(shouldEnableReaderMode) {
         val activity = context as? Activity ?: return@DisposableEffect onDispose {}
+        val activityId = selectedActivity?.id ?: return@DisposableEffect onDispose {}
 
         if (shouldEnableReaderMode) {
-            nfcAdapter?.enableReaderMode(
-                activity,
-                { tag ->
-                    val activityId = selectedActivity?.id ?: return@enableReaderMode
-                    detailsViewModel.onTagDiscovered(tag, activityId, host)
-                },
-                NfcAdapter.FLAG_READER_NFC_A or
-                NfcAdapter.FLAG_READER_NFC_B or
-                NfcAdapter.FLAG_READER_NFC_F or
-                NfcAdapter.FLAG_READER_NFC_V,
-                null
-            )
+            nfcManager.enableReaderMode(activity) { tag ->
+                nfcViewModel.onTagDiscovered(tag, host, activityId)
+            }
         } else {
-            nfcAdapter?.disableReaderMode(activity)
+            nfcManager.disableReaderMode(activity)
         }
 
         onDispose {
-            nfcAdapter?.disableReaderMode(activity)
+            nfcManager.disableReaderMode(activity)
         }
     }
 
     ActivityTheme(useLimitTheme = state.useLimitTheme) {
         ScreenContainer(
-            modifier = modifier,
             isWidthAtLeastExpanded = isWidthAtLeastExpanded,
             title = state.title.ifBlank { null },
             bottomBarContent = {
@@ -174,7 +187,12 @@ fun ActivityDetailsScreen(
                     )
                 ) {
                     selectedActivity?.let {
-                        detailsViewModel.setCheckInFormMode(CheckInFormMode.Add(it.id))
+                        detailsViewModel.setCheckInFormMode(
+                            CheckInFormMode.Add(
+                                it.id,
+                                it.defaultAmount
+                            )
+                        )
                     }
                 }
             },
@@ -196,7 +214,8 @@ fun ActivityDetailsScreen(
                             onClick = {
                                 detailsViewModel.setCheckInFormMode(
                                     CheckInFormMode.Add(
-                                        activity.id
+                                        activity.id,
+                                        activity.defaultAmount
                                     )
                                 )
                             }
@@ -229,7 +248,7 @@ fun ActivityDetailsScreen(
                         DropdownMenuItem(
                             onClick = {
                                 detailsViewModel.showMenu(false)
-                                onEditActivity()
+                                onEditActivity(activity)
                             },
                             leadingIcon = {
                                 Icon(
@@ -244,7 +263,7 @@ fun ActivityDetailsScreen(
                         DropdownMenuItem(
                             onClick = {
                                 detailsViewModel.showMenu(false)
-                                uiViewModel.setDeletionMode(DeletionMode.Activity(activity))
+                                detailsViewModel.setDeletionMode(DeletionMode.Activity(activity))
                             },
                             leadingIcon = {
                                 Icon(
@@ -274,7 +293,7 @@ fun ActivityDetailsScreen(
                 if (activity != null) {
                     ActivityDetails(
                         state = state,
-                        hasNfc = nfcAdapter != null,
+                        hasNfc = nfcManager.hasNfc,
                         onShowHistory = {
                             detailsViewModel.setShowHistory(true)
                         },
@@ -283,9 +302,7 @@ fun ActivityDetailsScreen(
                                 mode = CheckInFormMode.Edit(it)
                             )
                         },
-                        onWriteNfcChip = {
-                            if (nfcAdapter != null) detailsViewModel.startNfcWrite()
-                        }
+                        onOpenNfcList = { detailsViewModel.showNfcList(true) }
                     )
                 } else {
                     Box(
@@ -308,7 +325,7 @@ fun ActivityDetailsScreen(
                         scope.launch { activityFormSheetState.hide() }.invokeOnCompletion {
                             detailsViewModel.setCheckInFormMode(null)
                         }
-                        uiViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) },
+                        detailsViewModel.setDeletionMode(DeletionMode.CheckIn(it, activity)) },
                     onDismissRequest = {
                         scope.launch { activityFormSheetState.hide() }.invokeOnCompletion {
                             detailsViewModel.setCheckInFormMode(null)
@@ -346,11 +363,65 @@ fun ActivityDetailsScreen(
                     scope.launch { statsDialogState.hide() }.invokeOnCompletion {
                         detailsViewModel.setShowStatsDialog(false)
                     }
+                },
+                reference = selectedActivity?.reference?.toDouble()
+            )
+        }
+
+        if (state.showNfcList) {
+            NfcChipListDialog(
+                sheetState = nfcChipListSheetState,
+                nfcChips = state.allNfcChips,
+//                useLimitTheme = state.useLimitTheme,
+                onUnlinkRequest = { chipId ->
+                    detailsViewModel.unlinkNfcChip(chipId)
+                },
+                onLinkRequest = { nfcViewModel.startNfcWrite() },
+                onEditLabelClicked = { chipId, label -> nfcViewModel.setUpdateLabel(chipId, label)},
+                onDismissRequest = {
+                    scope.launch { nfcChipListSheetState.hide() }.invokeOnCompletion {
+                        detailsViewModel.showNfcList(false)
+                    }
                 }
             )
         }
 
-        when (val writeState = state.nfcWriteState) {
+        deletionMode?.let { mode ->
+            DeletionDialog(
+                mode = mode,
+                onDismissRequest = { detailsViewModel.setDeletionMode(null) },
+                onDelete = {
+                    when (mode) {
+                        is DeletionMode.Activity -> {
+                            detailsViewModel.setDeletionMode(null)
+                            activityListViewModel.deleteActivity(mode.activity)
+                            onNavigateBack()
+                        }
+                        is DeletionMode.CheckIn -> {
+                            detailsViewModel.setDeletionMode(null)
+                            activityListViewModel.deleteCheckIn(mode.checkIn)
+                        }
+                    }
+                }
+            )
+        }
+
+        nfcLabelState.currentNfcTagId?.let { chipId ->
+            NameNfcTagDialog(
+                label = nfcLabelState.currentLabel,
+                onSaveName = { label ->
+                    nfcViewModel.updateLabel(label, chipId)
+                    nfcViewModel.hideLabelDialog()
+                    nfcViewModel.dismissNfcWrite()
+                },
+                onDismissRequest = {
+                    nfcViewModel.hideLabelDialog()
+                    nfcViewModel.dismissNfcWrite()
+                }
+            )
+        }
+
+        when (val writeState = nfcWriteState) {
             NfcWriteState.Idle -> {}
             else -> {
                 NfcWriteDialog(
@@ -358,7 +429,7 @@ fun ActivityDetailsScreen(
                     sheetState = nfcSheetState,
                     onDismissRequest = {
                         scope.launch { nfcSheetState.hide() }.invokeOnCompletion {
-                            detailsViewModel.dismissNfcWrite()
+                            nfcViewModel.dismissNfcWrite()
                         }
                     }
                 )
@@ -375,7 +446,7 @@ private fun ActivityDetails(
     hasNfc: Boolean,
     onShowHistory: () -> Unit,
     onItemClick: (CheckInUi) -> Unit,
-    onWriteNfcChip: () -> Unit
+    onOpenNfcList: () -> Unit,
 ) {
     val context = LocalContext.current
     val unitNames = state.unitId.getShortUnitNamesById(context)
@@ -386,7 +457,7 @@ private fun ActivityDetails(
     ) {
         waffleDiagramItem(state)
         streakItem(state)
-        nfcChipItem(state, hasNfc, onWriteNfcChip)
+        nfcChipItem(state, hasNfc, onOpenNfcList)
         todayHeaderItem(state, unitNames.shortUnitSingular, unitNames.shortUnitPlural)
         checkInItems(
             state,
@@ -488,7 +559,8 @@ private fun LazyListScope.streakItem(state: ActivityDetailsState) {
                     .animateItem()
                     .padding(top = 8.dp),
                 currentStreak = state.currentStreakLength,
-                longestStreak = state.longestStreakLength
+                longestStreak = state.longestStreakLength,
+                referenceType = state.referenceType
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
@@ -617,61 +689,5 @@ private fun LazyListScope.checkInHistory(
                 )
             }
         }
-    }
-}
-
-private fun LazyListScope.nfcChipItem(
-    state: ActivityDetailsState,
-    hasNfc: Boolean,
-    onWriteNfcChip: () -> Unit
-) {
-    if (!hasNfc) return
-
-    item {
-        Card(
-            modifier = Modifier
-                .animateItem()
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-            onClick = onWriteNfcChip,
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    DefaultText(
-                        text = stringResource(
-                            id = if (state.nfcChipId != null)
-                                R.string.nfc_chip_linked
-                            else
-                                R.string.link_nfc_chip
-                        ),
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    if (state.nfcChipId != null) {
-                        SmallText(
-                            text = state.nfcChipId,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
-                        )
-                    }
-                }
-
-                Icon(
-                    imageVector = TablerIcons.ArrowNarrowRight,
-                    contentDescription = null
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(6.dp))
     }
 }

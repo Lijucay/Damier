@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
+import de.lijucay.damier.core.domain.ActivityUnit
 import de.lijucay.damier.core.domain.units
 import de.lijucay.damier.core.presentation.components.UnitRow
 import de.lijucay.damier.core.presentation.getShortUnitNamesById
@@ -43,7 +44,7 @@ import de.lijucay.damier.shared.UnitId
 fun UnitSelectionBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState,
-    selectedUnit: UnitId,
+    selectedUnit: ActivityUnit,
     onUnitSelected: (UnitId) -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -52,7 +53,7 @@ fun UnitSelectionBottomSheet(
     val groupedUnits = units.groupBy { it.group }
     val groups = groupedUnits.keys.toList()
 
-    var selectedGroup by remember { mutableStateOf(groups.first()) }
+    var selectedGroup by remember { mutableStateOf(selectedUnit.group) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -99,7 +100,7 @@ fun UnitSelectionBottomSheet(
                     UnitRow(
                         label = stringResource(unit.unitId.toStringResource()),
                         badge = "${unitName.shortUnitSingular}/${unitName.shortUnitPlural}",
-                        selected = selectedUnit == unit.unitId,
+                        selected = selectedUnit == unit,
                         onClick = { onUnitSelected(unit.unitId) }
                     )
                 }

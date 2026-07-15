@@ -91,7 +91,7 @@ fun ActivityListItem(
                 waffleDiagramData = WaffleDiagramData(
                     reference = activityUi.reference,
                     referenceType = activityUi.referenceType,
-                    checkIns = activityUi.groupedCheckIns.values.flatten()
+                    checkIns = activityUi.groupedCheckIns.flatMap { it.checkIns }
                 )
             )
 

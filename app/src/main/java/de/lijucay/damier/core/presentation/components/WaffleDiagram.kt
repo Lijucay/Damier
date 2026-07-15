@@ -1,6 +1,5 @@
 package de.lijucay.damier.core.presentation.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.core.domain.WaffleDiagramData
-import de.lijucay.damier.core.presentation.models.DisplayableDate
-import de.lijucay.damier.core.presentation.models.toDisplayableDate
 import de.lijucay.damier.shared.ReferenceType
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -25,8 +22,8 @@ import java.time.LocalDate
 fun WaffleDiagram(
     modifier: Modifier = Modifier,
     waffleDiagramData: WaffleDiagramData,
-    selectedDate: LocalDate? = null,
-    onCellSelected: ((DisplayableDate) -> Unit)? = null
+//    selectedDate: LocalDate? = null,
+//    onCellSelected: ((DisplayableDate) -> Unit)? = null
 ) {
     BoxWithConstraints(
         modifier = modifier.padding(4.dp)
@@ -75,22 +72,23 @@ fun WaffleDiagram(
                                 .padding(2.dp)
                         ) {
                             Cell(
-                                modifier = Modifier.let {
-                                    onCellSelected?.let { _ ->
-                                        if (!date.isAfter(endDate))
-                                            it
-                                                .clickable {
-                                                    onCellSelected.invoke(date.toDisplayableDate())
-                                                }
-                                        else it
-                                    } ?: it
-                                },
+                                modifier = Modifier,
+//                                    .let {
+////                                    onCellSelected?.let { _ ->
+////                                        if (!date.isAfter(endDate))
+////                                            it
+////                                                .clickable {
+////                                                    onCellSelected.invoke(date.toDisplayableDate())
+////                                                }
+////                                        else it
+////                                    } ?: it
+//                                },
                                 checkInCount = checkInCount,
                                 currentDate = date,
                                 endDate = endDate,
                                 reference = reference,
                                 type = waffleDiagramData.referenceType,
-                                isSelected = (date == selectedDate)
+//                                isSelected = (date == selectedDate)
                             )
                         }
                     }

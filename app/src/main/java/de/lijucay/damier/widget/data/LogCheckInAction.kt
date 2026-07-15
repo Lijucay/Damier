@@ -4,13 +4,10 @@ import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
-import androidx.glance.appwidget.updateAll
 import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.core.domain.ActivityRepository
-import de.lijucay.damier.widget.domain.WidgetActivityState
 import de.lijucay.damier.widget.domain.WidgetRepository
 import de.lijucay.damier.widget.presentation.DamierWidget
-import kotlinx.coroutines.flow.first
 import org.koin.core.context.GlobalContext
 import java.time.LocalDateTime
 import java.util.UUID
@@ -25,17 +22,17 @@ class LogCheckInAction : ActionCallback {
         val widgetRepository: WidgetRepository = GlobalContext.get().get()
 
         val activityId = UUID.fromString(parameters[ACTIVITY_ID_KEY] ?: return)
-        val activity = widgetRepository.observeActivity(activityId).first()
+        val defaultAmount = widgetRepository.getDefaultAmount(activityId)
 
         repository.upsertCheckIn(
             CheckInInfo(
                 activityId = activityId,
                 timestamp = LocalDateTime.now(),
-                amount = (activity as? WidgetActivityState.Loaded)?.activity?.activityInfo?.defaultAmount ?: 0
+                amount = defaultAmount ?: 1
             )
         )
 
-        DamierWidget().updateAll(context)
+        DamierWidget().update(context, glanceId)
     }
 
     companion object {

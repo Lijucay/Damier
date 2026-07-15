@@ -56,7 +56,7 @@ import de.lijucay.damier.core.presentation.models.toDisplayableTime
 import de.lijucay.damier.design.components.DefaultText
 import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -86,7 +86,10 @@ fun CheckInForm(
     }
 
     val amountState = rememberTextFieldState(
-        initialText = if (state.amount == 1) "" else state.amount.toString()
+        initialText = when (mode) {
+            is CheckInFormMode.Edit -> mode.checkIn.amount.toString()
+            is CheckInFormMode.Add -> mode.defaultAmount.toString()
+        }
     )
 
     val dateState = rememberDatePickerState(

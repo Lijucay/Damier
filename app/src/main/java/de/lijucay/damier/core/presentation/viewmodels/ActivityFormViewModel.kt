@@ -20,9 +20,7 @@ class ActivityFormViewModel : ViewModel() {
 
     fun initForAdd() {
         activityId = UUID.randomUUID()
-        _state.value = ActivityFormState(
-            checkInInfo = getRandomCheckInInfo()
-        )
+        _state.value = ActivityFormState(checkInInfo = getRandomCheckInInfo())
     }
 
     fun initForEdit(activity: ActivityUi) {

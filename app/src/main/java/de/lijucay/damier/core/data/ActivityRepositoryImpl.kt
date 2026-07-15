@@ -3,8 +3,10 @@ package de.lijucay.damier.core.data
 import androidx.room.withTransaction
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
+import de.lijucay.damier.core.data.daos.NfcChipDao
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.core.data.entities.NfcChipInfo
 import de.lijucay.damier.core.data.wrapper.toActivityDomain
 import de.lijucay.damier.core.data.wrapper.toActivityDomains
 import de.lijucay.damier.core.domain.ActivityRepository
@@ -22,6 +24,7 @@ class ActivityRepositoryImpl(
     private val database: DamierDatabase,
     private val activityDao: ActivityInfoDao,
     private val checkInDao: CheckInDao,
+    private val nfcChipDao: NfcChipDao,
     private val streakDataSource: StreakDataSource,
 ) : ActivityRepository {
     override fun getActivities(): Flow<List<ActivityDomain>> =
@@ -38,6 +41,7 @@ class ActivityRepositoryImpl(
 
     override suspend fun upsertActivity(activity: ActivityInfo) {
         activityDao.upsert(activity)
+        recalculateStreakForActivity(activity.id)
     }
 
     override suspend fun deleteActivity(activity: ActivityInfo) {
@@ -58,20 +62,29 @@ class ActivityRepositoryImpl(
         }
     }
 
-    override suspend fun updateNfcChipId(activityId: UUID, chipId: String?) {
-        activityDao.updateNfcChipId(activityId, chipId)
+    override suspend fun linkNfcChip(chipId: UUID, activityId: UUID) {
+        nfcChipDao.insert(
+            NfcChipInfo(chipId = chipId, activityId = activityId, linkedAt = LocalDateTime.now())
+        )
     }
 
-    override suspend fun getActivityByNfcChipId(chipId: String): ActivityInfo? {
-        return activityDao.getActivityByNfcChipId(chipId)
+    override suspend fun unlinkNfcChip(chipId: UUID): UUID? {
+        val chip = nfcChipDao.getByChipId(chipId) ?: return null
+        nfcChipDao.deleteByChipId(chipId)
+        return chip.activityId
     }
 
-    override suspend fun checkInByNfcChipId(chipId: String): NfcCheckInResult? {
-        val activity = activityDao.getActivityByNfcChipId(chipId) ?: return null
+    override suspend fun updateNfcChipLabel(label: String, chipId: UUID) {
+        nfcChipDao.updateLabel(label, chipId)
+    }
+
+    override suspend fun checkInByNfcChipId(chipId: UUID): NfcCheckInResult? {
+        val activityId = nfcChipDao.getActivityIdForChip(chipId) ?: return null
+        val activity = activityDao.getActivityById(activityId)?.activityInfo ?: return null
 
         val checkIn = CheckInFactory.createQuickCheckIn(activity.id, activity.defaultAmount)
-
         upsertCheckIn(checkIn)
+
         return NfcCheckInResult(activity.id, activity.activityName)
     }
 

@@ -40,7 +40,7 @@ data class ActivityFormState(
             checkInInfo = WaffleDiagramData(
                 reference = activity.reference,
                 referenceType = activity.referenceType,
-                checkIns = activity.groupedCheckIns.values.flatten()
+                checkIns = activity.groupedCheckIns.flatMap { it.checkIns }
             )
         )
     }

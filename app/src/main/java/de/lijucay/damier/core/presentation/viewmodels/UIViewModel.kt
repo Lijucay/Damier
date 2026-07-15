@@ -6,9 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.lijucay.damier.core.DataPreferences
-import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.domain.InfoMode
-import de.lijucay.damier.core.presentation.DetailsDestination
 import de.lijucay.damier.core.presentation.SnackbarEvent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,20 +16,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class UIViewModel(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
     private val _title = MutableStateFlow("Damier")
     val title = _title.asStateFlow()
-
-    private val _pendingActivityId = MutableStateFlow<UUID?>(null)
-    val pendingActivityId = _pendingActivityId.asStateFlow()
-
-    private val _detailsPage =
-        MutableStateFlow<DetailsDestination>(DetailsDestination.ActivityDetails)
-    val detailsPage = _detailsPage.asStateFlow()
 
     val showReference = dataStore.data
         .map { it[DataPreferences.Keys.showReference] ?: true }
@@ -57,6 +47,14 @@ class UIViewModel(
             initialValue = null
         )
 
+    val showSnackbar = dataStore.data
+        .map { it[DataPreferences.Keys.showSnackbar] ?: true }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = true
+        )
+
     val firstLaunch = dataStore.data
         .map { it[DataPreferences.Keys.firstLaunch] ?: true }
         .stateIn(
@@ -71,9 +69,6 @@ class UIViewModel(
     private val _isHeightAtLeastExpanded = MutableStateFlow(false)
     val isHeightAtLeastExpanded = _isHeightAtLeastExpanded.asStateFlow()
 
-    private val _deletionDialogMode = MutableStateFlow<DeletionMode?>(null)
-    val deletionDialogMode = _deletionDialogMode.asStateFlow()
-
     private val _infoMode = MutableStateFlow<InfoMode?>(null)
     val infoMode = _infoMode.asStateFlow()
 
@@ -85,10 +80,6 @@ class UIViewModel(
 
     fun emitSnackbar(event: SnackbarEvent) {
         viewModelScope.launch { _snackbarEvent.send(event) }
-    }
-
-    fun setDetailsPage(destination: DetailsDestination) {
-        _detailsPage.value = destination
     }
 
     fun changeShowReference(shouldShow: Boolean) {
@@ -119,13 +110,15 @@ class UIViewModel(
         }
     }
 
+    fun changeShowSnackbar(shouldShow: Boolean) {
+        viewModelScope.launch {
+            dataStore.edit { it[DataPreferences.Keys.showSnackbar] = shouldShow }
+        }
+    }
+
     fun setWindowSizeInfo(isWidthAtLeastExpanded: Boolean, isHeightAtLeastExpanded: Boolean) {
         _isWidthAtLeastExpanded.value = isWidthAtLeastExpanded
         _isHeightAtLeastExpanded.value = isHeightAtLeastExpanded
-    }
-
-    fun setDeletionMode(deletionMode: DeletionMode?) {
-        _deletionDialogMode.value = deletionMode
     }
 
     fun setInfoMode(infoMode: InfoMode?) {
@@ -142,9 +135,5 @@ class UIViewModel(
 
     fun setShowUpdateTimeline(show: Boolean) {
         _showUpdateTimeline.value = show
-    }
-
-    fun setPendingActivityId(id: UUID?) {
-        _pendingActivityId.value = id
     }
 }

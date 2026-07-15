@@ -9,6 +9,7 @@ import com.google.firebase.crashlytics.recordException
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
+import de.lijucay.damier.core.data.daos.NfcChipDao
 import de.lijucay.damier.core.data.daos.StreakDao
 import de.lijucay.damier.core.domain.DataUtil
 import de.lijucay.damier.core.domain.ExportResult
@@ -26,7 +27,8 @@ class ExportUtilImpl(
     private val context: Context,
     private val activityInfoDao: ActivityInfoDao,
     private val checkInDao: CheckInDao,
-    private val streakDao: StreakDao
+    private val streakDao: StreakDao,
+    private val nfcChipDao: NfcChipDao
 ) : ExportUtil {
     private val json = Json { encodeDefaults = false }
 
@@ -35,12 +37,14 @@ class ExportUtilImpl(
             val activities = activityInfoDao.getActivityInfoList()
             val checkIns = checkInDao.getAllCheckIns()
             val streaks = streakDao.getAllStreaks()
+            val nfcChips = nfcChipDao.getAllChips()
 
             val exportData = buildJsonObject {
                 put(BackupConstants.VERSION_KEY, DataUtil.DATABASE_SCHEME_VERSION)
                 put(BackupConstants.ACTIVITIES_KEY, json.encodeToJsonElement(activities))
                 put(BackupConstants.CHECK_INS_KEY, json.encodeToJsonElement(checkIns))
                 put(BackupConstants.STREAKS_KEY, json.encodeToJsonElement(streaks))
+                put(BackupConstants.NFC_CHIPS_KEY, json.encodeToJsonElement(nfcChips))
             }
 
             val exportDataJson = exportData.toString()

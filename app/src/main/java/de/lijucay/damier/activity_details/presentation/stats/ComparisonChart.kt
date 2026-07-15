@@ -25,6 +25,7 @@ import java.util.Locale
 @Composable
 fun ComparisonChart(
     modifier: Modifier = Modifier,
+    reference: Double?,
     state: ActivityDetailsState
 ) {
     val thisWeek = stringResource(R.string.this_week)
@@ -45,11 +46,15 @@ fun ComparisonChart(
 
             val currentAmount = if (currentDate > today)
                 0.0
-            else state.allCheckIns[currentDate]?.sumOf { it.amount.toDouble() } ?: 0.0
+            else state
+                .allCheckIns
+                .find { it.date.value == currentDate }
+                ?.checkIns
+                ?.sumOf { it.amount.toDouble() } ?: 0.0
 
-            val lastWeekAmount = state.allCheckIns[lastWeekDate]?.sumOf {
-                it.amount.toDouble()
-            } ?: 0.0
+            val lastWeekAmount = state.allCheckIns.find { it.date.value == lastWeekDate }
+                ?.checkIns
+                ?.sumOf { it.amount.toDouble() } ?: 0.0
 
             Bars(
                 label = currentDate.dayOfWeek.getDisplayName(TextStyle.SHORT, locale),

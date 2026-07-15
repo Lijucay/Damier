@@ -25,8 +25,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 37
-        versionCode = 24
-        versionName = "1.2.0"
+        versionCode = 26
+        versionName = "2.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,12 +67,12 @@ configure<ApplicationExtension> {
 dependencies {
     implementation(project(":shared"))
 
+    implementation(libs.kotlinx.serialization.core)
+
     implementation(libs.compose.tabler.icons)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime)
-
-    implementation(libs.cue)
 
     implementation(libs.vico.compose.m3)
 
@@ -95,7 +95,10 @@ dependencies {
     implementation(libs.bundles.koin)
 
     implementation(libs.bundles.room)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.material3.adaptive.navigation3)
     implementation(libs.androidx.documentfile)
 
     ksp(libs.room.compiler)
@@ -107,7 +110,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)

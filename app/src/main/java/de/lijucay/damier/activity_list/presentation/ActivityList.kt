@@ -29,16 +29,16 @@ import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.toCheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.design.components.LargeText
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Composable
 fun ActivityList(
     modifier: Modifier = Modifier,
+    uiViewModel: UIViewModel,
     onActivityClicked: (UUID) -> Unit
 ) {
-    val uiViewModel = koinViewModel<UIViewModel>()
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
 
     val activities by activityListViewModel.activities.collectAsStateWithLifecycle(initialValue = listOf())

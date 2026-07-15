@@ -1,14 +1,10 @@
 package de.lijucay.damier.activity_details.presentation
 
-import android.nfc.Tag
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.lijucay.cue_write.NfcWriteManager
-import de.lijucay.cue_write.WriteResult
 import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.presentation.models.ActivityUi
-import de.lijucay.damier.cue.NfcWriteState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,18 +12,19 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
 
-class ActivityDetailsViewModel(
-    private val nfcWriteManager: NfcWriteManager,
-    private val activityRepository: ActivityRepository
-) : ViewModel() {
+class ActivityDetailsViewModel(private val activityRepository: ActivityRepository) : ViewModel() {
     private val _state = MutableStateFlow(ActivityDetailsState())
     val state = _state.asStateFlow()
+
+    private val _deletionDialogMode = MutableStateFlow<DeletionMode?>(null)
+    val deletionDialogMode = _deletionDialogMode.asStateFlow()
 
     fun load(activity: ActivityUi) {
         _state.update { current ->
             ActivityDetailsState.fromActivityUi(activity, LocalDate.now())
                 .copy(
-                    showCheckInHistory = current.showCheckInHistory
+                    showCheckInHistory = current.showCheckInHistory,
+                    showNfcList = current.showNfcList
                 )
         }
     }
@@ -56,37 +53,16 @@ class ActivityDetailsViewModel(
         _state.update { it.copy(menuExpanded = show) }
     }
 
-    fun startNfcWrite() {
-        _state.update { it.copy(nfcWriteState = NfcWriteState.WaitingForTag) }
+    fun unlinkNfcChip(chipId: UUID) {
+        viewModelScope.launch { activityRepository.unlinkNfcChip(chipId) }
     }
 
-    fun dismissNfcWrite() {
-        _state.update { it.copy(nfcWriteState = NfcWriteState.Idle) }
+
+    fun setDeletionMode(deletionMode: DeletionMode?) {
+        _deletionDialogMode.value = deletionMode
     }
 
-    fun onTagDiscovered(tag: Tag, activityId: UUID, host: String) {
-        if (_state.value.nfcWriteState !is NfcWriteState.WaitingForTag) return
-        _state.update { it.copy(nfcWriteState = NfcWriteState.Writing) }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = nfcWriteManager.write(tag, host, activityId)
-
-            if (result is WriteResult.Success) {
-                activityRepository.updateNfcChipId(activityId, result.chip.chipId)
-            }
-
-            _state.update {
-                it.copy(
-                    nfcWriteState = when (result) {
-                        is WriteResult.Success -> NfcWriteState.Success(result.chip.chipId)
-                        WriteResult.TagLost -> NfcWriteState.TagLost
-                        WriteResult.NotWriteable -> NfcWriteState.NotWriteable
-                        WriteResult.InsufficientSize -> NfcWriteState.InsufficientSize
-                        WriteResult.NotNdefCompatible -> NfcWriteState.NotNdefCompatible
-                        is WriteResult.UnknownError -> NfcWriteState.Unknown
-                    }
-                )
-            }
-        }
+    fun showNfcList(show: Boolean) {
+        _state.update { it.copy(showNfcList = show) }
     }
 }

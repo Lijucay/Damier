@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
@@ -18,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.R
+import compose.icons.TablerIcons
+import compose.icons.tablericons.AlertTriangle
+import compose.icons.tablericons.Check
 import de.lijucay.damier.shared.ReferenceType
 import java.time.LocalDate
 
@@ -34,7 +35,7 @@ fun Cell(
     endDate: LocalDate,
     reference: Int,
     type: ReferenceType,
-    isSelected: Boolean = false
+//    isSelected: Boolean = false
 ) {
     val cellColor = getCellColor(
         type = type,
@@ -50,10 +51,10 @@ fun Cell(
             .clip(MaterialShapes.Square.toShape())
             .background(color = cellColor)
             .then(
-                if (isSelected) {
+                if (currentDate.isEqual(endDate)) {
                     Modifier.border(
-                        width = 1.dp,
-                        color = contentColorFor(cellColor),
+                        width = 2.dp,
+                        color = cellColor.copy(alpha = 1f),
                         shape = MaterialShapes.Square.toShape()
                     )
                 } else Modifier
@@ -62,8 +63,19 @@ fun Cell(
     ) {
         if (type == ReferenceType.LIMIT && checkInCount > reference) {
             Icon(
-                modifier = Modifier.fillMaxSize(),
-                imageVector = ImageVector.vectorResource(R.drawable.exclamation_mark),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(2.dp),
+                imageVector = TablerIcons.AlertTriangle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.errorContainer
+            )
+        } else if (type == ReferenceType.GOAL && checkInCount >= reference) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(2.dp),
+                imageVector = TablerIcons.Check,
                 contentDescription = null,
                 tint = contentColorFor(cellColor)
             )
@@ -94,8 +106,7 @@ private fun getCellColor(
         checkInCount != 0 -> MaterialTheme.colorScheme.onErrorContainer.copy(alpha = alpha)
         type == ReferenceType.LIMIT &&
         currentDate.isAfter(endDate) -> MaterialTheme.colorScheme.errorContainer
-        currentDate.isBefore(endDate) && checkInCount != 0 -> MaterialTheme.colorScheme.primary.copy(alpha = alpha)
-        currentDate.isEqual(endDate) && checkInCount != 0 -> MaterialTheme.colorScheme.tertiary.copy(alpha = alpha)
+        (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) && checkInCount != 0 -> MaterialTheme.colorScheme.primary.copy(alpha = alpha)
         currentDate.isAfter(endDate) -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0f)
         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
     }

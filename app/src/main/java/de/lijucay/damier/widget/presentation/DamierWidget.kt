@@ -47,10 +47,9 @@ import androidx.glance.text.TextStyle
 import de.lijucay.damier.MainActivity
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
-import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.entities.CheckInInfo
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.widget.data.LogCheckInAction
+import de.lijucay.damier.widget.domain.WidgetActivityData
 import de.lijucay.damier.widget.domain.WidgetActivityState
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +57,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
-import java.time.LocalDate
 import java.util.UUID
 
 class DamierWidget : GlanceAppWidget() {
@@ -80,7 +78,7 @@ class DamierWidget : GlanceAppWidget() {
             GlanceTheme {
                 when {
                     activityId == null -> NoActivitySelectedLayout(context)
-                    state is WidgetActivityState.Loaded -> WidgetLayout(context, (state as WidgetActivityState.Loaded).activity)
+                    state is WidgetActivityState.Loaded -> WidgetLayout(context, (state as WidgetActivityState.Loaded).data)
                     state is WidgetActivityState.Deleted -> DeletedActivityLayout(context)
                     else -> LoadingLayout(context, activityName)
                 }
@@ -88,37 +86,21 @@ class DamierWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getReference(activityData: Activity): Int {
-        val groupedCheckIns = activityData.checkIns.groupBy { it.timestamp.toLocalDate() }
-        val max = groupedCheckIns.maxOfOrNull { checkIns ->
-            checkIns.value.sumOf { it.amount }
-        } ?: 0
-
+    private fun getReference(activityData: WidgetActivityData): Int {
         return when(activityData.activityInfo.referenceType) {
             ReferenceType.GOAL, ReferenceType.LIMIT -> activityData.activityInfo.reference
-            ReferenceType.MAX -> max
+            ReferenceType.MAX -> activityData.maxDailyAmount
         }
-    }
-
-    private fun getTodaysCheckInAmount(checkIns: List<CheckInInfo>): Int {
-        val today = LocalDate.now()
-
-        val todaysCheckIns = checkIns.filter { checkIn ->
-            checkIn.timestamp.toLocalDate().isEqual(today)
-        }
-
-        return todaysCheckIns.sumOf { it.amount }
     }
 
     private fun getProgress(
-        activityData: Activity
-    ) = getTodaysCheckInAmount(activityData.checkIns).toFloat() /
-                getReference(activityData).coerceAtLeast(1)
+        activityData: WidgetActivityData
+    ) = activityData.todaysAmount.toFloat() / getReference(activityData).coerceAtLeast(1)
 
     @Composable
     fun WidgetLayout(
         context: Context,
-        activityData: Activity
+        activityData: WidgetActivityData
     ) {
         Scaffold(
             modifier = GlanceModifier
@@ -158,7 +140,7 @@ class DamierWidget : GlanceAppWidget() {
                     Text(
                         context.getString(
                             R.string.amount_of_reference,
-                            getTodaysCheckInAmount(activityData.checkIns),
+                            activityData.todaysAmount,
                             getReference(activityData)
                         ),
                         style = TextStyle(

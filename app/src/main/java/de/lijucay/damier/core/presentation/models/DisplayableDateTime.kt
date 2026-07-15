@@ -1,20 +1,20 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.core.data.converter.LocalDateTimeSerializer
 import de.lijucay.damier.core.data.entities.CheckInInfo
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import java.util.Locale
 
+@Serializable
 data class DisplayableDateTime(
     val formatted: String,
-    val value: LocalDateTime
+    @Serializable(with = LocalDateTimeSerializer::class) val value: LocalDateTime
 )
 
 fun LocalDateTime.toDisplayableDateTime(): DisplayableDateTime {
-    val formatter = DateTimeFormatter
-        .ofLocalizedDateTime(FormatStyle.FULL)
-        .withZone(ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm:ss", Locale.getDefault())
 
     return DisplayableDateTime(
         formatted = this.format(formatter),

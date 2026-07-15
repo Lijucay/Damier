@@ -16,19 +16,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import de.lijucay.damier.core.domain.WaffleDiagramData
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
 import de.lijucay.damier.shared.ReferenceType
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
 
-sealed interface DetailsDestination {
-    data object AddActivity : DetailsDestination
-    data object ActivityDetails : DetailsDestination
-    data object EditActivity : DetailsDestination
-    data object Settings : DetailsDestination
+sealed interface Destination {
+    @Serializable data object ActivityList : NavKey
+    @Serializable data object AddActivity : NavKey
+
+    @Serializable data class ActivityDetails(val activityId: String) : NavKey
+
+    @Serializable data class EditActivity(val activityId: String) : NavKey
+
+    @Serializable data object Settings : NavKey
 }
 
 @Composable

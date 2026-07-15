@@ -1,5 +1,6 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.core.data.CheckInGroupUi
 import de.lijucay.damier.core.domain.models.CheckInDomain
 import java.time.LocalDate
 
@@ -12,8 +13,6 @@ fun CheckInDomain.toCheckInUi(): CheckInUi {
     )
 }
 
-fun List<CheckInDomain>.toCheckInUis(): List<CheckInUi> = this.map { it.toCheckInUi() }
-
 fun CheckInUi.toCheckInDomain(): CheckInDomain {
     return CheckInDomain(
         id = id,
@@ -25,14 +24,14 @@ fun CheckInUi.toCheckInDomain(): CheckInDomain {
 
 fun List<CheckInUi>.toCheckInDomains(): List<CheckInDomain> = this.map { it.toCheckInDomain() }
 
-fun Map<LocalDate, List<CheckInUi>>.toScrollableChartEntries(
+fun List<CheckInGroupUi>.toScrollableChartEntries(
     startDate: LocalDate,
     today: LocalDate
 ): List<Double> {
     val result = mutableListOf<Double>()
     var date = startDate
     while (date <= today) {
-        result.add(this[date]?.sumOf { it.amount.toDouble() } ?: 0.0)
+        result.add(find { it.date.value == date }?.checkIns?.sumOf { it.amount.toDouble() } ?: 0.0)
         date = date.plusDays(1)
     }
 

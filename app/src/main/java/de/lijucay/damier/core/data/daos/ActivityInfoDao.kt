@@ -7,6 +7,7 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.widget.domain.WidgetActivityData
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -49,9 +50,25 @@ interface ActivityInfoDao {
     @Delete
     suspend fun deleteActivity(activity: ActivityInfo)
 
-    @Query("UPDATE ActivityInfo SET nfcChipId = :chipId WHERE id = :activityId")
-    suspend fun updateNfcChipId(activityId: UUID, chipId: String?)
+    @Query("SELECT defaultAmount FROM ActivityInfo WHERE id = :activityId")
+    suspend fun getDefaultAmount(activityId: UUID): Int?
 
-    @Query("SELECT * FROM ActivityInfo WHERE nfcChipId = :chipId LIMIT 1")
-    suspend fun getActivityByNfcChipId(chipId: String): ActivityInfo?
+    @Query("""
+        SELECT a.*,
+            COALESCE((
+                SELECT SUM(amount) FROM CheckInInfo c
+                WHERE c.activityId = a.id AND date(c.timestamp) = date('now', 'localtime')
+            ), 0) AS todaysAmount,
+            COALESCE((
+                SELECT MAX(dailySum) FROM (
+                    SELECT SUM(amount) as dailySum
+                    FROM CheckInInfo
+                    WHERE activityId = a.id
+                    GROUP BY date(timestamp)
+                )
+            ), 0) AS maxDailyAmount
+        FROM ActivityInfo a
+        WHERE a.id = :id
+    """)
+    fun observeWidgetActivityData(id: UUID): Flow<WidgetActivityData?>
 }

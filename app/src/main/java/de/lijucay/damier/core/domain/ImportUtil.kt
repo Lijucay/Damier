@@ -10,6 +10,4 @@ interface ImportUtil {
         onComplete: (Boolean) -> Unit,
         onIncompatibleVersion: () -> Unit
     )
-
-    suspend fun calculateCount(fileUri: Uri, onTotalCountUpdate: (Int) -> Unit)
 }

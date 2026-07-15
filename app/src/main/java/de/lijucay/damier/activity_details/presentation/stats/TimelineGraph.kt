@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -17,6 +18,7 @@ import com.patrykandpatrick.vico.compose.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.compose.cartesian.data.CartesianValueFormatter
 import com.patrykandpatrick.vico.compose.cartesian.data.lineModel
+import com.patrykandpatrick.vico.compose.cartesian.decoration.HorizontalLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
@@ -28,11 +30,15 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.Insets
 import com.patrykandpatrick.vico.compose.common.MarkerCornerBasedShape
+import com.patrykandpatrick.vico.compose.common.component.LineComponent
+import com.patrykandpatrick.vico.compose.common.component.TextComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.models.toScrollableChartEntries
+import de.lijucay.damier.shared.ReferenceType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -42,7 +48,8 @@ import java.util.Locale
 @Composable
 fun TimelineGraph(
     modifier: Modifier,
-    state: ActivityDetailsState
+    state: ActivityDetailsState,
+    reference: Double? = null
 ) {
     val context = LocalContext.current
 
@@ -51,7 +58,7 @@ fun TimelineGraph(
     val locale = remember { Locale.getDefault() }
 
     val startDate = remember(state.allCheckIns) {
-        state.allCheckIns.keys.minOrNull() ?: today
+        state.allCheckIns.minOfOrNull { it.date.value } ?: today
     }
 
     val entries = remember (state.allCheckIns) {
@@ -65,6 +72,11 @@ fun TimelineGraph(
     }
 
     val unitName = state.unitId.getLongUnitNamesById(context)
+    val label = when (state.referenceType) {
+        ReferenceType.GOAL -> stringResource(R.string.goal)
+        ReferenceType.LIMIT -> stringResource(R.string.limit)
+        else -> ""
+    }
 
     val bottomAxisValueFormatter = CartesianValueFormatter { _, x, _ ->
         startDate.plusDays(x.toLong())
@@ -126,6 +138,21 @@ fun TimelineGraph(
                 labelPosition = DefaultCartesianMarker.LabelPosition.AbovePoint,
                 valueFormatter = markerValueFormatter
             ),
+            decorations = reference?.let { ref ->
+                listOf(
+                    HorizontalLine(
+                        y = { ref },
+                        line = LineComponent(
+                            Fill(MaterialTheme.colorScheme.tertiary)
+                        ),
+                        labelComponent = TextComponent(
+                            textStyle = androidx.compose.ui.text.TextStyle.Default.copy(MaterialTheme.colorScheme.tertiary),
+                            margins = Insets(start = 2.dp),
+                        ),
+                        label = { label }
+                    )
+                )
+            } ?: emptyList()
         ),
         modelProducer = modelProducer
     )

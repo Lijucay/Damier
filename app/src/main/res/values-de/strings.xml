@@ -144,8 +144,6 @@
     <string name="last_week">Letzte Woche</string>
     <string name="week_comparison">Wochenvergleich</string>
     <string name="week_comparison_expl">Tägliche Gesamtmengen der aktuellen Woche im Vergleich zur letzten Woche</string>
-    <string name="nfc_chip_linked">NFC-Chip verbunden</string>
-    <string name="link_nfc_chip">NFC-Chip verbinden</string>
     <string name="writing">Wird beschrieben</string>
     <string name="tag_lost">Der Chip wurde zu früh entfernt. Bitte erneut versuchen.</string>
     <string name="not_compatible">Dieser Chip ist nicht mit Cue kompatibel.</string>
@@ -210,6 +208,22 @@
     <string name="closed_beta_2_started">Eine zweite Gruppe von 15 Testern kommt dazu, um Damier vor dem öffentlichen Launch mitzugestalten.</string>
     <string name="play_store_release">Play Store Release</string>
     <string name="play_store_release_text">Damier ist jetzt öffentlich im Google Play Store verfügbar. Danke, dass du von Anfang an dabei bist.</string>
+    <string name="show_snackbar">Snackbar anzeigen</string>
+    <string name="show_snackbar_expl">Zeigt nach einem Quick Check-in eine Snackbar an, über die du ihn rückgängig machen kannst</string>
+    <string name="linked_tags">Verknüpfte NFC-Tags</string>
+    <string name="streak_info_max">Jedes Check-in hält die Serie am Leben. Ein verpasster Tag setzt sie zurück.</string>
+    <string name="streak_info_goal">Ziel-Modus: Die Serie wächst nur an Tagen, an denen du dein Ziel erreichst.</string>
+    <string name="format_nfc_chip">NFC-Tag formatieren</string>
+    <string name="format_nfc_chip_explanation">Löscht alle Daten vom NFC-Tag, damit er für alles wiederverwendet werden kann</string>
+    <string name="erasing">Wird gelöscht</string>
+    <string name="reset_success">Tag wurde erfolgreich zurückgesetzt</string>
+    <string name="linked_nfc_chips">Verknüpfte NFC-Tags</string>
+    <string name="untitled">Unbenannt</string>
+    <string name="unlink">Verknüpfung aufheben</string>
+    <string name="unlink_chip_warning">Das Entfernen des Tags löscht nur die Verknüpfung in der App, der Tag selbst bleibt physisch beschrieben. Nutze dies nur für Tags, die du verloren hast oder die defekt sind. Wenn du den Tag noch hast, formatiere ihn stattdessen in den App-Einstellungen, damit auch sein Inhalt gelöscht wird.</string>
+    <string name="name_your_tag">Benenne deinen NFC-Tag</string>
+    <string name="name_your_tag_info">Du kannst deinem NFC-Tag einen Namen geben, um ihn von deinen anderen Tags zu unterscheiden. Standardmäßig lautet er "Unbenannt".</string>
+    <string name="link_nfc_tag">NFC-Tag verknüpfen</string>
 
     <string-array name="v0_1_1_notes">
         <item>Behebt mehrere Fehler, die nach der ersten Veröffentlichung gemeldet wurden.</item>
@@ -305,12 +319,11 @@
         <item>Allgemeine Stabilitätsverbesserungen und Fehlerbehebungen.</item>
     </string-array>
 
-    <string-array name="v1_2_0_notes">
+    <string-array name="v1_2_1_notes">
         <item>Die gesamte Update-Historie ist jetzt direkt in der App verfügbar, vom ersten Alpha bis heute.</item>
         <item>Damier verwendet ab sofort Tabler Icons in der gesamten App, für ein einheitlicheres und aufgeräumteres Erscheinungsbild.</item>
         <item>Dein längster Streak wird jetzt auf der Streak-Karte angezeigt, damit du deinen persönlichen Rekord immer im Blick hast.</item>
         <item>Check-ins können jetzt per Snackbar rückgängig gemacht werden, kein versehentlicher Check-in ohne Ausweg mehr.</item>
-        <item>Aktivitäten mit einem Limit zeigen jetzt einen visuellen Hinweis, wenn das Limit überschritten wird.</item>
         <item>Damiers Sprache kann jetzt unabhängig von der Systemsprache in den App-Einstellungen geändert werden.</item>
     </string-array>
 

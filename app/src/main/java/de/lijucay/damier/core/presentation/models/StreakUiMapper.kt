@@ -12,8 +12,6 @@ fun StreakDomain.toStreakUi(): StreakUi {
     )
 }
 
-fun List<StreakDomain>.toStreakUis(): List<StreakUi> = this.map { it.toStreakUi() }
-
 fun StreakUi.toStreakDomain(): StreakDomain {
     return StreakDomain(
         id = id,

@@ -10,18 +10,18 @@ import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class WidgetRepositoryImpl(private val activityDao: ActivityInfoDao) : WidgetRepository {
-    override suspend fun getActivityById(id: UUID): Activity? {
-        return activityDao.getActivityById(id)
-    }
+    override suspend fun getActivityById(id: UUID): Activity? =
+        activityDao.getActivityById(id)
 
-    override suspend fun getAllActivities(): List<ActivityInfo> {
-        return activityDao.getActivitiesForWidgetConfig()
-    }
+    override suspend fun getAllActivities(): List<ActivityInfo> =
+        activityDao.getActivitiesForWidgetConfig()
 
-    override fun observeActivity(id: UUID): Flow<WidgetActivityState> {
-        return activityDao.observeSelectedActivity(id).map { activity ->
-            if (activity != null) WidgetActivityState.Loaded(activity)
+    override fun observeActivity(id: UUID): Flow<WidgetActivityState> =
+        activityDao.observeWidgetActivityData(id).map { data ->
+            if (data != null) WidgetActivityState.Loaded(data)
             else WidgetActivityState.Deleted
         }
-    }
+
+    override suspend fun getDefaultAmount(activityId: UUID): Int? =
+        activityDao.getDefaultAmount(activityId)
 }

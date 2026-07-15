@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.core.data.entities.NfcChipInfo
 import de.lijucay.damier.core.data.entities.Streak
 
 data class Activity(
@@ -17,5 +18,10 @@ data class Activity(
         parentColumn = "id",
         entityColumn = "activityId"
     )
-    val streaks: List<Streak>
+    val streaks: List<Streak>,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "activityId"
+    )
+    val chips: List<NfcChipInfo>
 )

@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
+import de.lijucay.damier.core.data.CheckInGroupUi
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.models.CheckInUi
@@ -36,24 +38,29 @@ import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.TitleText
 import de.lijucay.damier.shared.UnitId
 import java.time.LocalDate
+import kotlin.collections.forEach
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckInHistory(
     sheetState: SheetState,
-    checkIns: Map<LocalDate, List<CheckInUi>>,
+    checkIns: List<CheckInGroupUi>,
     unitId: UnitId,
     onDismissRequest: () -> Unit,
     onItemClicked: (CheckInUi) -> Unit
 ) {
     val context = LocalContext.current
     val allDates = if (checkIns.isEmpty()) emptyList() else {
-        val first = checkIns.keys.min()
+        val first = checkIns.minOfOrNull { it.date.value }
         val today = LocalDate.now()
 
         generateSequence(today) { it.minusDays(1) }
             .takeWhile { !it.isBefore(first) }
             .toList()
+    }
+
+    val checkInsByDate = remember(checkIns) {
+        checkIns.associateBy { it.date.value }
     }
 
     ModalBottomSheet(
@@ -89,7 +96,8 @@ fun CheckInHistory(
             contentPadding = PaddingValues(bottom = bottomPadding())
         ) {
             allDates.forEach { date ->
-                val checkInUis = checkIns[date]
+                val checkInUis = checkInsByDate[date]?.checkIns
+
                 item {
                     Spacer(modifier = Modifier.height(6.dp))
                     TitleText(text = date.toDisplayableDate().formatted)

@@ -1,5 +1,6 @@
 package de.lijucay.damier.core.presentation.screens
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +48,8 @@ import de.lijucay.damier.R
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.activity_list.presentation.UnitSelectionBottomSheet
 import de.lijucay.damier.core.domain.ActivityFormMode
+import de.lijucay.damier.core.domain.ActivityUnit
+import de.lijucay.damier.core.domain.units
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.components.Stepper
 import de.lijucay.damier.core.presentation.components.TitleField
@@ -60,9 +63,11 @@ import de.lijucay.damier.design.components.LargeTitleText
 import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText
 import de.lijucay.damier.shared.ReferenceType
+import de.lijucay.damier.shared.UnitGroup
+import de.lijucay.damier.shared.UnitId
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -73,9 +78,9 @@ fun ActivityFormScreen(
 ) {
     val context = LocalContext.current
 
-    val uiViewModel = koinViewModel<UIViewModel>()
     val activityListViewModel = koinViewModel<ActivityListViewModel>()
     val formViewModel = koinViewModel<ActivityFormViewModel>()
+    val uiViewModel = koinViewModel<UIViewModel>()
 
     val sheetState = rememberBottomSheetState(
         initialValue = SheetValue.Hidden,
@@ -88,7 +93,22 @@ fun ActivityFormScreen(
 
     val labels = ReferenceType.entries.map { stringResource(it.toStringResource()) }
 
-    LaunchedEffect(mode) {
+    val referenceState = rememberTextFieldState(
+        initialText = when (mode) {
+            is ActivityFormMode.Edit -> mode.activity.reference.toString()
+            else -> "1"
+        }
+    )
+    val defaultAmountState = rememberTextFieldState(
+        initialText = when (mode) {
+            is ActivityFormMode.Edit -> mode.activity.defaultAmount.toString()
+            else -> "1"
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        Log.d("ActivityFormScreen", "Mode: $mode")
+
         when (mode) {
             is ActivityFormMode.Add -> formViewModel.initForAdd()
             is ActivityFormMode.Edit -> formViewModel.initForEdit(mode.activity)
@@ -99,14 +119,6 @@ fun ActivityFormScreen(
         is ActivityFormMode.Add -> stringResource(R.string.add_activity)
         is ActivityFormMode.Edit -> stringResource(R.string.edit, mode.activity.title)
     }
-
-    val referenceState = rememberTextFieldState(
-        initialText = if (state.reference == 1) "" else state.reference.toString()
-    )
-
-    val defaultAmountState = rememberTextFieldState(
-        initialText = if (state.defaultAmount == 1) "" else state.reference.toString()
-    )
 
     ActivityTheme(state.useLimitTheme) {
         ScreenContainer(
@@ -296,9 +308,14 @@ fun ActivityFormScreen(
         }
 
         if (state.showUnitsSelectionDialog) {
+            val activityUnit = units.find { it.unitId == state.unitId } ?: ActivityUnit(
+                unitId = UnitId.TIMES,
+                group = UnitGroup.COUNT
+            )
+
             UnitSelectionBottomSheet(
                 sheetState = sheetState,
-                selectedUnit = state.unitId,
+                selectedUnit = activityUnit,
                 onUnitSelected = formViewModel::setUnitId
             ) {
                 scope.launch { sheetState.hide() }.invokeOnCompletion {

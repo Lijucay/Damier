@@ -1,10 +1,20 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.core.data.CheckInGroupUi
 import de.lijucay.damier.core.domain.models.ActivityDomain
 
 fun ActivityDomain.toActivityUi(): ActivityUi {
     val checkInUis = checkIns.map { it.toCheckInUi() }
-    val groupedCheckIns = checkInUis.groupBy { it.dateTime.value.toLocalDate() }
+    val groupedCheckIns = checkInUis
+        .groupBy { it.dateTime.value.toLocalDate() }
+        .map { (date, checkInsForDate) ->
+            CheckInGroupUi(
+                date = date.toDisplayableDate(),
+                checkIns = checkInsForDate
+            )
+        }
+
+        checkInUis.groupBy { it.dateTime.value.toLocalDate() }
 
     return ActivityUi(
         id = id,
@@ -15,7 +25,7 @@ fun ActivityDomain.toActivityUi(): ActivityUi {
         defaultAmount = defaultAmount,
         groupedCheckIns = groupedCheckIns,
         streaks = streaks.map { it.toStreakUi() },
-        nfcChipId = nfcChipId
+        nfcChipId = nfcChipId.toNfcChipUis()
     )
 }
 
@@ -29,8 +39,8 @@ fun ActivityUi.toActivityDomain(): ActivityDomain {
         reference = reference,
         referenceType = referenceType,
         defaultAmount = defaultAmount,
-        checkIns = groupedCheckIns.values.flatten().toCheckInDomains(),
+        checkIns = groupedCheckIns.flatMap { it.checkIns }.toCheckInDomains(),
         streaks = streaks.toStreakDomains(),
-        nfcChipId = nfcChipId
+        nfcChipId = nfcChipId.toNfcChipDomain()
     )
 }

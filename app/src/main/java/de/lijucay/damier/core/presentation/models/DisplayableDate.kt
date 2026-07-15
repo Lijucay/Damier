@@ -1,12 +1,15 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.core.data.converter.LocalDateSerializer
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+@Serializable
 data class DisplayableDate(
     val formatted: String,
-    val value: LocalDate
+    @Serializable(with = LocalDateSerializer::class) val value: LocalDate
 )
 
 fun LocalDate.toDisplayableDate(): DisplayableDate {

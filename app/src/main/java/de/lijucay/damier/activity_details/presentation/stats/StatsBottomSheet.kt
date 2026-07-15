@@ -37,7 +37,8 @@ import de.lijucay.damier.design.components.SmallText
 fun StatsBottomSheet(
     onDismissRequest: () -> Unit,
     dialogState: SheetState,
-    state: ActivityDetailsState
+    state: ActivityDetailsState,
+    reference: Double? = null
 ) {
     ModalBottomSheet(
         sheetState = dialogState,
@@ -98,7 +99,8 @@ fun StatsBottomSheet(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp),
-                        state = state
+                        state = state,
+                        reference = reference
                     )
                 }
             }
@@ -133,7 +135,8 @@ fun StatsBottomSheet(
                         modifier = Modifier
                             .height(260.dp)
                             .padding(vertical = 16.dp),
-                        state = state
+                        state = state,
+                        reference = reference
                     )
                 }
             }

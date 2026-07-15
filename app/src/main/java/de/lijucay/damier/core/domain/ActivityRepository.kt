@@ -17,8 +17,9 @@ interface ActivityRepository {
     suspend fun upsertCheckIn(checkIn: CheckInInfo)
     suspend fun deleteCheckIn(checkIn: CheckInInfo)
 
-    suspend fun updateNfcChipId(activityId: UUID, chipId: String?)
-    suspend fun getActivityByNfcChipId(chipId: String): ActivityInfo?
+    suspend fun linkNfcChip(chipId: UUID, activityId: UUID)
+    suspend fun unlinkNfcChip(chipId: UUID): UUID?
+    suspend fun updateNfcChipLabel(label: String, chipId: UUID)
 
-    suspend fun checkInByNfcChipId(chipId: String): NfcCheckInResult?
+    suspend fun checkInByNfcChipId(chipId: UUID): NfcCheckInResult?
 }

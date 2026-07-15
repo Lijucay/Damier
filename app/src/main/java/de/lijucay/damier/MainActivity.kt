@@ -6,56 +6,62 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.VerticalDragHandle
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
-import androidx.compose.material3.adaptive.layout.AdaptStrategy
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldDefaults
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.material3.adaptive.layout.rememberPaneExpansionState
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import androidx.window.core.layout.WindowSizeClass
-import de.lijucay.damier.activity_details.presentation.ActivityDetailsScreen
-import de.lijucay.damier.activity_details.presentation.EditActivityScreen
-import de.lijucay.damier.activity_list.presentation.ActivityListScreen
-import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
-import de.lijucay.damier.activity_list.presentation.AddActivityItemScreen
-import de.lijucay.damier.core.domain.DeletionMode
-import de.lijucay.damier.core.presentation.DetailsDestination
-import de.lijucay.damier.core.presentation.components.AdaptivePane
-import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
+import de.lijucay.damier.core.presentation.Navigator
+import de.lijucay.damier.core.presentation.adaptiveHorizontalCutoutPadding
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.debug.DebugDataSeeder
 import de.lijucay.damier.nfc.NfcManager
 import de.lijucay.damier.onboarding.OnBoarding
-import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.koinViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.scope.activityRetainedScope
+import org.koin.compose.navigation3.koinEntryProvider
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.scope.Scope
 import java.util.UUID
 
-class MainActivity : ComponentActivity() {
-    val nfcManager: NfcManager by inject()
-    private val uiViewModel: UIViewModel by viewModel()
+class MainActivity : ComponentActivity(), AndroidScopeComponent {
+    override val scope: Scope by activityRetainedScope()
 
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
+    private val nfcManager: NfcManager by lazy { scope.get() }
+    private val navigator: Navigator by lazy { scope.get() }
+
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class, KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,7 +79,9 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val activityListViewModel = koinViewModel<ActivityListViewModel>()
+            val uiViewModel = koinViewModel<UIViewModel>(scope = scope)
+            val coroutineScope = rememberCoroutineScope()
+            val snackbarHostState = remember { scope.get<SnackbarHostState>() }
 
             val windowAdaptiveInfo = currentWindowAdaptiveInfoV2()
             val isWidthAtLeastExpanded = windowAdaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(
@@ -82,70 +90,55 @@ class MainActivity : ComponentActivity() {
             val isHeightAtLeastExpanded = windowAdaptiveInfo.windowSizeClass.isHeightAtLeastBreakpoint(
                 WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
             )
-            val scope = rememberCoroutineScope()
-
-            val firstLaunch by uiViewModel.firstLaunch.collectAsStateWithLifecycle()
 
             LaunchedEffect(isWidthAtLeastExpanded, isHeightAtLeastExpanded) {
-                uiViewModel.setWindowSizeInfo(isWidthAtLeastExpanded,  isHeightAtLeastExpanded)
+                uiViewModel.setWindowSizeInfo(isWidthAtLeastExpanded, isHeightAtLeastExpanded)
             }
 
-            val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator(
-                adaptStrategies = ListDetailPaneScaffoldDefaults.adaptStrategies(
-                    detailPaneAdaptStrategy = if (isWidthAtLeastExpanded)
-                        AdaptStrategy.Reflow(
-                            reflowUnder = ListDetailPaneScaffoldRole.List
-                        ) else AdaptStrategy.Hide
-                )
-            )
-
-            val pendingActivityId by uiViewModel.pendingActivityId.collectAsStateWithLifecycle()
-
-            LaunchedEffect(pendingActivityId) {
-                pendingActivityId?.let { id ->
-                    activityListViewModel.observeSelectedActivity(id)
-                    scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                    uiViewModel.setPendingActivityId(null)
+            val firstLaunch by uiViewModel.firstLaunch.collectAsStateWithLifecycle()
+            val listDetailsStrategy = rememberListDetailSceneStrategy<Any>(
+                paneExpansionState = rememberPaneExpansionState(),
+                paneExpansionDragHandle = { state ->
+                    val interactionSource = remember { MutableInteractionSource() }
+                    VerticalDragHandle(
+                        modifier = Modifier.paneExpansionDraggable(
+                            state,
+                            LocalMinimumInteractiveComponentSize.current,
+                            interactionSource
+                        ),
+                        interactionSource = interactionSource
+                    )
                 }
-            }
-
-            val detailsPage by uiViewModel.detailsPage.collectAsStateWithLifecycle()
-            val deletionMode by uiViewModel.deletionDialogMode.collectAsStateWithLifecycle()
+            )
             val infoMode by uiViewModel.infoMode.collectAsStateWithLifecycle()
+            val shouldShowSnackbar by uiViewModel.showSnackbar.collectAsStateWithLifecycle()
 
-            val snackbarHostState = remember { SnackbarHostState() }
-
-            val showSnackbar: (String, Boolean, String?, (() -> Unit)?) -> Unit = remember {
-                { message, showButton, buttonText, action ->
-                    scope.launch {
-                        val result = snackbarHostState.showSnackbar(
-                            message = message,
-                            actionLabel = if (showButton) buttonText else null,
-                            duration = SnackbarDuration.Short
-                        )
-
-                        if (result == SnackbarResult.ActionPerformed) action?.invoke()
+            LaunchedEffect(Unit) {
+                uiViewModel.snackbarEvent.collect { event ->
+                    if (shouldShowSnackbar) {
+                        coroutineScope.launch {
+                            val result = snackbarHostState.showSnackbar(
+                                message = event.message,
+                                actionLabel = if (event.showButton) event.buttonText else null,
+                                duration = SnackbarDuration.Short
+                            )
+                            if (result == SnackbarResult.ActionPerformed) {
+                                event.action?.invoke()
+                            }
+                        }
                     }
                 }
             }
 
-            LaunchedEffect(Unit) {
-                uiViewModel.snackbarEvent.collect { event ->
-                    showSnackbar(
-                        event.message,
-                        event.showButton,
-                        event.buttonText,
-                        event.action
-                    )
-                }
-            }
-
             DamierTheme {
+                val intAnimationSpec = MaterialTheme.motionScheme.defaultSpatialSpec<IntOffset>()
+                val floatAnimationSpec = MaterialTheme.motionScheme.defaultSpatialSpec<Float>()
+
                 AnimatedContent(
                     firstLaunch,
                     transitionSpec = {
-                        (slideInVertically { it / 16 } + fadeIn(tween(400)))
-                            .togetherWith(fadeOut(tween(200)))
+                        (slideInVertically(intAnimationSpec) { it / 16 } + fadeIn(floatAnimationSpec))
+                            .togetherWith(slideOutVertically(intAnimationSpec) { it / 16 } + fadeOut(floatAnimationSpec))
                     }
                 ) {
                     if (it) {
@@ -153,109 +146,42 @@ class MainActivity : ComponentActivity() {
                             uiViewModel.setFirstLaunch(false)
                         }
                     } else {
-                        AdaptivePane(
-                            listPane = {
-                                ActivityListScreen(
-                                    snackbarHost = { SnackbarHost(snackbarHostState) },
-                                    onActivityClicked = {
-                                        scope.launch {
-                                            uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
-                                            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                        }
-                                    },
-                                    onSettingsClicked = {
-                                        scope.launch {
-                                            uiViewModel.setDetailsPage(DetailsDestination.Settings)
-                                            scaffoldNavigator.navigateTo(
-                                                pane = ListDetailPaneScaffoldRole.Detail
-                                            )
-                                        }
-                                    },
-                                    onAddActivity = {
-                                        uiViewModel.setDetailsPage(DetailsDestination.AddActivity)
-                                        scope.launch {
-                                            scaffoldNavigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                        }
-                                    }
-                                )
+                        val entryProvider = koinEntryProvider<Any>(scope)
+
+                        NavDisplay(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                .adaptiveHorizontalCutoutPadding(
+                                    start = if(isWidthAtLeastExpanded) 15.dp else 0.dp,
+                                    end = if (isWidthAtLeastExpanded) 15.dp else 0.dp,
+                                    bottom = if (isWidthAtLeastExpanded) 15.dp else 0.dp
+                                ),
+                            backStack = navigator.backStack,
+                            sceneStrategies = listOf(listDetailsStrategy),
+                            onBack = { navigator.goBack() },
+                            entryDecorators = listOf(
+                                rememberSaveableStateHolderNavEntryDecorator()
+                            ),
+                            transitionSpec = {
+                                slideInHorizontally(intAnimationSpec) { it } togetherWith
+                                        slideOutHorizontally(intAnimationSpec) { -it }
                             },
-                            detailPane = {
-                                AnimatedContent(targetState = detailsPage) { detailsDestination ->
-                                    when (detailsDestination) {
-                                        is DetailsDestination.ActivityDetails -> {
-                                            ActivityDetailsScreen(
-                                                onEditActivity = {
-                                                    uiViewModel.setDetailsPage(DetailsDestination.EditActivity)
-                                                    scope.launch { scaffoldNavigator.navigateTo(
-                                                        pane = ListDetailPaneScaffoldRole.Detail
-                                                    ) }
-                                                }
-                                            ) {
-                                                scope.launch { scaffoldNavigator.navigateBack() }
-                                            }
-                                        }
-                                        is DetailsDestination.AddActivity -> {
-                                            AddActivityItemScreen {
-                                                scope.launch { scaffoldNavigator.navigateBack() }
-                                            }
-                                        }
-                                        is DetailsDestination.Settings -> {
-                                            SettingsScreen(
-                                                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-                                                showCrashlyticsChangedSnackbar = { snackbarSumId, show, buttonTxtId, action ->
-                                                    showSnackbar(
-                                                        this@MainActivity.getString(snackbarSumId),
-                                                        show,
-                                                        this@MainActivity.getString(buttonTxtId),
-                                                        action
-                                                    )
-                                                }
-                                            ) {
-                                                scope.launch { scaffoldNavigator.navigateBack() }
-                                            }
-                                        }
-                                        is DetailsDestination.EditActivity -> {
-                                            EditActivityScreen {
-                                                scope.launch {
-                                                    scaffoldNavigator.navigateBack()
-                                                }
-                                                uiViewModel.setDetailsPage(DetailsDestination.ActivityDetails)
-                                            }
-                                        }
-                                    }
-                                }
+                            popTransitionSpec = {
+                                slideInHorizontally(intAnimationSpec) { -it } togetherWith
+                                        slideOutHorizontally(intAnimationSpec) { it }
                             },
-                            showDetailPane = isWidthAtLeastExpanded,
-                            scaffoldNavigator = scaffoldNavigator
+                            predictivePopTransitionSpec = {
+                                slideInHorizontally(intAnimationSpec) { -it } togetherWith
+                                        slideOutHorizontally(intAnimationSpec) { it }
+                            },
+                            entryProvider = entryProvider
                         )
                     }
-                }
-
-                deletionMode?.let { mode ->
-                    DeletionDialog(
-                        mode = mode,
-                        onDismissRequest = { uiViewModel.setDeletionMode(null) },
-                        onDelete = {
-                            when (mode) {
-                                is DeletionMode.Activity -> {
-                                    uiViewModel.setDeletionMode(null)
-                                    activityListViewModel.deleteActivity(mode.activity)
-                                    scope.launch { scaffoldNavigator.navigateBack() }
-                                }
-                                is DeletionMode.CheckIn -> {
-                                    uiViewModel.setDeletionMode(null)
-                                    activityListViewModel.deleteCheckIn(mode.checkIn)
-                                }
-                            }
-                        }
-                    )
                 }
 
                 infoMode?.let {
                     InfoDialog(it) { uiViewModel.setInfoMode(null) }
                 }
-
-
             }
         }
     }
@@ -274,6 +200,6 @@ class MainActivity : ComponentActivity() {
     private fun handleActivityIdIntent(intent: Intent?) {
         intent?.getStringExtra("activityId")
             ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
-            ?.let { uiViewModel.setPendingActivityId(it) }
+            ?.let { navigator.goToActivityDetailsFresh(it) }
     }
 }

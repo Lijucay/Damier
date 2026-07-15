@@ -57,7 +57,7 @@ class DebugDataSeeder(private val repository: ActivityRepository) {
         )
 
         val seeds = listOf(
-            ActivitySeed(uuid1, 1, 0.3f),
+            ActivitySeed(uuid1, 17, 0.3f),
             ActivitySeed(uuid2, 30, 0.4f),
             ActivitySeed(uuid3, 1, 0.2f)
         )

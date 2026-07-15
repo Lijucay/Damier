@@ -57,10 +57,7 @@ fun ScreenContainer(
     content: @Composable (BoxScope.() -> Unit)
 ) {
     Scaffold(
-        modifier = modifier
-            .animateContentSize(
-                animationSpec = motionScheme.defaultSpatialSpec()
-            ),
+        modifier = modifier.animateContentSize(animationSpec = motionScheme.defaultSpatialSpec()),
         contentWindowInsets = WindowInsets
             .displayCutout
             .exclude(WindowInsets.safeContent)
@@ -74,7 +71,15 @@ fun ScreenContainer(
                         AnimatedContent(
                             targetState = title,
                             transitionSpec = {
-                                fadeIn(tween(300)) togetherWith fadeOut(tween(300))
+                                fadeIn(
+                                    animationSpec = tween(
+                                        durationMillis = 300
+                                    )
+                                ) togetherWith fadeOut(
+                                    animationSpec = tween(
+                                        durationMillis = 300
+                                    )
+                                )
                             }
                         ) { animatedTitle ->
                             LargeTitleText(text = animatedTitle.ifBlank { stringResource(R.string.app_name) })
@@ -124,6 +129,7 @@ fun ScreenContainer(
         Box(
             modifier = Modifier
                 .padding(innerPadding)
+                .padding(top = if (isWidthAtLeastExpanded) 16.dp else 0.dp, bottom = if (isWidthAtLeastExpanded) bottomPadding() else 0.dp)
                 .animateClipWithScreenSize(isWidthAtLeastExpanded, showBottomBar = showBottomBarContent)
                 .background(MaterialTheme.colorScheme.surface)
                 .animateContentSize()
@@ -133,7 +139,7 @@ fun ScreenContainer(
                     .padding(
                         top = 16.dp,
                         end = 16.dp,
-                        bottom = if (isWidthAtLeastExpanded) 16.dp else bottomPadding(),
+                        bottom = if (showBottomBarContent || isWidthAtLeastExpanded) 16.dp else bottomPadding(),
                         start = 16.dp
                     )
                     .fillMaxSize()

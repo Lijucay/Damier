@@ -5,18 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +31,8 @@ import compose.icons.tablericons.ArrowLeft
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.core.presentation.components.ScreenContainer
+import de.lijucay.damier.design.components.ListCard
 import de.lijucay.damier.ui.theme.DamierTheme
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.launch
@@ -46,6 +45,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         setResult(RESULT_CANCELED)
 
@@ -85,7 +85,7 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
             }
 
             DamierWidget().update(
-                context =this@DamierWidgetConfigActivity,
+                context = this@DamierWidgetConfigActivity,
                 id = GlanceAppWidgetManager(this@DamierWidgetConfigActivity)
                     .getGlanceIdBy(appWidgetId)
             )
@@ -109,40 +109,28 @@ class DamierWidgetConfigActivity : ComponentActivity(), KoinComponent {
             activities.addAll(widgetRepository.getAllActivities())
         }
 
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.activities))
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = onCancel
-                        ) {
-                            Icon(
-                                imageVector = TablerIcons.ArrowLeft,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                )
+        ScreenContainer(
+            isWidthAtLeastExpanded = false,
+            title = stringResource(R.string.activities),
+            navigationIcon = {
+                IconButton(
+                    onClick = onCancel
+                ) {
+                    Icon(
+                        imageVector = TablerIcons.ArrowLeft,
+                        contentDescription = null
+                    )
+                }
             }
-        ) { innerPadding ->
+        ) {
             LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(activities) { activity ->
-                    Card(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                    ListCard(
                         onClick = { onActivitySelected(activity) },
-                        shape = RoundedCornerShape(
-                            topStart = if (activities.first() == activity) 40.dp else 4.dp,
-                            topEnd = if (activities.first() == activity) 40.dp else 4.dp,
-                            bottomEnd = if (activities.last() == activity) 40.dp else 4.dp,
-                            bottomStart = if (activities.last() == activity) 40.dp else 4.dp
-                        )
+                        isItemFirst = activity == activities.first(),
+                        isItemLast = activity == activities.last()
                     ) {
                         Text(
                             modifier = Modifier

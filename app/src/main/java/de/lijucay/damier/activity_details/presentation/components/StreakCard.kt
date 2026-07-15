@@ -29,22 +29,30 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Flame
+import compose.icons.tablericons.InfoCircle
+import compose.icons.tablericons.Target
 import de.lijucay.damier.R
 import de.lijucay.damier.design.components.HeadlineText
 import de.lijucay.damier.design.components.LargeText
 import de.lijucay.damier.design.components.SmallText
 import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.shared.ReferenceType
 
 @Composable
 fun StreakCard(
     modifier: Modifier = Modifier,
     currentStreak: Int,
-    longestStreak: Int
+    longestStreak: Int,
+    referenceType: ReferenceType
 ) {
     val resources = LocalResources.current
+
+    val intOffsetAnimationSpec = MaterialTheme.motionScheme.defaultSpatialSpec<IntOffset>()
+    val floatAnimationSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -76,7 +84,7 @@ fun StreakCard(
                         .background(color = MaterialTheme.colorScheme.onSecondaryContainer)
                 ) {
                     SmallText(
-                        modifier = Modifier.padding(4.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         text = resources.getStringArray(
                             when (currentStreak) {
                                 0 -> R.array.streak_m_ns
@@ -99,7 +107,12 @@ fun StreakCard(
                 AnimatedContent(
                     targetState = currentStreak,
                     transitionSpec = {
-                        (slideInVertically { it } + fadeIn()) togetherWith (slideOutVertically { -it } + fadeOut())
+                        (slideInVertically(intOffsetAnimationSpec) {
+                            it
+                        } + fadeIn(floatAnimationSpec)) togetherWith
+                                (slideOutVertically(intOffsetAnimationSpec) {
+                                    -it
+                                } + fadeOut(floatAnimationSpec))
                     }
                 ) { streak ->
                     HeadlineText(text = streak.toString())
@@ -132,6 +145,39 @@ fun StreakCard(
                     ),
                     fontWeight = FontWeight.Bold
                 )
+            }
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = if (referenceType.isMax())
+                            TablerIcons.InfoCircle
+                        else
+                            TablerIcons.Target,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondaryContainer
+                    )
+                    SmallText(
+                        text = stringResource(
+                            id = if (referenceType.isMax())
+                                R.string.streak_info_max
+                            else
+                                R.string.streak_info_goal
+                        ),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }

@@ -4,9 +4,6 @@ import de.lijucay.damier.core.data.Activity
 import de.lijucay.damier.core.data.entities.ActivityInfo
 import de.lijucay.damier.core.domain.models.ActivityDomain
 
-/**
- * Maps the Room relation POJO [Activity] to the pure domain model [ActivityDomain].
- */
 fun Activity.toActivityDomain(): ActivityDomain {
     return ActivityDomain(
         id = activityInfo.id,
@@ -17,15 +14,12 @@ fun Activity.toActivityDomain(): ActivityDomain {
         defaultAmount = activityInfo.defaultAmount,
         checkIns = checkIns.map { it.toCheckInDomain() },
         streaks = streaks.map { it.toStreakDomain() },
-        nfcChipId = activityInfo.nfcChipId
+        nfcChipId = chips.toNfcChipDomains()
     )
 }
 
 fun List<Activity>.toActivityDomains(): List<ActivityDomain> = this.map { it.toActivityDomain() }
 
-/**
- * Reverse mapping for the write path (e.g. ActivityFormViewModel saving an edited activity).
- * */
 fun ActivityDomain.toActivityInfo(): ActivityInfo {
     return ActivityInfo(
         id = id,
@@ -34,6 +28,5 @@ fun ActivityDomain.toActivityInfo(): ActivityInfo {
         reference = reference,
         referenceType = referenceType,
         defaultAmount = defaultAmount,
-        nfcChipId = nfcChipId
     )
 }

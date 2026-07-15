@@ -19,6 +19,9 @@ class CheckInFormViewModel : ViewModel() {
 
     fun initForAdd(activityId: UUID) {
         checkInId = UUID.randomUUID()
+
+        // Reset state when adding a new check in
+        _state.value = CheckInFormState()
         this.activityId = activityId
     }
 

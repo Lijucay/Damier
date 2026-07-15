@@ -12,6 +12,7 @@ object DataPreferences {
         val showReference = booleanPreferencesKey("show_reference")
         val showMaxAmount = booleanPreferencesKey("show_max_amount")
         val backupDirUri = stringPreferencesKey("backup_dir_uri")
+        val showSnackbar = booleanPreferencesKey("show_snackbar")
 
         val firstLaunch = booleanPreferencesKey("first_launch")
 

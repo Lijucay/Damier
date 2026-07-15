@@ -71,9 +71,9 @@ fun UpdateTimelineDialog(
                 val date = LocalDate.of(2026, 6, 25)
 
                 UpdateItem(
-                    version = "1.2.0",
+                    version = "1.2.1",
                     date = date.toDisplayableDate().formatted,
-                    releaseNotes = stringArrayResource(R.array.v1_2_0_notes).toList()
+                    releaseNotes = stringArrayResource(R.array.v1_2_1_notes).toList()
                 )
             }
             item {

@@ -16,13 +16,14 @@ import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.ScreenContainer
 import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import java.util.UUID
 
 @Composable
 fun ActivityListScreen(
     modifier: Modifier = Modifier,
     snackbarHost: @Composable (() -> Unit),
-    onActivityClicked: () -> Unit,
+    onActivityClicked: (UUID) -> Unit,
     onSettingsClicked: () -> Unit,
     onAddActivity: () -> Unit
 ) {
@@ -57,6 +58,9 @@ fun ActivityListScreen(
             }
         }
     ) {
-        ActivityList(onActivityClicked = { onActivityClicked() })
+        ActivityList(
+            onActivityClicked = { onActivityClicked(it) },
+            uiViewModel = uiViewModel
+        )
     }
 }
