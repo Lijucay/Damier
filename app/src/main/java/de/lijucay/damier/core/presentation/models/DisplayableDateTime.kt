@@ -22,6 +22,15 @@ fun LocalDateTime.toDisplayableDateTime(): DisplayableDateTime {
     )
 }
 
+fun LocalDateTime.toDisplayableDateTimeWithMs(): DisplayableDateTime {
+    val formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm:ss.SSS", Locale.getDefault())
+
+    return DisplayableDateTime(
+        formatted = this.format(formatter),
+        value = this
+    )
+}
+
 fun CheckInInfo.toCheckInUi(): CheckInUi {
     return CheckInUi(
         id = id,

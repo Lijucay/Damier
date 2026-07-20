@@ -35,6 +35,8 @@ sealed interface Destination {
     @Serializable data class EditActivity(val activityId: String) : NavKey
 
     @Serializable data object Settings : NavKey
+
+    @Serializable data object ReadLogsScreen : NavKey
 }
 
 @Composable

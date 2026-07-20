@@ -413,4 +413,7 @@
     </string-array>
     <string name="less">Weniger</string>
     <string name="more">Mehr</string>
+    <string name="share_logs">Logs teilen</string>
+    <string name="show_logs">Logs anzeigen</string>
+    <string name="show_logs_explanation">Schau dir an, was schiefgelaufen ist, als es schiefgelaufen ist.</string>
 </resources>

@@ -44,6 +44,7 @@ import de.lijucay.damier.nfc.RecentNfcWriteTracker
 import de.lijucay.damier.nfc.read.CueReadManager
 import de.lijucay.damier.nfc.read.NfcReadManager
 import de.lijucay.damier.nfc.write.NfcWriteManager
+import de.lijucay.damier.settings.presentation.ReadLogsScreen
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.widget.data.WidgetRepositoryImpl
 import de.lijucay.damier.widget.domain.WidgetRepository
@@ -186,8 +187,16 @@ val appModule = module {
                     }
                 },
                 scope = this,
+                onNavigateToLogs = { navigator.goTo(Destination.ReadLogsScreen) },
                 onNavigateBack = { navigator.goBack() }
             )
+        }
+
+        navigation<Destination.ReadLogsScreen> {
+            ReadLogsScreen {
+                val navigator = get<Navigator>()
+                navigator.goBack()
+            }
         }
     }
 

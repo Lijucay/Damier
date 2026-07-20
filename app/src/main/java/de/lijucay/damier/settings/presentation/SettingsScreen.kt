@@ -38,6 +38,7 @@ import compose.icons.tablericons.CalendarEvent
 import compose.icons.tablericons.ChartBar
 import compose.icons.tablericons.FileExport
 import compose.icons.tablericons.FileImport
+import compose.icons.tablericons.FileText
 import compose.icons.tablericons.InfoCircle
 import compose.icons.tablericons.Nfc
 import compose.icons.tablericons.PlayerPlay
@@ -66,6 +67,7 @@ fun SettingsScreen(
     scope: Scope,
     snackbarHost: @Composable (() -> Unit),
     showCrashlyticsChangedSnackbar: (Int, Boolean, Int, () -> Unit) -> Unit,
+    onNavigateToLogs: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -353,6 +355,12 @@ fun SettingsScreen(
             ) {
                 uiViewModel.setShowUpdateTimeline(true)
             }
+            Preference(
+                title = stringResource(R.string.show_logs),
+                summary = stringResource(R.string.show_logs_explanation),
+                iconVector = TablerIcons.FileText,
+                onClick = onNavigateToLogs
+            )
         }
     }
 

@@ -47,6 +47,7 @@ import androidx.glance.text.TextStyle
 import de.lijucay.damier.MainActivity
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
+import de.lijucay.damier.core.Logger
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.widget.data.LogCheckInAction
 import de.lijucay.damier.widget.domain.WidgetActivityData
@@ -64,6 +65,8 @@ class DamierWidget : GlanceAppWidget() {
     override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        Logger.d(context, "provideGlance started")
+
         val repo: WidgetRepository = GlobalContext.get().get()
 
         provideContent {

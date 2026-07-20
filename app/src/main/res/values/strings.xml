@@ -234,6 +234,10 @@
     <string name="link_nfc_tag">Link NFC Tag</string>
     <string name="first_public_beta">First public beta</string>
     <string name="first_public_beta_text">Damier now offers users to join the public beta channel inside the Play Store. Before signing up, keep in mind that public beta\'s contain bugs and might not work reliably.</string>
+    <string name="share_logs">Share logs</string>
+    <string name="show_logs">Show logs</string>
+    <string name="show_logs_explanation">See what went wrong when it went wrong</string>
+    <string name="logs" translatable="false">Logs</string>
     <string-array name="v0_1_1_notes">
         <item>Fixes several bugs reported after the initial release.</item>
     </string-array>
