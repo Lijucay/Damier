@@ -9,11 +9,14 @@ import androidx.room.TypeConverters
 import de.lijucay.damier.core.data.converter.LocalDateTimeConverter
 import de.lijucay.damier.core.data.converter.LocalDateTimeSerializer
 import de.lijucay.damier.core.data.converter.UUIDSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 import java.time.LocalDateTime
 import java.util.UUID
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @Entity(
     foreignKeys = [
@@ -35,6 +38,7 @@ data class CheckInInfo(
     val activityId: UUID,
     @Serializable(with = LocalDateTimeSerializer::class)
     val timestamp: LocalDateTime,
-    @SerialName("checkInCount")
-    @ColumnInfo(defaultValue = "0") val amount: Int
+    @JsonNames("checkInCount")
+    @ColumnInfo(defaultValue = "0") val amount: Int,
+    val note: String? = null
 )

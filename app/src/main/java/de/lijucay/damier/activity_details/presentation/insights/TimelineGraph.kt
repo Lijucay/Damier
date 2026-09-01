@@ -1,4 +1,4 @@
-package de.lijucay.damier.activity_details.presentation.stats
+package de.lijucay.damier.activity_details.presentation.insights
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape

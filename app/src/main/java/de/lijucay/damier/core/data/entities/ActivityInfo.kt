@@ -3,6 +3,7 @@ package de.lijucay.damier.core.data.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import de.lijucay.damier.core.data.converter.LocalTimeConverter
 import de.lijucay.damier.core.data.converter.ReferenceTypeConverter
 import de.lijucay.damier.core.data.converter.UUIDSerializer
 import de.lijucay.damier.core.data.converter.UnitIdConverter
@@ -13,7 +14,7 @@ import java.util.UUID
 
 @Serializable
 @Entity
-@TypeConverters(UnitIdConverter::class, ReferenceTypeConverter::class)
+@TypeConverters(UnitIdConverter::class, ReferenceTypeConverter::class, LocalTimeConverter::class)
 data class ActivityInfo(
     @PrimaryKey(autoGenerate = false)
     @Serializable(with = UUIDSerializer::class)

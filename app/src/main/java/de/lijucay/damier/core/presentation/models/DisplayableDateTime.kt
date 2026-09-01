@@ -36,6 +36,7 @@ fun CheckInInfo.toCheckInUi(): CheckInUi {
         id = id,
         activityId = activityId,
         dateTime = timestamp.toDisplayableDateTime(),
-        amount = amount
+        amount = amount,
+        note = note
     )
 }

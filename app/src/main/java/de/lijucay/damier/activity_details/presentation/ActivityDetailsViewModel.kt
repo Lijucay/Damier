@@ -12,7 +12,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
 
-class ActivityDetailsViewModel(private val activityRepository: ActivityRepository) : ViewModel() {
+class ActivityDetailsViewModel(
+    private val activityRepository: ActivityRepository
+) : ViewModel() {
+
     private val _state = MutableStateFlow(ActivityDetailsState())
     val state = _state.asStateFlow()
 

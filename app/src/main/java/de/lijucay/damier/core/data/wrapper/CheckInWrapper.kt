@@ -8,7 +8,8 @@ fun CheckInInfo.toCheckInDomain(): CheckInDomain {
         id = id,
         activityId = activityId,
         timestamp = timestamp,
-        amount = amount
+        amount = amount,
+        note = note
     )
 }
 
@@ -17,7 +18,8 @@ fun CheckInDomain.toCheckInInfo(): CheckInInfo {
         id = id,
         activityId = activityId,
         timestamp = timestamp,
-        amount = amount
+        amount = amount,
+        note = note
     )
 }
 

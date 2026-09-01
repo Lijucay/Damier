@@ -71,7 +71,8 @@ val appModule = module {
             Migrations.Migration_1_2,
             Migrations.Migration_2_3,
             Migrations.Migration_3_4,
-            Migrations.Migration_4_5
+            Migrations.Migration_4_5,
+            Migrations.MIGRATION_5_6
         ).build()
     }
 

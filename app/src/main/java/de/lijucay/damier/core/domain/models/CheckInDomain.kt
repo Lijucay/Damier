@@ -7,5 +7,6 @@ data class CheckInDomain(
     val id: UUID,
     val activityId: UUID,
     val timestamp: LocalDateTime,
-    val amount: Int
+    val amount: Int,
+    val note: String?
 )

@@ -9,5 +9,6 @@ data class CheckInUi(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     @Serializable(with = UUIDSerializer::class) val activityId: UUID,
     val dateTime: DisplayableDateTime,
-    val amount: Int
+    val amount: Int,
+    val note: String?
 )

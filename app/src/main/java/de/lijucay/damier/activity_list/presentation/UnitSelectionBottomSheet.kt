@@ -10,13 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalToggleButton
+import androidx.compose.material3.FilledTonalToggleButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TonalToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -75,19 +77,17 @@ fun UnitSelectionBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween)
             ) {
                 groups.forEachIndexed { index, group ->
-                    TonalToggleButton(
+                    FilledTonalToggleButton(
                         checked = selectedGroup == group,
                         onCheckedChange = { selectedGroup = group },
-                        modifier = Modifier
-                            .semantics { role = Role.RadioButton },
+                        modifier = Modifier.semantics { role = Role.RadioButton },
                         shapes = when (index) {
                             0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
                             groups.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                             else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                        }
-                    ) {
-                        Text(text = stringResource(groups[index].toStringResource()))
-                    }
+                        },
+                        contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MinHeight),
+                        content = { Text(text = stringResource(groups[index].toStringResource())) })
                 }
             }
 

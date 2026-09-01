@@ -197,7 +197,8 @@
     <string name="welcome">Welcome to Damier</string>
     <string name="activity_no_longer_exists">This activity no longer exists</string>
     <string name="tap_to_reconfigure">Tap to reconfigure</string>
-    <string name="invalid_version">This backup was created with an older version of Damier and is no longer supported. I\'m sorry for the inconvenience, future backups will always remain compatible.</string>    <string name="unit_group_time">Time</string>
+    <string name="invalid_version">This backup was created with an older version of Damier and is no longer supported. I\'m sorry for the inconvenience, future backups will always remain compatible.</string>
+    <string name="unit_group_time">Time</string>
     <string name="unit_group_distance">Distance</string>
     <string name="unit_group_volume">Volume</string>
     <string name="unit_group_weight">Weight</string>
@@ -238,6 +239,18 @@
     <string name="show_logs">Show logs</string>
     <string name="show_logs_explanation">See what went wrong when it went wrong</string>
     <string name="logs" translatable="false">Logs</string>
+    <string name="filter">Filter</string>
+    <string name="created_at">Created at</string>
+    <string name="expanded">Expanded</string>
+    <string name="compact">Compact</string>
+    <string name="extra_compact">Extra compact</string>
+    <string name="name">Name</string>
+    <string name="recently_checked_in">Recently checked in</string>
+    <string name="insights">Insights</string>
+    <string name="your_strongest_days">Your strongest days</string>
+    <string name="your_strongest_days_expl">See how your check-ins are spread across the week, so you know which days this activity comes easiest</string>
+    <string name="note">Note</string>
+    <string name="note_placeholder">Add some notes about this check-in here, e.g. what happened in your book, or what you are working on…</string>
     <string-array name="v0_1_1_notes">
         <item>Fixes several bugs reported after the initial release.</item>
     </string-array>

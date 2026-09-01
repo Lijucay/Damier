@@ -9,7 +9,8 @@ data class CheckInFormState(
     val dateTime: DisplayableDateTime = LocalDateTime.now().toDisplayableDateTime(),
     val amount: Int = 1,
     val showDatePicker: Boolean = false,
-    val showTimePicker: Boolean = false
+    val showTimePicker: Boolean = false,
+    val note: String? = null
 ) {
     val isSaveEnabled: Boolean get() = amount > 0
 
@@ -18,7 +19,8 @@ data class CheckInFormState(
             dateTime = checkIn.dateTime,
             amount = checkIn.amount,
             showDatePicker = false,
-            showTimePicker = false
+            showTimePicker = false,
+            note = checkIn.note
         )
     }
 }

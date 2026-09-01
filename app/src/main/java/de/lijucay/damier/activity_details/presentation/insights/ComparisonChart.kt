@@ -1,4 +1,4 @@
-package de.lijucay.damier.activity_details.presentation.stats
+package de.lijucay.damier.activity_details.presentation.insights
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

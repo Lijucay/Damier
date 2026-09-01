@@ -13,6 +13,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
@@ -54,6 +55,7 @@ fun ScreenContainer(
     floatingActionButton: (@Composable () -> Unit) = {},
     navigationIcon: @Composable (() -> Unit) = {},
     snackbarHost: @Composable (() -> Unit) = {},
+    subtitleContent: @Composable (() -> Unit)? = null,
     content: @Composable (BoxScope.() -> Unit)
 ) {
     Scaffold(
@@ -65,35 +67,39 @@ fun ScreenContainer(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         snackbarHost = snackbarHost,
         topBar = {
-            title?.let { title ->
-                TopAppBar(
-                    title = {
-                        AnimatedContent(
-                            targetState = title,
-                            transitionSpec = {
-                                fadeIn(
-                                    animationSpec = tween(
-                                        durationMillis = 300
+            Column {
+                title?.let { title ->
+                    TopAppBar(
+                        title = {
+                            AnimatedContent(
+                                targetState = title,
+                                transitionSpec = {
+                                    fadeIn(
+                                        animationSpec = tween(
+                                            durationMillis = 300
+                                        )
+                                    ) togetherWith fadeOut(
+                                        animationSpec = tween(
+                                            durationMillis = 300
+                                        )
                                     )
-                                ) togetherWith fadeOut(
-                                    animationSpec = tween(
-                                        durationMillis = 300
-                                    )
-                                )
+                                }
+                            ) { animatedTitle ->
+                                LargeTitleText(text = animatedTitle.ifBlank { stringResource(R.string.app_name) })
                             }
-                        ) { animatedTitle ->
-                            LargeTitleText(text = animatedTitle.ifBlank { stringResource(R.string.app_name) })
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                        titleContentColor = contentColorFor(
-                            backgroundColor = MaterialTheme.colorScheme.surfaceContainer
-                        )
-                    ),
-                    actions = topAppBarActions,
-                    navigationIcon = navigationIcon
-                )
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            titleContentColor = contentColorFor(
+                                backgroundColor = MaterialTheme.colorScheme.surfaceContainer
+                            )
+                        ),
+                        actions = topAppBarActions,
+                        navigationIcon = navigationIcon
+                    )
+                }
+
+                subtitleContent?.invoke()
             }
         },
         bottomBar = {

@@ -8,6 +8,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import compose.icons.TablerIcons
 import compose.icons.tablericons.DotsVertical
@@ -16,6 +17,7 @@ import de.lijucay.damier.R
 @Composable
 fun DamierMenu(
     modifier: Modifier = Modifier,
+    icon: ImageVector = TablerIcons.DotsVertical,
     expanded: Boolean,
     onShowMenu: (Boolean) -> Unit,
     menuItems: @Composable (ColumnScope.() -> Unit)
@@ -25,7 +27,7 @@ fun DamierMenu(
             onClick = { onShowMenu(true) }
         ) {
             Icon(
-                imageVector = TablerIcons.DotsVertical,
+                imageVector = icon,
                 contentDescription = stringResource(R.string.menu)
             )
         }

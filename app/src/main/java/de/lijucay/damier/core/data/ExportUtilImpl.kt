@@ -7,6 +7,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.crashlytics.recordException
 import de.lijucay.damier.R
+import de.lijucay.damier.core.Logger
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
 import de.lijucay.damier.core.data.daos.NfcChipDao
@@ -86,6 +87,7 @@ class ExportUtilImpl(
 
                 ExportResult.Success
             } catch (e: Exception) {
+                Logger.e(context, message = e.message ?: "Unknown error", e)
                 Firebase.crashlytics.recordException(e) {
                     key("backup_uri", backupFile.uri.toString())
                     key("data_size_byte", preparedData[BackupConstants.DATA]?.length ?: -1)

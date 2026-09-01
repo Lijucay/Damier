@@ -2,6 +2,7 @@ package de.lijucay.damier.activity_list.presentation
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -28,6 +29,7 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Bolt
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.WaffleDiagramData
+import de.lijucay.damier.core.presentation.DisplayMode
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.models.ActivityUi
@@ -43,6 +45,7 @@ fun ActivityListItem(
     activityUi: ActivityUi,
     showReference: Boolean,
     showMaxAmount: Boolean,
+    displayMode: DisplayMode,
     onCheckInClicked: () -> Unit,
     onItemClick: () -> Unit,
 ) {
@@ -69,6 +72,7 @@ fun ActivityListItem(
 
     Card(
         modifier = modifier
+            .animateContentSize()
             .fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
@@ -87,13 +91,15 @@ fun ActivityListItem(
                 textAlign = TextAlign.Center
             )
 
-            WaffleDiagram(
-                waffleDiagramData = WaffleDiagramData(
-                    reference = activityUi.reference,
-                    referenceType = activityUi.referenceType,
-                    checkIns = activityUi.groupedCheckIns.flatMap { it.checkIns }
+            AnimatedVisibility(visible = displayMode.isExpanded() || displayMode.isCompact()) {
+                WaffleDiagram(
+                    waffleDiagramData = WaffleDiagramData(
+                        reference = activityUi.reference,
+                        referenceType = activityUi.referenceType,
+                        checkIns = activityUi.groupedCheckIns.flatMap { it.checkIns }
+                    )
                 )
-            )
+            }
 
             FlowRow(
                 modifier = Modifier
@@ -102,7 +108,10 @@ fun ActivityListItem(
                 itemVerticalAlignment = Alignment.CenterVertically
             ) {
                 AnimatedVisibility(
-                    visible = activityUi.referenceType != ReferenceType.MAX && showReference
+                    visible = activityUi.referenceType != ReferenceType.MAX
+                            && showReference
+                            && !displayMode.isCompact()
+                            && !displayMode.isExtraCompact()
                 ) {
                     LargeText(text = "$referenceType: ${activityUi.reference} $displayUnitName")
                 }
@@ -110,14 +119,16 @@ fun ActivityListItem(
                     visible = activityUi.referenceType == ReferenceType.MAX
                             && showReference
                             && showMaxAmount
+                            && !displayMode.isCompact()
+                            && !displayMode.isExtraCompact()
                 ) {
                     LargeText(
-                        text = "$referenceType: $max $displayUnitName",
-                        )
+                        text = "$referenceType: $max $displayUnitName"
+                    )
                 }
 
                 AnimatedContent(
-                    targetState = showReference && if (activityUi.referenceType.isMax()) showMaxAmount else true
+                    targetState = displayMode.isExpanded() && (showReference && if (activityUi.referenceType.isMax()) showMaxAmount else true)
                 ) {
                     if (it) {
                         IconButton(

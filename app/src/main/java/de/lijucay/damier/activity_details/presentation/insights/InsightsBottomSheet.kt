@@ -1,4 +1,4 @@
-package de.lijucay.damier.activity_details.presentation.stats
+package de.lijucay.damier.activity_details.presentation.insights
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowsLeftRight
 import compose.icons.tablericons.ChartLine
+import compose.icons.tablericons.ChartPie
 import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
 import de.lijucay.damier.design.components.DefaultText
@@ -34,7 +35,7 @@ import de.lijucay.damier.design.components.SmallText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatsBottomSheet(
+fun InsightsBottomSheet(
     onDismissRequest: () -> Unit,
     dialogState: SheetState,
     state: ActivityDetailsState,
@@ -53,7 +54,7 @@ fun StatsBottomSheet(
                 BottomSheetDefaults.DragHandle()
                 LargeTitleText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.statistics)
+                    text = stringResource(R.string.insights)
                 )
                 Spacer(Modifier.height(8.dp))
             }
@@ -140,6 +141,41 @@ fun StatsBottomSheet(
                     )
                 }
             }
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = TablerIcons.ChartPie,
+                            contentDescription = null
+                        )
+                        DefaultText(
+                            text = stringResource(R.string.your_strongest_days),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    SmallText(text = stringResource(R.string.your_strongest_days_expl))
+
+                    WeekInsightGraph(
+                        modifier = Modifier
+                            .padding(top = 16.dp),
+                        state = state
+                    )
+                }
+            }
         }
 
         // Todo: Check-ins per week day per week
@@ -150,5 +186,10 @@ fun StatsBottomSheet(
         //  => get totals per day for both week
         //  => Column graph allows multiple columns per unit, create two cols, one showing the last
         //     week, one showing the current week
+
+        // TODO: Check-In insight about what days in weeks (total time) are checked-in most
+        //  (pie-chart)
+
+
     }
 }

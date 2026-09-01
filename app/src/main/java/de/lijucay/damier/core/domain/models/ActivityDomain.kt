@@ -13,5 +13,5 @@ data class ActivityDomain(
     val defaultAmount: Int,
     val checkIns: List<CheckInDomain>,
     val streaks: List<StreakDomain>,
-    val nfcChipId: List<NfcChipDomain>
+    val nfcChipId: List<NfcChipDomain>,
 )

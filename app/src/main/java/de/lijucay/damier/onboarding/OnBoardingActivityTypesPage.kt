@@ -7,13 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalToggleButton
+import androidx.compose.material3.FilledTonalToggleButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TonalToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +66,7 @@ fun OnBoardingActivityTypesPage(modifier: Modifier = Modifier) {
                     listOf(Modifier.weight(1f), Modifier.weight(1f), Modifier.weight(1f))
 
                 ReferenceType.entries.forEachIndexed { index, type ->
-                    TonalToggleButton(
+                    FilledTonalToggleButton(
                         checked = selectedReferenceType == type,
                         onCheckedChange = { selectedReferenceType = type },
                         modifier = modifiers[index].semantics { role = Role.RadioButton },
@@ -72,10 +74,9 @@ fun OnBoardingActivityTypesPage(modifier: Modifier = Modifier) {
                             0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
                             ReferenceType.entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                             else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                        }
-                    ) {
-                        Text(labels[index])
-                    }
+                        },
+                        contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MinHeight),
+                        content = { Text(labels[index]) })
                 }
             }
 

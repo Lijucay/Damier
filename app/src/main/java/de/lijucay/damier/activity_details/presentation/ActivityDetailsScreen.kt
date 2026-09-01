@@ -61,7 +61,7 @@ import de.lijucay.damier.R
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_details.presentation.components.nfcChipItem
-import de.lijucay.damier.activity_details.presentation.stats.StatsBottomSheet
+import de.lijucay.damier.activity_details.presentation.insights.InsightsBottomSheet
 import de.lijucay.damier.activity_list.presentation.ActivityListViewModel
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.presentation.DamierMenu
@@ -242,7 +242,7 @@ fun ActivityDetailsScreen(
                                 )
                             },
                             text = {
-                                Text(stringResource(R.string.statistics))
+                                Text(stringResource(R.string.insights))
                             }
                         )
                         DropdownMenuItem(
@@ -356,7 +356,7 @@ fun ActivityDetailsScreen(
         }
 
         if (state.showStatsDialog) {
-            StatsBottomSheet(
+            InsightsBottomSheet(
                 state = state,
                 dialogState = statsDialogState,
                 onDismissRequest = {

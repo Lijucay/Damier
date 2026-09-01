@@ -2,9 +2,13 @@ package de.lijucay.damier.core.data
 
 import android.content.Context
 import android.net.Uri
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import androidx.room.withTransaction
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.stream.JsonReader
+import de.lijucay.damier.core.Logger
+import de.lijucay.damier.core.data.converter.LocalDateTimeSerializer
 import de.lijucay.damier.core.data.converter.UUIDSerializer
 import de.lijucay.damier.core.data.daos.ActivityInfoDao
 import de.lijucay.damier.core.data.daos.CheckInDao
@@ -19,6 +23,7 @@ import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.shared.UnitId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -71,7 +76,7 @@ class ImportUtilImpl(
             when (fileVersion) {
                 1,2,3 -> onIncompatibleVersion()
                 4 -> importDataFromV4(fileUri, onComplete)
-                5 -> importDataFromV5(fileUri, onComplete)
+                5, 6 -> importDataFromV5(fileUri, onComplete)
                 else -> onComplete(false)
             }
         }
@@ -116,6 +121,7 @@ class ImportUtilImpl(
                     onComplete(true)
                 }
             } catch (e: Exception) {
+                Logger.e(context, e.message ?: "Unknown error", e)
                 FirebaseCrashlytics.getInstance().apply {
                     setCustomKey("import_version", 4)
                     recordException(e)

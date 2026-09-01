@@ -1,6 +1,8 @@
 package de.lijucay.damier.activity_list.presentation
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,12 +10,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.motionScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +29,11 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Artboard
 import de.lijucay.damier.R
 import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.core.presentation.DisplayMode
 import de.lijucay.damier.core.presentation.SnackbarEvent
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.toCheckInUi
+import de.lijucay.damier.core.presentation.toSortedList
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.design.components.LargeText
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,6 +52,15 @@ fun ActivityList(
 
     val showReference by uiViewModel.showReference.collectAsStateWithLifecycle()
     val showMaxAmount by uiViewModel.showMaxAmount.collectAsStateWithLifecycle()
+
+    val displayMode by uiViewModel.displayMode.collectAsStateWithLifecycle()
+    val sortMode by uiViewModel.sortMode.collectAsStateWithLifecycle()
+
+    val gridState = rememberLazyGridState()
+
+    LaunchedEffect(sortMode) {
+        gridState.scrollToItem(0)
+    }
 
     AnimatedContent(
         targetState = activities.isEmpty()
@@ -70,19 +86,23 @@ fun ActivityList(
                 )
             }
         } else {
-            LazyColumn(
-                modifier = modifier,
+            LazyVerticalGrid(
+                state = gridState,
+                columns = if (
+                    DisplayMode.valueOf(displayMode).isExpanded()
+                ) GridCells.Fixed(1)
+                else GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = bottomPadding() + 70.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(
-                    activities,
-                    key = { it.id }
-                ) { activityUi ->
+                items(activities.toSortedList(sortMode), key = { it.id }) { activityUi ->
                     val checkInDone = stringResource(R.string.check_in_done, activityUi.title)
                     val undo = stringResource(R.string.undo)
+
                     ActivityListItem(
-                        modifier = Modifier.animateItem(fadeInSpec = motionScheme.defaultSpatialSpec()),
+                        modifier = Modifier
+                            .animateItem(fadeInSpec = motionScheme.defaultSpatialSpec()),
                         activityUi = activityUi,
                         onCheckInClicked = {
                             val checkIn = CheckInInfo(
@@ -106,6 +126,7 @@ fun ActivityList(
                         },
                         showReference = showReference,
                         showMaxAmount = showMaxAmount,
+                        displayMode = DisplayMode.valueOf(displayMode)
                     ) {
                         activityListViewModel.observeSelectedActivity(activityUi.id)
                         onActivityClicked(activityUi.id)

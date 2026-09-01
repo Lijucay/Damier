@@ -20,7 +20,6 @@ class CheckInFormViewModel : ViewModel() {
     fun initForAdd(activityId: UUID) {
         checkInId = UUID.randomUUID()
 
-        // Reset state when adding a new check in
         _state.value = CheckInFormState()
         this.activityId = activityId
     }
@@ -44,7 +43,8 @@ class CheckInFormViewModel : ViewModel() {
             id = checkInId,
             activityId = activityId,
             timestamp = s.dateTime.value,
-            amount = s.amount
+            amount = s.amount,
+            note = s.note
         )
     }
 
@@ -64,5 +64,9 @@ class CheckInFormViewModel : ViewModel() {
                 showTimePicker = !it.showTimePicker
             )
         }
+    }
+
+    fun setNote(note: String) {
+        _state.update { currentState -> currentState.copy(note = note) }
     }
 }

@@ -26,6 +26,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.getSelectedDate
@@ -39,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -313,21 +318,55 @@ fun CheckInForm(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                                     timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     timeSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                                     periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     periodSelectorBorderColor = MaterialTheme.colorScheme.primaryContainer,
                                     clockDialSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    clockDialUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                     periodSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
                                     clockDialColor = MaterialTheme.colorScheme.primaryContainer,
                                     selectorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             ),
                                 state = timeState
                             )
                         }
+                    }
+                }
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.extraLarge,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        TitleText(text = stringResource(R.string.note))
+
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            value = state.note ?: "",
+                            onValueChange = { newValue -> formViewModel.setNote(newValue) },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                focusedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                                focusedIndicatorColor = Color.Transparent,
+                                focusedPlaceholderColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                            ),
+                            shape = MaterialTheme.shapes.large,
+                            placeholder = {
+                                Text(stringResource(R.string.note_placeholder))
+                            }
+                        )
                     }
                 }
 

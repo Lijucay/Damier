@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.domain.InfoMode
+import de.lijucay.damier.core.presentation.DisplayMode
 import de.lijucay.damier.core.presentation.SnackbarEvent
+import de.lijucay.damier.core.presentation.SortMode
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,9 +22,6 @@ import kotlinx.coroutines.launch
 class UIViewModel(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
-    private val _title = MutableStateFlow("Damier")
-    val title = _title.asStateFlow()
-
     val showReference = dataStore.data
         .map { it[DataPreferences.Keys.showReference] ?: true }
         .stateIn(
@@ -61,6 +60,22 @@ class UIViewModel(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = true
+        )
+
+    val displayMode = dataStore.data
+        .map { it[DataPreferences.Keys.displayMode] ?: DisplayMode.EXPANDED.name }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = DisplayMode.EXPANDED.name
+        )
+
+    val sortMode = dataStore.data
+        .map { it[DataPreferences.Keys.sortMode] ?: SortMode.NAME_ASC.name }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = SortMode.NAME_ASC.name
         )
 
     private val _isWidthAtLeastExpanded = MutableStateFlow(false)
@@ -135,5 +150,21 @@ class UIViewModel(
 
     fun setShowUpdateTimeline(show: Boolean) {
         _showUpdateTimeline.value = show
+    }
+
+    fun setDisplayMode(mode: DisplayMode) {
+        viewModelScope.launch {
+            dataStore.edit { preferences ->
+                preferences[DataPreferences.Keys.displayMode] = mode.name
+            }
+        }
+    }
+
+    fun setSortMode(mode: SortMode) {
+        viewModelScope.launch {
+            dataStore.edit { preferences ->
+                preferences[DataPreferences.Keys.sortMode] = mode.name
+            }
+        }
     }
 }

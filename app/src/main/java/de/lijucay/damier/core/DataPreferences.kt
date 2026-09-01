@@ -14,6 +14,9 @@ object DataPreferences {
         val backupDirUri = stringPreferencesKey("backup_dir_uri")
         val showSnackbar = booleanPreferencesKey("show_snackbar")
 
+        val displayMode = stringPreferencesKey("display_mode")
+        val sortMode = stringPreferencesKey("sort_mode")
+
         val firstLaunch = booleanPreferencesKey("first_launch")
 
         val activityId = stringPreferencesKey("selected_activity_id")

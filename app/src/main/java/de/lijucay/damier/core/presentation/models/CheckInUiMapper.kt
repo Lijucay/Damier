@@ -9,7 +9,8 @@ fun CheckInDomain.toCheckInUi(): CheckInUi {
         id = id,
         activityId = activityId,
         dateTime = timestamp.toDisplayableDateTime(),
-        amount = amount
+        amount = amount,
+        note = note
     )
 }
 
@@ -18,7 +19,8 @@ fun CheckInUi.toCheckInDomain(): CheckInDomain {
         id = id,
         activityId = activityId,
         timestamp = dateTime.value,
-        amount = amount
+        amount = amount,
+        note = note
     )
 }
 

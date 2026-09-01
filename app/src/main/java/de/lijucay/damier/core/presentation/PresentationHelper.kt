@@ -14,14 +14,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import de.lijucay.damier.R
+import de.lijucay.damier.core.data.CheckInGroupUi
 import de.lijucay.damier.core.domain.WaffleDiagramData
+import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
 import de.lijucay.damier.shared.ReferenceType
 import kotlinx.serialization.Serializable
+import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
@@ -112,7 +117,11 @@ fun getRandomCheckInInfo(
                 dateTime = LocalDateTime.now()
                     .minusDays(daysAgo.toLong())
                     .toDisplayableDateTime(),
-                amount = Random.nextInt(from, until)
+                amount = Random.nextInt(from, until),
+                note = listOf(
+                    null,
+                    "This backup was created with an older version of Damier and is no longer supported. I'm sorry for the inconvenience, future backups will always remain compatible."
+                ).random()
             )
         )
     }
@@ -122,4 +131,22 @@ fun getRandomCheckInInfo(
         referenceType = ReferenceType.MAX,
         checkIns = checkIns
     )
+}
+
+fun List<ActivityUi>.toSortedList(sortMode: String): List<ActivityUi> {
+    return when (SortMode.valueOf(sortMode)) {
+        SortMode.NAME_ASC -> this.sortedBy { it.title }
+        SortMode.NAME_DESC -> this.sortedByDescending { it.title }
+        SortMode.RECENTLY_CHECKED_IN -> this.sortedByDescending { activityUi ->
+            activityUi.groupedCheckIns.maxOfOrNull { it.date.value }
+        }
+    }
+}
+
+fun List<CheckInGroupUi>.toDayOfWeekDistribution(): Map<DayOfWeek, Int> {
+    val counts = this
+        .groupingBy { it.date.value.dayOfWeek }
+        .fold(0) { acc, group -> acc + group.checkIns.size }
+
+    return DayOfWeek.entries.associateWith { counts[it] ?: 0 }
 }
