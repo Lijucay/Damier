@@ -37,6 +37,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.window.core.layout.WindowSizeClass
+import de.lijucay.damier.core.domain.IntentAction
+import de.lijucay.damier.core.domain.resolveIntentAction
 import de.lijucay.damier.core.presentation.Navigator
 import de.lijucay.damier.core.presentation.adaptiveHorizontalCutoutPadding
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        handleActivityIdIntent(intent)
+        handleIntent(intent)
 
         lifecycleScope.launch {
             nfcManager.handleNfcIntent(intent)
@@ -194,12 +196,14 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
             nfcManager.handleNfcIntent(intent)
         }
 
-        handleActivityIdIntent(intent)
+        handleIntent(intent)
     }
 
-    private fun handleActivityIdIntent(intent: Intent?) {
-        intent?.getStringExtra("activityId")
-            ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
-            ?.let { navigator.goToActivityDetailsFresh(it) }
+    private fun handleIntent(intent: Intent?) {
+        when (val action = resolveIntentAction(intent)) {
+            is IntentAction.OpenActivityDetails -> navigator.goToActivityDetailsFresh(action.id)
+            is IntentAction.AddActivity -> navigator.goToAddActivity()
+            null -> Unit
+        }
     }
 }

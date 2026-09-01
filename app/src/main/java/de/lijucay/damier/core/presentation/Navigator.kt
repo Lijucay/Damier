@@ -18,4 +18,10 @@ class Navigator(startDestination: NavKey) {
         backStack.add(Destination.ActivityList)
         backStack.add(Destination.ActivityDetails(activityId.toString()))
     }
+
+    fun goToAddActivity() {
+        backStack.clear()
+        backStack.add(Destination.ActivityList)
+        backStack.add(Destination.AddActivity)
+    }
 }

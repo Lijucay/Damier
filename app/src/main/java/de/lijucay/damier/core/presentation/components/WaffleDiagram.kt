@@ -22,8 +22,6 @@ import java.time.LocalDate
 fun WaffleDiagram(
     modifier: Modifier = Modifier,
     waffleDiagramData: WaffleDiagramData,
-//    selectedDate: LocalDate? = null,
-//    onCellSelected: ((DisplayableDate) -> Unit)? = null
 ) {
     BoxWithConstraints(
         modifier = modifier.padding(4.dp)
@@ -73,22 +71,11 @@ fun WaffleDiagram(
                         ) {
                             Cell(
                                 modifier = Modifier,
-//                                    .let {
-////                                    onCellSelected?.let { _ ->
-////                                        if (!date.isAfter(endDate))
-////                                            it
-////                                                .clickable {
-////                                                    onCellSelected.invoke(date.toDisplayableDate())
-////                                                }
-////                                        else it
-////                                    } ?: it
-//                                },
                                 checkInCount = checkInCount,
                                 currentDate = date,
                                 endDate = endDate,
                                 reference = reference,
                                 type = waffleDiagramData.referenceType,
-//                                isSelected = (date == selectedDate)
                             )
                         }
                     }

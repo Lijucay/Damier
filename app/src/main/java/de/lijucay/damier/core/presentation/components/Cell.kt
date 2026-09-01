@@ -35,7 +35,6 @@ fun Cell(
     endDate: LocalDate,
     reference: Int,
     type: ReferenceType,
-//    isSelected: Boolean = false
 ) {
     val cellColor = getCellColor(
         type = type,
