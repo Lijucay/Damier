@@ -26,8 +26,8 @@ import androidx.compose.ui.window.Dialog
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Pencil
 import de.lijucay.damier.R
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

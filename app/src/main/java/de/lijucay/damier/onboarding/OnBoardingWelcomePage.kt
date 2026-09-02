@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.HeadlineText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.HeadlineText
 
 @Composable
 fun OnBoardingWelcomePage(modifier: Modifier = Modifier) {

@@ -17,12 +17,12 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowRight
 import de.lijucay.damier.R
-import de.lijucay.damier.core.presentation.components.UnitBadge
+import de.lijucay.damier.core.presentation.components.Badge
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.getShortUnitNamesById
 import de.lijucay.damier.core.presentation.models.ActivityFormState
-import de.lijucay.damier.design.components.SmallText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.SmallText
+import de.lijucay.damier.core.presentation.components.TitleText
 
 @Composable
 fun UnitCard(
@@ -55,8 +55,10 @@ fun UnitCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                UnitBadge(
-                    text = "${state.unitId.getShortUnitNamesById(context).shortUnitSingular}/${state.unitId.getShortUnitNamesById(context).shortUnitPlural}"
+                Badge(
+                    text = "${state.unitId.getShortUnitNamesById(context).shortUnitSingular}/${state.unitId.getShortUnitNamesById(context).shortUnitPlural}",
+                    backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textColor = MaterialTheme.colorScheme.secondaryContainer
                 )
                 Icon(
                     imageVector = TablerIcons.ArrowRight,

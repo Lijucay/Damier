@@ -33,9 +33,9 @@ import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
-import de.lijucay.damier.design.components.LargeText
-import de.lijucay.damier.design.components.LargeTitleText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.LargeText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.TitleText
 import de.lijucay.damier.shared.UnitId
 import java.time.LocalDate
 import kotlin.collections.forEach

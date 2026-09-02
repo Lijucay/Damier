@@ -1,0 +1,138 @@
+package de.lijucay.damier.activity_list.presentation.layouts
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.motionScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Artboard
+import de.lijucay.damier.R
+import de.lijucay.damier.activity_list.presentation.components.ActivityListItem
+import de.lijucay.damier.activity_list.presentation.viewmodels.ActivityListViewModel
+import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.core.presentation.DisplayMode
+import de.lijucay.damier.core.presentation.SnackbarEvent
+import de.lijucay.damier.core.presentation.bottomPadding
+import de.lijucay.damier.core.presentation.models.toCheckInUi
+import de.lijucay.damier.core.presentation.toSortedList
+import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
+import de.lijucay.damier.core.presentation.components.LargeText
+import org.koin.compose.viewmodel.koinViewModel
+import java.time.LocalDateTime
+import java.util.UUID
+
+@Composable
+fun ActivityList(
+    modifier: Modifier = Modifier,
+    uiViewModel: UIViewModel,
+    onActivityClicked: (UUID) -> Unit
+) {
+    val activityListViewModel = koinViewModel<ActivityListViewModel>()
+
+    val activities by activityListViewModel.activities.collectAsStateWithLifecycle(initialValue = listOf())
+
+    val showReference by uiViewModel.showReference.collectAsStateWithLifecycle()
+    val showMaxAmount by uiViewModel.showMaxAmount.collectAsStateWithLifecycle()
+
+    val displayMode by uiViewModel.displayMode.collectAsStateWithLifecycle()
+    val sortMode by uiViewModel.sortMode.collectAsStateWithLifecycle()
+
+    val gridState = rememberLazyGridState()
+
+    LaunchedEffect(sortMode) {
+        gridState.scrollToItem(0)
+    }
+
+    AnimatedContent(
+        targetState = activities.isEmpty()
+    ) { it ->
+        if (it) {
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    imageVector = TablerIcons.Artboard,
+                    contentDescription = null,
+                    modifier = Modifier.size(96.dp),
+                    tint = colorScheme.onSurfaceVariant
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                LargeText(
+                    text = stringResource(R.string.no_activities),
+                    color = colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                state = gridState,
+                columns = if (
+                    DisplayMode.valueOf(displayMode).isExpanded()
+                ) GridCells.Fixed(1)
+                else GridCells.Fixed(2),
+                contentPadding = PaddingValues(bottom = bottomPadding() + 70.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(activities.toSortedList(sortMode), key = { it.id }) { activityUi ->
+                    val checkInDone = stringResource(R.string.check_in_done, activityUi.title)
+                    val undo = stringResource(R.string.undo)
+
+                    ActivityListItem(
+                        modifier = Modifier
+                            .animateItem(fadeInSpec = motionScheme.defaultSpatialSpec()),
+                        activityUi = activityUi,
+                        onCheckInClicked = {
+                            val checkIn = CheckInInfo(
+                                activityId = activityUi.id,
+                                timestamp = LocalDateTime.now(),
+                                amount = activityUi.defaultAmount
+                            )
+
+                            activityListViewModel.upsert(checkIn)
+
+                            val checkInSnackbarEvent = SnackbarEvent(
+                                message = checkInDone,
+                                showButton = true,
+                                buttonText = undo,
+                                action = {
+                                    activityListViewModel.deleteCheckIn(checkIn.toCheckInUi())
+                                }
+                            )
+
+                            uiViewModel.emitSnackbar(checkInSnackbarEvent)
+                        },
+                        showReference = showReference,
+                        showMaxAmount = showMaxAmount,
+                        displayMode = DisplayMode.valueOf(displayMode)
+                    ) {
+                        activityListViewModel.observeSelectedActivity(activityUi.id)
+                        onActivityClicked(activityUi.id)
+                    }
+                }
+            }
+        }
+    }
+}

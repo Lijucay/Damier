@@ -1,13 +1,8 @@
 package de.lijucay.damier.activity_details.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,16 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.R
+import de.lijucay.damier.core.presentation.components.Badge
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.ListCard
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableTime
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeTitleText
-import de.lijucay.damier.design.components.ListCard
-import de.lijucay.damier.design.components.TitleText
 
 @Composable
 fun CheckInItem(
@@ -59,17 +50,11 @@ fun CheckInItem(
                     .toDisplayableTime().formatted
             )
 
-            Box(
-                Modifier
-                    .clip(shape = MaterialTheme.shapes.extraLarge)
-                    .background(MaterialTheme.colorScheme.tertiary)
-            ) {
-                DefaultText(
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    text = "${checkInUi.amount} $unitName"
-                )
-            }
+            Badge(
+                backgroundColor = MaterialTheme.colorScheme.tertiary,
+                textColor = MaterialTheme.colorScheme.onTertiary,
+                text = "${checkInUi.amount} $unitName"
+            )
         }
 
         checkInUi.note?.let {

@@ -29,7 +29,7 @@ import compose.icons.tablericons.User
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
-import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)

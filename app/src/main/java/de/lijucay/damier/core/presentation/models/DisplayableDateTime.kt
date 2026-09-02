@@ -13,9 +13,12 @@ data class DisplayableDateTime(
     @Serializable(with = LocalDateTimeSerializer::class) val value: LocalDateTime
 )
 
-fun LocalDateTime.toDisplayableDateTime(): DisplayableDateTime {
-    val formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy, HH:mm:ss", Locale.getDefault())
-
+fun LocalDateTime.toDisplayableDateTime(
+    formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(
+        "EEEE, d MMMM yyyy, HH:mm:ss",
+        Locale.getDefault()
+    )
+): DisplayableDateTime {
     return DisplayableDateTime(
         formatted = this.format(formatter),
         value = this

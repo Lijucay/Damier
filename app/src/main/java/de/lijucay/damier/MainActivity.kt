@@ -44,7 +44,7 @@ import de.lijucay.damier.core.presentation.adaptiveHorizontalCutoutPadding
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.debug.DebugDataSeeder
-import de.lijucay.damier.nfc.NfcManager
+import de.lijucay.damier.core.data.nfc.NfcManager
 import de.lijucay.damier.onboarding.OnBoarding
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
@@ -55,7 +55,6 @@ import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.scope.Scope
-import java.util.UUID
 
 class MainActivity : ComponentActivity(), AndroidScopeComponent {
     override val scope: Scope by activityRetainedScope()
@@ -165,8 +164,8 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
                                 rememberSaveableStateHolderNavEntryDecorator()
                             ),
                             transitionSpec = {
-                                slideInHorizontally(intAnimationSpec) { it } togetherWith
-                                        slideOutHorizontally(intAnimationSpec) { -it }
+                                slideInHorizontally(intAnimationSpec) { offsetX -> offsetX } togetherWith
+                                        slideOutHorizontally(intAnimationSpec) { offsetX -> -offsetX }
                             },
                             popTransitionSpec = {
                                 slideInHorizontally(intAnimationSpec) { -it } togetherWith

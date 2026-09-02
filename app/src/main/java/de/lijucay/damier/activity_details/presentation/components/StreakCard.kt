@@ -36,10 +36,10 @@ import compose.icons.tablericons.Flame
 import compose.icons.tablericons.InfoCircle
 import compose.icons.tablericons.Target
 import de.lijucay.damier.R
-import de.lijucay.damier.design.components.HeadlineText
-import de.lijucay.damier.design.components.LargeText
-import de.lijucay.damier.design.components.SmallText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.HeadlineText
+import de.lijucay.damier.core.presentation.components.LargeText
+import de.lijucay.damier.core.presentation.components.SmallText
+import de.lijucay.damier.core.presentation.components.TitleText
 import de.lijucay.damier.shared.ReferenceType
 
 @Composable

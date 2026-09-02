@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.InfoMode
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.TitleText
 
 @Composable
 fun InfoDialog(

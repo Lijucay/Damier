@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.Cell
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 import de.lijucay.damier.shared.ReferenceType
 import java.time.LocalDate
 

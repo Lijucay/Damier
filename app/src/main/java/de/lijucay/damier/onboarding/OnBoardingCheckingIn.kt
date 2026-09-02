@@ -25,9 +25,9 @@ import compose.icons.tablericons.Bolt
 import compose.icons.tablericons.InfoCircle
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.CookieButton
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeTitleText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.TitleText
 
 @Composable
 fun OnBoardingCheckingIn(modifier: Modifier = Modifier) {

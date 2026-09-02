@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.TitleText
 
 @Composable
 fun UpdateTitle(

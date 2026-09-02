@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,11 +22,16 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Minus
 import compose.icons.tablericons.Pencil
 import de.lijucay.damier.R
+import de.lijucay.damier.core.presentation.components.Badge
 import de.lijucay.damier.core.presentation.models.NfcChipUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
-import de.lijucay.damier.design.components.SmallText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.SmallText
+import de.lijucay.damier.core.presentation.components.TitleText
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import java.util.UUID
+import androidx.compose.ui.platform.LocalLocale
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 
 @Composable
 fun NfcChipListItem(
@@ -35,9 +41,14 @@ fun NfcChipListItem(
     onUnlinkClicked: () -> Unit
 ) {
     val untitled = stringResource(R.string.untitled)
+    val currentLocale = LocalLocale.current
 
     Card(
         modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
         shape = MaterialTheme.shapes.extraLarge
     ) {
         Row(
@@ -52,18 +63,17 @@ fun NfcChipListItem(
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                TitleText(text = nfcChip.label ?: untitled)
-                Box(
-                    modifier = Modifier
-                        .clip(shape = MaterialTheme.shapes.extraLarge)
-                        .background(color = MaterialTheme.colorScheme.onSecondaryContainer)
-                ) {
-                    SmallText(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        text = nfcChip.linkedAt.toDisplayableDateTime().formatted,
-                        color = MaterialTheme.colorScheme.secondaryContainer
-                    )
-                }
+                LargeTitleText(text = nfcChip.label ?: untitled)
+                Badge(
+                    backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textColor = MaterialTheme.colorScheme.secondaryContainer,
+                    text = nfcChip.linkedAt.toDisplayableDateTime(
+                        formatter = DateTimeFormatter.ofPattern(
+                            "d MMMM yyyy, HH:mm:ss",
+                            currentLocale.platformLocale
+                        )
+                    ).formatted
+                )
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically

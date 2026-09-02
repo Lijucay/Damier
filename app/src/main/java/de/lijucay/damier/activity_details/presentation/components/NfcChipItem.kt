@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowNarrowRight
 import de.lijucay.damier.R
-import de.lijucay.damier.activity_details.presentation.ActivityDetailsState
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.SmallText
+import de.lijucay.damier.activity_details.presentation.states.ActivityDetailsState
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.SmallText
 
 fun LazyListScope.nfcChipItem(
     state: ActivityDetailsState,

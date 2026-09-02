@@ -13,7 +13,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalToggleButton
-import androidx.compose.material3.FilledTonalToggleButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,9 +31,9 @@ import de.lijucay.damier.core.presentation.components.cards.PreviewCard
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
 import de.lijucay.damier.core.presentation.models.ActivityFormState
 import de.lijucay.damier.core.presentation.toStringResource
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.LargeTitleText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.LargeTitleText
+import de.lijucay.damier.core.presentation.components.TitleText
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.ui.theme.ActivityTheme
 

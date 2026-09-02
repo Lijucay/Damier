@@ -11,8 +11,8 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
 import de.lijucay.damier.core.domain.DeletionMode
-import de.lijucay.damier.design.components.DefaultText
-import de.lijucay.damier.design.components.TitleText
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.TitleText
 
 @Composable
 fun DeletionDialog(

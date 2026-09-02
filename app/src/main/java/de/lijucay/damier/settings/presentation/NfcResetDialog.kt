@@ -22,9 +22,9 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.AlertCircle
 import compose.icons.tablericons.CircleCheck
 import de.lijucay.damier.R
-import de.lijucay.damier.cue.NfcWriteState
-import de.lijucay.damier.cue.NfcWriteState.Idle.isAutoClosing
-import de.lijucay.damier.design.components.LargeText
+import de.lijucay.damier.core.data.nfc.NfcWriteState
+import de.lijucay.damier.core.data.nfc.NfcWriteState.Idle.isAutoClosing
+import de.lijucay.damier.core.presentation.components.LargeText
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 

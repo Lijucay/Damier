@@ -20,7 +20,6 @@ import compose.icons.tablericons.Bolt
 import de.lijucay.damier.BuildConfig
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
-import de.lijucay.damier.design.components.DefaultText
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

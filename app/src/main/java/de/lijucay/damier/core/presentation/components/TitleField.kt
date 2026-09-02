@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import de.lijucay.damier.R
-import de.lijucay.damier.design.components.DefaultText
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

@@ -42,7 +42,7 @@
                 android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-            android:name=".nfc.NfcDispatchActivity"
+            android:name=".core.data.nfc.NfcDispatchActivity"
             android:exported="true"
             android:permission="android.permission.DISPATCH_NFC_MESSAGE">
             <intent-filter>

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.OnBoardingButtons
-import de.lijucay.damier.core.presentation.components.ScreenContainer
+import de.lijucay.damier.core.presentation.layouts.ScreenContainer
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import kotlinx.coroutines.launch
 

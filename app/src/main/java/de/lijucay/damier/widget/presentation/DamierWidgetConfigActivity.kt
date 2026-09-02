@@ -31,8 +31,8 @@ import compose.icons.tablericons.ArrowLeft
 import de.lijucay.damier.R
 import de.lijucay.damier.core.DataPreferences
 import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.presentation.components.ScreenContainer
-import de.lijucay.damier.design.components.ListCard
+import de.lijucay.damier.core.presentation.layouts.ScreenContainer
+import de.lijucay.damier.core.presentation.components.ListCard
 import de.lijucay.damier.ui.theme.DamierTheme
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.launch
