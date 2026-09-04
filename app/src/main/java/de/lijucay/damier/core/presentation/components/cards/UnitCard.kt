@@ -57,8 +57,8 @@ fun UnitCard(
             ) {
                 Badge(
                     text = "${state.unitId.getShortUnitNamesById(context).shortUnitSingular}/${state.unitId.getShortUnitNamesById(context).shortUnitPlural}",
-                    backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    textColor = MaterialTheme.colorScheme.secondaryContainer
+                    backgroundColor = MaterialTheme.colorScheme.secondary,
+                    textColor = MaterialTheme.colorScheme.onSecondary
                 )
                 Icon(
                     imageVector = TablerIcons.ArrowRight,

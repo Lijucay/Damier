@@ -54,12 +54,12 @@ fun WeekInsightGraph(modifier: Modifier = Modifier, state: ActivityDetailsState)
     val slicePairs = remember(colorScheme) {
         listOf(
             colorScheme.background to colorScheme.onBackground,
-            colorScheme.primaryContainer to colorScheme.onPrimaryContainer,
-            colorScheme.secondaryContainer to colorScheme.onSecondaryContainer,
-            colorScheme.onTertiaryContainer to colorScheme.tertiaryContainer,
-            colorScheme.onPrimaryContainer to colorScheme.primaryContainer,
-            colorScheme.onSecondaryContainer to colorScheme.secondaryContainer,
-            colorScheme.tertiaryContainer to colorScheme.onTertiaryContainer
+            colorScheme.onPrimary to colorScheme.primary,
+            colorScheme.onSecondary to colorScheme.secondary,
+            colorScheme.onTertiary to colorScheme.tertiary,
+            colorScheme.primary to colorScheme.onPrimary,
+            colorScheme.secondary to colorScheme.onSecondary,
+            colorScheme.tertiary to colorScheme.onTertiary
         )
     }
 

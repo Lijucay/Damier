@@ -29,18 +29,18 @@ fun UpdateTitle(
         Box(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.extraLarge)
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .background(MaterialTheme.colorScheme.onPrimary),
             contentAlignment = Alignment.Center,
         ) {
             Text(
                 modifier = Modifier.padding(4.dp),
                 text = version,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.primary
             )
         }
         TitleText(
             text = date,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

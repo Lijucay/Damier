@@ -1,7 +1,6 @@
 package de.lijucay.damier.activity_details.presentation.layouts
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,14 +55,12 @@ import de.lijucay.damier.activity_list.presentation.viewmodels.ActivityListViewM
 import de.lijucay.damier.core.presentation.LongUnitName
 import de.lijucay.damier.core.presentation.bottomPadding
 import de.lijucay.damier.core.presentation.components.AnimatedBadge
-import de.lijucay.damier.core.presentation.components.Badge
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 import de.lijucay.damier.core.presentation.components.Stepper
+import de.lijucay.damier.core.presentation.components.TitleText
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDate
 import de.lijucay.damier.core.presentation.models.toDisplayableTime
-import de.lijucay.damier.core.presentation.components.DefaultText
-import de.lijucay.damier.core.presentation.components.LargeTitleText
-import de.lijucay.damier.core.presentation.components.TitleText
 import org.koin.compose.viewmodel.koinViewModel
 import java.time.Instant
 import java.time.LocalDate
@@ -78,7 +74,6 @@ fun CheckInForm(
     sheetState: SheetState,
     mode: CheckInFormMode,
     unit: LongUnitName,
-    useLimitTheme: Boolean,
     onDeleteRequest: (CheckInUi) -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -209,8 +204,8 @@ fun CheckInForm(
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraLarge,
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     ),
                     onClick = formViewModel::toggleShowDatePicker
                 ) {
@@ -224,8 +219,8 @@ fun CheckInForm(
                         ) {
                             TitleText(text = stringResource(R.string.date))
                             AnimatedBadge(
-                                backgroundColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                                textColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                backgroundColor = MaterialTheme.colorScheme.tertiary,
+                                textColor = MaterialTheme.colorScheme.onTertiary,
                                 text = dateState.getSelectedDate()!!.toDisplayableDate().formatted
                             )
                         }
@@ -233,22 +228,22 @@ fun CheckInForm(
                         AnimatedVisibility(visible = state.showDatePicker) {
                             DatePicker(
                                 colors = DatePickerDefaults.colors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    weekdayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    yearContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    currentYearContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    disabledYearContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.5f),
-                                    selectedYearContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    selectedYearContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    dayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    selectedDayContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    selectedDayContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    disabledDayContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.5f),
-                                    todayDateBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    todayContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    subheadContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    dividerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    navigationContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                                    weekdayContentColor = MaterialTheme.colorScheme.primary,
+                                    yearContentColor = MaterialTheme.colorScheme.primary,
+                                    currentYearContentColor = MaterialTheme.colorScheme.primary,
+                                    disabledYearContentColor = MaterialTheme.colorScheme.primary.copy(0.5f),
+                                    selectedYearContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedYearContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    dayContentColor = MaterialTheme.colorScheme.primary,
+                                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    disabledDayContentColor = MaterialTheme.colorScheme.primary.copy(0.5f),
+                                    todayDateBorderColor = MaterialTheme.colorScheme.primary,
+                                    todayContentColor = MaterialTheme.colorScheme.primary,
+                                    subheadContentColor = MaterialTheme.colorScheme.primary,
+                                    dividerColor = MaterialTheme.colorScheme.primary,
+                                    navigationContentColor = MaterialTheme.colorScheme.primary,
                                 ),
                                 state = dateState,
                                 showModeToggle = false,
@@ -262,8 +257,8 @@ fun CheckInForm(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     ),
                     shape = MaterialTheme.shapes.extraLarge,
                     onClick = formViewModel::toggleShowTimePicker
@@ -277,8 +272,8 @@ fun CheckInForm(
                         TitleText(text = stringResource(R.string.time))
 
                         AnimatedBadge(
-                            backgroundColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                            textColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            backgroundColor = MaterialTheme.colorScheme.tertiary,
+                            textColor = MaterialTheme.colorScheme.onTertiary,
                             text = LocalTime.of(timeState.hour, timeState.minute).toDisplayableTime().formatted
                         )
                     }
@@ -290,17 +285,17 @@ fun CheckInForm(
                         ) {
                             TimePicker(
                                 colors = TimePickerDefaults.colors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    timeSelectorContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    timeSelectorContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    periodSelectorBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                                    clockDialSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.primaryContainer,
-                                    clockDialColor = MaterialTheme.colorScheme.primaryContainer,
-                                    selectorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    timeSelectorContainerColor = MaterialTheme.colorScheme.onPrimary,
+                                    timeSelectorContentColor = MaterialTheme.colorScheme.primary,
+                                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    periodSelectorBorderColor = MaterialTheme.colorScheme.onPrimary,
+                                    clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                                    clockDialColor = MaterialTheme.colorScheme.onPrimary,
+                                    selectorColor = MaterialTheme.colorScheme.primary,
                             ),
                                 state = timeState
                             )
@@ -311,8 +306,8 @@ fun CheckInForm(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     ),
                     shape = MaterialTheme.shapes.extraLarge,
                 ) {
@@ -330,19 +325,19 @@ fun CheckInForm(
                             value = state.note ?: "",
                             onValueChange = { newValue -> formViewModel.setNote(newValue) },
                             colors = TextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                focusedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                                focusedContainerColor = MaterialTheme.colorScheme.primary,
+                                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
                                 focusedIndicatorColor = Color.Transparent,
-                                focusedPlaceholderColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
-                                cursorColor = MaterialTheme.colorScheme.primaryContainer,
+                                focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
+                                cursorColor = MaterialTheme.colorScheme.onPrimary,
                                 selectionColors = TextSelectionColors(
                                     handleColor = MaterialTheme.colorScheme.onTertiaryContainer,
                                     backgroundColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f)
                                 ),
-                                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                                 unfocusedIndicatorColor = Color.Transparent,
-                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
                             ),
                             shape = MaterialTheme.shapes.large,
                             placeholder = {

@@ -52,7 +52,7 @@ fun ActivityListItem(
     val context = LocalContext.current
 
     val containerColor = if (activityUi.referenceType != ReferenceType.LIMIT)
-        MaterialTheme.colorScheme.primaryContainer
+        MaterialTheme.colorScheme.onPrimary
     else MaterialTheme.colorScheme.errorContainer
 
     val max = activityUi.groupedCheckIns.maxOfOrNull { (_, checkIns) ->

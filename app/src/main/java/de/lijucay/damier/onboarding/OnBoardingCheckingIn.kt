@@ -15,7 +15,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -59,8 +58,8 @@ fun OnBoardingCheckingIn(modifier: Modifier = Modifier) {
                 IconButton(
                     onClick = {  },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer),
-                        contentColor = MaterialTheme.colorScheme.primaryContainer
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Icon(
@@ -120,8 +119,8 @@ fun OnBoardingCheckingIn(modifier: Modifier = Modifier) {
             ) {
                 CookieButton(
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer),
-                        contentColor = MaterialTheme.colorScheme.primaryContainer
+                        containerColor =MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     )
                 ) { }
 

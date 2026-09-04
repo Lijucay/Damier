@@ -21,8 +21,8 @@ fun PreviewCard(state: ActivityFormState) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = colorScheme.primaryContainer,
-            contentColor = colorScheme.onPrimaryContainer
+            containerColor = colorScheme.onPrimary,
+            contentColor = colorScheme.primary
         )
     ) {
         Column(

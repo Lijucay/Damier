@@ -191,8 +191,8 @@ fun ActivityFormScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraLarge,
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Column(
@@ -242,7 +242,7 @@ fun ActivityFormScreen(
                             }
                         }
 
-                        HorizontalDivider(color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
                         TitleText(
                             text = stringResource(
@@ -283,7 +283,7 @@ fun ActivityFormScreen(
                             }
                         }
 
-                        HorizontalDivider(color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
                         TitleText(
                             text = stringResource(R.string.default_amount)

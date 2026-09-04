@@ -132,11 +132,11 @@ class DamierWidget : GlanceAppWidget() {
                     Image(
                         modifier = GlanceModifier
                             .size(40.dp)
-                            .background(GlanceTheme.colors.primaryContainer)
+                            .background(GlanceTheme.colors.onPrimary)
                             .cornerRadius(100.dp),
                         provider = ImageProvider(R.drawable.ic_launcher_foreground),
                         colorFilter = ColorFilter
-                            .tint(GlanceTheme.colors.onPrimaryContainer),
+                            .tint(GlanceTheme.colors.primary),
                         contentDescription = null,
                     )
                     Spacer(GlanceModifier.defaultWeight())
@@ -171,8 +171,8 @@ class DamierWidget : GlanceAppWidget() {
                         modifier = GlanceModifier
                             .cornerRadius(20.dp)
                             .fillMaxWidth(),
-                        color = GlanceTheme.colors.onPrimaryContainer,
-                        backgroundColor = GlanceTheme.colors.primaryContainer
+                        color = GlanceTheme.colors.primary,
+                        backgroundColor = GlanceTheme.colors.onPrimary
                     )
                     Spacer(GlanceModifier.height(16.dp))
                     Button(

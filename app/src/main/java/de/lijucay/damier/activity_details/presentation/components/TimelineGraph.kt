@@ -128,9 +128,9 @@ fun TimelineGraph(
                         shape = MarkerCornerBasedShape(
                             base = RoundedCornerShape(6.dp)
                         ),
-                        fill = Fill(MaterialTheme.colorScheme.primaryContainer),
+                        fill = Fill(MaterialTheme.colorScheme.onPrimary),
                     ),
-                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
+                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.primary),
                     lineCount = 2,
                     overflow = TextOverflow.Ellipsis,
                     padding = Insets(4.dp)

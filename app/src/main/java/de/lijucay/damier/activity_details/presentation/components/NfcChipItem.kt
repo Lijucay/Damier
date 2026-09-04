@@ -43,8 +43,8 @@ fun LazyListScope.nfcChipItem(
             shape = RoundedCornerShape(24.dp),
             onClick = onOpenNfcList,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                containerColor = MaterialTheme.colorScheme.onSecondary,
+                contentColor = MaterialTheme.colorScheme.secondary
             )
         ) {
             Row(
@@ -65,12 +65,12 @@ fun LazyListScope.nfcChipItem(
                     Box(
                         modifier = Modifier
                             .clip(shape = MaterialTheme.shapes.extraLarge)
-                            .background(color = MaterialTheme.colorScheme.onSecondaryContainer)
+                            .background(color = MaterialTheme.colorScheme.secondary)
                     ) {
                         SmallText(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             text = state.allNfcChips.size.toString(),
-                            color = MaterialTheme.colorScheme.secondaryContainer
+                            color = MaterialTheme.colorScheme.onSecondary
                         )
                     }
                     Icon(

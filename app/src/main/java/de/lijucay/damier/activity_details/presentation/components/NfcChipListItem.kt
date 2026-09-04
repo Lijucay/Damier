@@ -1,8 +1,6 @@
 package de.lijucay.damier.activity_details.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
@@ -23,15 +21,11 @@ import compose.icons.tablericons.Minus
 import compose.icons.tablericons.Pencil
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.Badge
+import de.lijucay.damier.core.presentation.components.LargeTitleText
 import de.lijucay.damier.core.presentation.models.NfcChipUi
 import de.lijucay.damier.core.presentation.models.toDisplayableDateTime
-import de.lijucay.damier.core.presentation.components.SmallText
-import de.lijucay.damier.core.presentation.components.TitleText
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import java.util.UUID
-import androidx.compose.ui.platform.LocalLocale
-import de.lijucay.damier.core.presentation.components.LargeTitleText
 
 @Composable
 fun NfcChipListItem(
@@ -46,8 +40,8 @@ fun NfcChipListItem(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.primary
         ),
         shape = MaterialTheme.shapes.extraLarge
     ) {
@@ -65,8 +59,8 @@ fun NfcChipListItem(
             ) {
                 LargeTitleText(text = nfcChip.label ?: untitled)
                 Badge(
-                    backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    textColor = MaterialTheme.colorScheme.secondaryContainer,
+                    backgroundColor = MaterialTheme.colorScheme.secondary,
+                    textColor = MaterialTheme.colorScheme.onSecondary,
                     text = nfcChip.linkedAt.toDisplayableDateTime(
                         formatter = DateTimeFormatter.ofPattern(
                             "d MMMM yyyy, HH:mm:ss",

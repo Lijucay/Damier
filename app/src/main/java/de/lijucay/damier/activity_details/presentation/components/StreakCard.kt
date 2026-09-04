@@ -58,8 +58,8 @@ fun StreakCard(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.onSecondary,
+            contentColor = MaterialTheme.colorScheme.secondary
         )
     ) {
         Column(
@@ -81,7 +81,7 @@ fun StreakCard(
                 Box(
                     modifier = Modifier
                         .clip(shape = MaterialTheme.shapes.extraLarge)
-                        .background(color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        .background(color = MaterialTheme.colorScheme.secondary)
                 ) {
                     SmallText(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -94,7 +94,7 @@ fun StreakCard(
                                 else -> R.array.streak_m_ns
                             }
                         ).random(),
-                        color = MaterialTheme.colorScheme.secondaryContainer
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
@@ -151,8 +151,8 @@ fun StreakCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.secondaryContainer
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
                 Row(
@@ -166,7 +166,7 @@ fun StreakCard(
                         else
                             TablerIcons.Target,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondaryContainer
+                        tint = MaterialTheme.colorScheme.onSecondary
                     )
                     SmallText(
                         text = stringResource(

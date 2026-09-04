@@ -5,10 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,38 +54,38 @@ import compose.icons.tablericons.ChartBar
 import compose.icons.tablericons.Edit
 import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
-import de.lijucay.damier.activity_details.presentation.states.ActivityDetailsState
-import de.lijucay.damier.activity_details.presentation.viewmodels.ActivityDetailsViewModel
-import de.lijucay.damier.activity_details.presentation.layouts.CheckInForm
 import de.lijucay.damier.activity_details.domain.CheckInFormMode
 import de.lijucay.damier.activity_details.presentation.components.CheckInItem
 import de.lijucay.damier.activity_details.presentation.components.StreakCard
 import de.lijucay.damier.activity_details.presentation.components.nfcChipItem
 import de.lijucay.damier.activity_details.presentation.dialogs.InsightsBottomSheet
+import de.lijucay.damier.activity_details.presentation.layouts.CheckInForm
 import de.lijucay.damier.activity_details.presentation.nfc.NfcChipListDialog
 import de.lijucay.damier.activity_details.presentation.nfc.NfcWriteDialog
+import de.lijucay.damier.activity_details.presentation.states.ActivityDetailsState
+import de.lijucay.damier.activity_details.presentation.viewmodels.ActivityDetailsViewModel
 import de.lijucay.damier.activity_list.presentation.viewmodels.ActivityListViewModel
+import de.lijucay.damier.core.data.nfc.NfcManager
+import de.lijucay.damier.core.data.nfc.NfcViewModel
+import de.lijucay.damier.core.data.nfc.NfcWriteState
 import de.lijucay.damier.core.domain.DeletionMode
 import de.lijucay.damier.core.presentation.DamierMenu
+import de.lijucay.damier.core.presentation.components.AnimatedBadge
 import de.lijucay.damier.core.presentation.components.Cell
 import de.lijucay.damier.core.presentation.components.CookieButton
-import de.lijucay.damier.core.presentation.layouts.ScreenContainer
+import de.lijucay.damier.core.presentation.components.DefaultText
+import de.lijucay.damier.core.presentation.components.LargeText
+import de.lijucay.damier.core.presentation.components.TitleText
 import de.lijucay.damier.core.presentation.components.WaffleDiagram
 import de.lijucay.damier.core.presentation.dialogs.CheckInHistory
 import de.lijucay.damier.core.presentation.dialogs.DeletionDialog
 import de.lijucay.damier.core.presentation.dialogs.NameNfcTagDialog
 import de.lijucay.damier.core.presentation.getLongUnitNamesById
 import de.lijucay.damier.core.presentation.getShortUnitNamesById
+import de.lijucay.damier.core.presentation.layouts.ScreenContainer
 import de.lijucay.damier.core.presentation.models.ActivityUi
 import de.lijucay.damier.core.presentation.models.CheckInUi
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
-import de.lijucay.damier.core.data.nfc.NfcWriteState
-import de.lijucay.damier.core.presentation.components.DefaultText
-import de.lijucay.damier.core.presentation.components.LargeText
-import de.lijucay.damier.core.presentation.components.TitleText
-import de.lijucay.damier.core.data.nfc.NfcManager
-import de.lijucay.damier.core.data.nfc.NfcViewModel
-import de.lijucay.damier.core.presentation.components.AnimatedBadge
 import de.lijucay.damier.ui.theme.ActivityTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -327,7 +323,6 @@ fun ActivityDetailsScreen(
                 CheckInForm(
                     sheetState = activityFormSheetState,
                     mode = mode,
-                    useLimitTheme = state.useLimitTheme,
                     onDeleteRequest = {
                         scope.launch { activityFormSheetState.hide() }.invokeOnCompletion {
                             detailsViewModel.setCheckInFormMode(null)
@@ -493,8 +488,8 @@ private fun LazyListScope.waffleDiagramItem(state: ActivityDetailsState) {
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = contentColorFor(MaterialTheme.colorScheme.primaryContainer)
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = contentColorFor(MaterialTheme.colorScheme.onPrimary)
                 )
             ) {
                 Column(
@@ -663,11 +658,11 @@ private fun LazyListScope.checkInHistory(
                 containerColor = if (state.useLimitTheme)
                     MaterialTheme.colorScheme.errorContainer
                 else
-                    MaterialTheme.colorScheme.primaryContainer,
+                    MaterialTheme.colorScheme.onPrimary,
                 contentColor = if (state.useLimitTheme)
                     MaterialTheme.colorScheme.onErrorContainer
                 else
-                    MaterialTheme.colorScheme.onPrimaryContainer
+                    MaterialTheme.colorScheme.primary
             )
         ) {
             Row(

@@ -106,7 +106,7 @@ private fun getCellColor(
         type == ReferenceType.LIMIT &&
         currentDate.isAfter(endDate) -> MaterialTheme.colorScheme.errorContainer
         (currentDate.isBefore(endDate) || currentDate.isEqual(endDate)) && checkInCount != 0 -> MaterialTheme.colorScheme.primary.copy(alpha = alpha)
-        currentDate.isAfter(endDate) -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0f)
+        currentDate.isAfter(endDate) -> MaterialTheme.colorScheme.onPrimary.copy(alpha = 0f)
         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
     }
 

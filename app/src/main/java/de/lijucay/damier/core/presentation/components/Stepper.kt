@@ -42,7 +42,7 @@ fun Stepper(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     enabled: Boolean = true,
-    color: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    color: Color = MaterialTheme.colorScheme.primary,
     onValidationChange: (Boolean) -> Unit = {},
     unit: String
 ) {

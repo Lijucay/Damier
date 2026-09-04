@@ -25,8 +25,8 @@ fun UpdateItem(
     Card(
         colors = if (version == BuildConfig.VERSION_NAME) {
             CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.primary
             )
         } else CardDefaults.cardColors(),
         shape = MaterialTheme.shapes.extraLarge
@@ -53,7 +53,7 @@ fun UpdateItem(
 
             releaseNotes.forEach { releaseNote ->
                 HorizontalDivider(
-                    color = if (version == BuildConfig.VERSION_NAME) MaterialTheme.colorScheme.onPrimaryContainer
+                    color = if (version == BuildConfig.VERSION_NAME) MaterialTheme.colorScheme.primary
                     else DividerDefaults.color
                 )
                 UpdateNote(note = releaseNote)

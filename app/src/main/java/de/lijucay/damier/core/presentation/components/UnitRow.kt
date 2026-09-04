@@ -45,8 +45,8 @@ fun UnitRow(
             }
             Badge(
                 text = badge,
-                backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                textColor = MaterialTheme.colorScheme.secondaryContainer
+                backgroundColor = MaterialTheme.colorScheme.onSecondary,
+                textColor = MaterialTheme.colorScheme.secondary
             )
         }
     }
