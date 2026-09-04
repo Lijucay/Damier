@@ -226,7 +226,20 @@
     <string name="link_nfc_tag">NFC-Tag verknüpfen</string>
     <string name="first_public_beta">Erste öffentliche Beta</string>
     <string name="first_public_beta_text">Damier bietet Nutzern jetzt die Möglichkeit, dem öffentlichen Beta-Kanal im Play Store beizutreten. Bedenke vor der Anmeldung, dass öffentliche Betas Fehler enthalten könnten und möglicherweise nicht zuverlässig funktionieren.</string>
-
+    <string name="filter">Filter</string>
+    <string name="created_at">Erstellt am</string>
+    <string name="expanded">Erweitert</string>
+    <string name="compact">Kompakt</string>
+    <string name="extra_compact">Extra kompakt</string>
+    <string name="name">Name</string>
+    <string name="recently_checked_in">Zuletzt eingecheckt</string>
+    <string name="insights">Einblicke</string>
+    <string name="your_strongest_days">Deine stärksten Tage</string>
+    <string name="your_strongest_days_expl">Sieh, wie sich deine Check-ins über die Woche verteilen, damit du weißt, an welchen Tagen dir diese Aktivität am leichtesten fällt</string>
+    <string name="note">Notiz</string>
+    <string name="note_placeholder">Füge hier Notizen zu diesem Check-in hinzu, z. B. was in deinem Buch passiert ist oder woran du gerade arbeitest…</string>
+    <string name="play_store_100_downloads">100 Downloads im Google Play Store</string>
+    <string name="play_store_100_downloads_expl">Am 30. August haben wir offiziell 100 Downloads im Google Play Store erreicht, unseren ersten Meilenstein</string>
     <string-array name="v0_1_1_notes">
         <item>Behebt mehrere Fehler, die nach der ersten Veröffentlichung gemeldet wurden.</item>
     </string-array>
@@ -347,6 +360,16 @@
 
     <string-array name="v2_1_2_notes">
         <item>Der Aktivitätsauswahl-Bildschirm für Widgets berücksichtigt jetzt Edge-to-Edge</item>
+    </string-array>
+
+    <string-array name="v3_1_3_notes">
+        <item>Aktivitäten können jetzt nach Name oder nach dem letzten Check-in sortiert werden</item>
+        <item>Eine neue Listenlayout-Option ist verfügbar, mit der Möglichkeit, Karten erweitert, kompakt oder extra kompakt anzuzeigen</item>
+        <item>Ein langer Druck auf das App-Symbol auf dem Homescreen zeigt jetzt eine Schnellaktion zum Hinzufügen einer Aktivität</item>
+        <item>Check-ins können jetzt Notizen enthalten</item>
+    </string-array>
+    <string-array name="v3_1_4_notes">
+        <item>Dieses Update ersetzt alle Container-Farbschemata durch passende, ähnliche Schemata, da das Container-Farbschema auf Pixel-Geräten offenbar fehlerhaft dargestellt wurde</item>
     </string-array>
 
     <plurals name="personal_best">

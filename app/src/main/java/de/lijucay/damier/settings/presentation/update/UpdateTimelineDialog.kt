@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.BrandGooglePlay
+import compose.icons.tablericons.Confetti
 import compose.icons.tablericons.Planet
 import compose.icons.tablericons.TestPipe
 import compose.icons.tablericons.User
@@ -68,6 +69,31 @@ fun UpdateTimelineDialog(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(bottom = bottomPadding())
         ) {
+            item {
+                val date = LocalDate.of(2026, 9, 4)
+
+                UpdateItem(
+                    version = "3.1.4",
+                    date = date.toDisplayableDate().formatted,
+                    releaseNotes = stringArrayResource(R.array.v2_1_2_notes).toList()
+                )
+            }
+
+            item {
+                val date = LocalDate.of(2026, 9, 2)
+
+                UpdateItem(
+                    version = "3.1.3-beta",
+                    date = date.toDisplayableDate().formatted,
+                    releaseNotes = stringArrayResource(R.array.v3_1_3_notes).toList(),
+                    highlightUpdate = HighlightUpdate(
+                        title = stringResource(R.string.play_store_100_downloads),
+                        text = stringResource(R.string.play_store_100_downloads_expl),
+                        icon = TablerIcons.Confetti
+                    )
+                )
+            }
+
             item {
                 val date = LocalDate.of(2026, 7, 15)
 
