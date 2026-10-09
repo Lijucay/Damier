@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
+import compose.icons.tablericons.Bell
 import compose.icons.tablericons.BrandGooglePlay
 import compose.icons.tablericons.Confetti
 import compose.icons.tablericons.Planet
@@ -70,12 +71,27 @@ fun UpdateTimelineDialog(
             contentPadding = PaddingValues(bottom = bottomPadding())
         ) {
             item {
+                val date = LocalDate.of(2026, 10, 10)
+
+                UpdateItem(
+                    version = "4.0.2-beta",
+                    date = date.toDisplayableDate().formatted,
+                    releaseNotes = stringArrayResource(R.array.v4_0_2_notes).toList(),
+                    highlightUpdate = HighlightUpdate(
+                        title = stringResource(R.string.notifications_highlight_title),
+                        text = stringResource(R.string.notifications_highlight_text),
+                        icon = TablerIcons.Bell
+                    )
+                )
+            }
+
+            item {
                 val date = LocalDate.of(2026, 9, 4)
 
                 UpdateItem(
                     version = "3.1.4",
                     date = date.toDisplayableDate().formatted,
-                    releaseNotes = stringArrayResource(R.array.v2_1_2_notes).toList()
+                    releaseNotes = stringArrayResource(R.array.v3_1_4_notes).toList()
                 )
             }
 

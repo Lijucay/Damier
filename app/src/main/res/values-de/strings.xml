@@ -240,6 +240,18 @@
     <string name="note_placeholder">Füge hier Notizen zu diesem Check-in hinzu, z. B. was in deinem Buch passiert ist oder woran du gerade arbeitest…</string>
     <string name="play_store_100_downloads">100 Downloads im Google Play Store</string>
     <string name="play_store_100_downloads_expl">Am 30. August haben wir offiziell 100 Downloads im Google Play Store erreicht, unseren ersten Meilenstein</string>
+    <string name="activity_reminder_title">Zeit, deine Aktivität "%1$s" zu erfassen</string>
+    <string name="activity_reminder_text">Du hast eine Erinnerung für "%1$s" eingerichtet. Möchtest du jetzt einchecken?</string>
+    <string name="reminder_channel_name">Aktivitätserinnerungen</string>
+    <string name="reminder_channel_description">Dieser Kanal sendet tägliche Erinnerungen für Aktivitäten</string>
+    <string name="reminder">Erinnerung</string>
+    <string name="enable_reminders">Erinnerung aktivieren</string>
+    <string name="enable_reminders_expl">Wenn aktiviert, erhältst du zu einer festgelegten Uhrzeit eine Erinnerung zum Einchecken.</string>
+    <string name="want_reminders">Erinnerungen gewünscht?</string>
+    <string name="reminders_expl">Damier kann dich daran erinnern, bei einer Aktivität einzuchecken. Dafür muss Damier Benachrichtigungen senden dürfen. Wenn du keine Erinnerungen möchtest, tippe auf "Weiter", andernfalls auf "Erlauben".</string>
+    <string name="grant">Erlauben</string>
+    <string name="notifications_not_granted">Benachrichtigungen nicht erlaubt</string>
+    <string name="notifications_not_granted_message">Damier benötigt die Berechtigung für Benachrichtigungen, um dir Erinnerungen zu senden.</string>
     <string-array name="v0_1_1_notes">
         <item>Behebt mehrere Fehler, die nach der ersten Veröffentlichung gemeldet wurden.</item>
     </string-array>
@@ -370,6 +382,13 @@
     </string-array>
     <string-array name="v3_1_4_notes">
         <item>Dieses Update ersetzt alle Container-Farbschemata durch passende, ähnliche Schemata, da das Container-Farbschema auf Pixel-Geräten offenbar fehlerhaft dargestellt wurde</item>
+    </string-array>
+
+    <string-array name="v4_0_2_notes">
+        <item>Dieses Update ersetzt weiterhin alle Container-Farbschemata durch passende ähnliche Alternativen, da diese auf Pixel-Smartphones fehlerhaft zu sein scheint</item>
+        <item>Dieses Update bringt Erinnerungen für Aktivitäten</item>
+        <item>Der NFC-Button ist jetzt Teil der oberen App-Leiste und keine separate Karte mehr</item>
+        <item>Einige kleinere visuelle Anpassungen wurden hinzugefügt</item>
     </string-array>
 
     <plurals name="personal_best">

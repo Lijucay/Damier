@@ -265,6 +265,8 @@
     <string name="grant">Grant</string>
     <string name="notifications_not_granted">Notifications not granted</string>
     <string name="notifications_not_granted_message">Damier needs notification permissions to send you reminders.</string>
+    <string name="notifications_highlight_title">New feature: Notifications</string>
+    <string name="notifications_highlight_text">Damier can now remind you to check into activities!</string>
     <string-array name="v0_1_1_notes">
         <item>Fixes several bugs reported after the initial release.</item>
     </string-array>
@@ -392,6 +394,13 @@
 
     <string-array name="v3_1_4_notes">
         <item>This update replaces all container-color schemes with appropriate similar schemes, as the container color scheme seems to be broken on Pixel phones</item>
+    </string-array>
+
+    <string-array name="v4_0_2_notes">
+        <item>This update continues to replace all container-color schemes with appropriate similar schemes, as the container color scheme seems to be broken on Pixel phones</item>
+        <item>This update brings reminders for activities</item>
+        <item>The NFC button is now part of the top app bar and no longer a separated card</item>
+        <item>Some smaller visual tweaks were added</item>
     </string-array>
 
     <string-array name="streak_m_ns">
