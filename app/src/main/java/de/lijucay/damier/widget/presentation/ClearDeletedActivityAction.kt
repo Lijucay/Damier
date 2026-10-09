@@ -5,7 +5,7 @@ import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.state.updateAppWidgetState
-import de.lijucay.damier.core.DataPreferences
+import de.lijucay.damier.core.domain.DataPreferences
 
 class ClearDeletedActivityAction : ActionCallback {
     override suspend fun onAction(

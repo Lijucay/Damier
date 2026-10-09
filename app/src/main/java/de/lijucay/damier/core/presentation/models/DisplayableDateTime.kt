@@ -1,7 +1,8 @@
 package de.lijucay.damier.core.presentation.models
 
+import de.lijucay.damier.check_in.presentation.CheckInUi
 import de.lijucay.damier.core.data.converter.LocalDateTimeSerializer
-import de.lijucay.damier.core.data.entities.CheckInInfo
+import de.lijucay.damier.check_in.data.model.dto.CheckInInfo
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

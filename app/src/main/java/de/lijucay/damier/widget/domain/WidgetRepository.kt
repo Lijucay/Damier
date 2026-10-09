@@ -1,7 +1,7 @@
 package de.lijucay.damier.widget.domain
 
-import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.activity.data.model.Activity
+import de.lijucay.damier.activity.data.model.dto.ActivityInfo
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

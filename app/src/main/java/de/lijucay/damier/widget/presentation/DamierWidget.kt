@@ -46,8 +46,8 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import de.lijucay.damier.MainActivity
 import de.lijucay.damier.R
-import de.lijucay.damier.core.DataPreferences
-import de.lijucay.damier.core.Logger
+import de.lijucay.damier.core.domain.DataPreferences
+import de.lijucay.damier.core.domain.Logger
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.widget.data.LogCheckInAction
 import de.lijucay.damier.widget.domain.WidgetActivityData

@@ -6,4 +6,6 @@ sealed interface InfoMode {
 
     data class BackupError(val message: String?) : InfoMode
     data class ImportError(val message: String?) : InfoMode
+
+    data object NotificationPermissionNotGranted : InfoMode
 }

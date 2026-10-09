@@ -1,8 +1,8 @@
 package de.lijucay.damier.widget.data
 
-import de.lijucay.damier.core.data.Activity
-import de.lijucay.damier.core.data.daos.ActivityInfoDao
-import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.activity.data.model.Activity
+import de.lijucay.damier.activity.data.dao.ActivityInfoDao
+import de.lijucay.damier.activity.data.model.dto.ActivityInfo
 import de.lijucay.damier.widget.domain.WidgetActivityState
 import de.lijucay.damier.widget.domain.WidgetRepository
 import kotlinx.coroutines.flow.Flow

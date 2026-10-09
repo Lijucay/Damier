@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.core.presentation.components.DefaultText
-import de.lijucay.damier.core.presentation.components.TitleText
+import de.lijucay.damier.core.presentation.components.text.DefaultText
+import de.lijucay.damier.core.presentation.components.text.TitleText
 
 data class HighlightUpdate(
     val title: String,

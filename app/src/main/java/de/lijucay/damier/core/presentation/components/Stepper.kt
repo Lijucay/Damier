@@ -36,6 +36,7 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Minus
 import compose.icons.tablericons.Plus
 import de.lijucay.damier.R
+import de.lijucay.damier.core.presentation.components.text.SmallText
 
 @Composable
 fun Stepper(

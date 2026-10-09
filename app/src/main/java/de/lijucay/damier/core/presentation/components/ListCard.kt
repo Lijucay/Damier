@@ -15,7 +15,7 @@ fun ListCard(
     isItemFirst: Boolean = false,
     isItemLast: Boolean = false,
     cardColors: CardColors = CardDefaults.cardColors(),
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     content: @Composable (ColumnScope.() -> Unit)
 ) {
     Card(

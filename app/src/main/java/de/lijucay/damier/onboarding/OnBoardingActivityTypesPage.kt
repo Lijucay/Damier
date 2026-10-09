@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import de.lijucay.damier.R
 import de.lijucay.damier.core.presentation.components.cards.PreviewCard
 import de.lijucay.damier.core.presentation.getRandomCheckInInfo
-import de.lijucay.damier.core.presentation.models.ActivityFormState
+import de.lijucay.damier.activity.domain.ActivityFormState
 import de.lijucay.damier.core.presentation.toStringResource
-import de.lijucay.damier.core.presentation.components.DefaultText
-import de.lijucay.damier.core.presentation.components.LargeTitleText
-import de.lijucay.damier.core.presentation.components.TitleText
+import de.lijucay.damier.core.presentation.components.text.DefaultText
+import de.lijucay.damier.core.presentation.components.text.LargeTitleText
+import de.lijucay.damier.core.presentation.components.text.TitleText
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.ui.theme.ActivityTheme
 

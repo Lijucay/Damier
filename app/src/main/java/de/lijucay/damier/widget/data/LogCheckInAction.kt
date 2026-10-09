@@ -9,9 +9,9 @@ import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.runComposition
-import de.lijucay.damier.core.Logger
-import de.lijucay.damier.core.data.entities.CheckInInfo
-import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.core.domain.Logger
+import de.lijucay.damier.check_in.data.model.dto.CheckInInfo
+import de.lijucay.damier.activity.domain.ActivityRepository
 import de.lijucay.damier.widget.domain.WidgetRepository
 import de.lijucay.damier.widget.presentation.DamierWidget
 import kotlinx.coroutines.withTimeoutOrNull
@@ -28,15 +28,18 @@ class LogCheckInAction : ActionCallback {
         parameters: ActionParameters
     ) {
         Logger.d(context, "onAction called")
+
         val repository: ActivityRepository = GlobalContext.get().get()
         val widgetRepository: WidgetRepository = GlobalContext.get().get()
 
         val activityId = UUID.fromString(parameters[ACTIVITY_ID_KEY] ?: return)
+
         Logger.d(context, "Received activityId = $activityId")
 
         val defaultAmount = widgetRepository.getDefaultAmount(activityId)
 
         Logger.d(context, "Received defaultAmount = $defaultAmount")
+
         repository.upsertCheckIn(
             CheckInInfo(
                 activityId = activityId,
@@ -61,7 +64,6 @@ class LogCheckInAction : ActionCallback {
                 AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, widgetView)
             }
         } catch (_: Exception) {
-            // Fallback
             DamierWidget().update(context, glanceId)
         }
 

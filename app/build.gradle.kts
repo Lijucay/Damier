@@ -25,8 +25,8 @@ configure<ApplicationExtension> {
         applicationId = "de.lijucay.damier"
         minSdk = 26
         targetSdk = 37
-        versionCode = 29
-        versionName = "3.1.4"
+        versionCode = 31
+        versionName = "4.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,6 +64,7 @@ configure<ApplicationExtension> {
 }
 
 dependencies {
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(project(":shared"))
 
     implementation(libs.kotlinx.serialization.core)

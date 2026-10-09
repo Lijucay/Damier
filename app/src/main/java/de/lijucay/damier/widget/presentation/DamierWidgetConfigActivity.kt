@@ -29,8 +29,8 @@ import androidx.lifecycle.lifecycleScope
 import compose.icons.TablerIcons
 import compose.icons.tablericons.ArrowLeft
 import de.lijucay.damier.R
-import de.lijucay.damier.core.DataPreferences
-import de.lijucay.damier.core.data.entities.ActivityInfo
+import de.lijucay.damier.core.domain.DataPreferences
+import de.lijucay.damier.activity.data.model.dto.ActivityInfo
 import de.lijucay.damier.core.presentation.layouts.ScreenContainer
 import de.lijucay.damier.core.presentation.components.ListCard
 import de.lijucay.damier.ui.theme.DamierTheme

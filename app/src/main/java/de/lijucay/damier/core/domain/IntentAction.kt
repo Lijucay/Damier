@@ -1,22 +1,25 @@
 package de.lijucay.damier.core.domain
 
 import android.content.Intent
+import android.nfc.NfcAdapter
 import java.util.UUID
 
 sealed interface IntentAction {
     data class OpenActivityDetails(val id: UUID) : IntentAction
     data object AddActivity : IntentAction
+    data class NFCDetected(val intent: Intent) : IntentAction
 }
 
 fun resolveIntentAction(intent: Intent?): IntentAction? {
-    return when {
-        intent?.action == "de.lijucay.damier.action.ADD_ACTIVITY" ->
-            IntentAction.AddActivity
+    val activityId = intent?.getStringExtra(DamierConstants.Extras.ACTIVITY_ID)
 
-        intent?.getStringExtra("activityId") != null ->
-            intent.getStringExtra("activityId")
-                ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
-                ?.let { IntentAction.OpenActivityDetails(it) }
+    return when {
+        intent?.action == DamierConstants.Actions.ADD_ACTIVITY -> IntentAction.AddActivity
+
+        activityId != null -> runCatching { UUID.fromString(activityId) }.getOrNull()
+            ?.let { IntentAction.OpenActivityDetails(it) }
+
+        intent?.action == NfcAdapter.ACTION_NDEF_DISCOVERED -> IntentAction.NFCDetected(intent)
 
         else -> null
     }

@@ -25,8 +25,8 @@ import compose.icons.tablericons.ArrowBack
 import compose.icons.tablericons.Share
 import compose.icons.tablericons.Trash
 import de.lijucay.damier.R
-import de.lijucay.damier.core.Logger
-import de.lijucay.damier.core.domain.DataUtil
+import de.lijucay.damier.core.domain.Logger
+import de.lijucay.damier.core.domain.DamierConstants
 import de.lijucay.damier.core.presentation.layouts.ScreenContainer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -40,7 +40,7 @@ fun ReadLogsScreen(context: Context = LocalContext.current, onNavigateBack: () -
     var logContent by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        val file = File(context.filesDir, DataUtil.LOG_FILE_NAME)
+        val file = File(context.filesDir, DamierConstants.LOG_FILE_NAME)
         while (isActive) {
             val content = withContext(Dispatchers.IO) {
                 if (file.exists()) file.readText() else ""

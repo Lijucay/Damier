@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Check
 import de.lijucay.damier.R
-import de.lijucay.damier.core.presentation.components.DefaultText
-import de.lijucay.damier.core.presentation.components.HeadlineText
+import de.lijucay.damier.core.presentation.components.text.DefaultText
+import de.lijucay.damier.core.presentation.components.text.HeadlineText
 
 @Composable
 fun OnBoardingGetStartedPage(modifier: Modifier = Modifier) {

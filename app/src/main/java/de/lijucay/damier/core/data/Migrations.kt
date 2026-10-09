@@ -95,4 +95,10 @@ object Migrations {
             )
         }
     }
+    val MIGRATION_6_7 = object : Migration(6,7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE ActivityInfo ADD COLUMN remindersEnabled INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE ActivityInfo ADD COLUMN reminderTime TEXT")
+        }
+    }
 }

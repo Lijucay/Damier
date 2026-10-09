@@ -5,11 +5,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.lijucay.damier.core.DataPreferences
+import de.lijucay.damier.core.domain.DataPreferences
 import de.lijucay.damier.core.domain.InfoMode
 import de.lijucay.damier.core.presentation.DisplayMode
 import de.lijucay.damier.core.presentation.SnackbarEvent
-import de.lijucay.damier.core.presentation.SortMode
+import de.lijucay.damier.activity.presentation.SortMode
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

@@ -42,7 +42,7 @@
                 android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-            android:name=".core.data.nfc.NfcDispatchActivity"
+            android:name=".nfc.presentation.NfcDispatchActivity"
             android:exported="true"
             android:permission="android.permission.DISPATCH_NFC_MESSAGE">
             <intent-filter>
@@ -63,7 +63,7 @@
             android:value="false"
             />
 
-        <receiver android:name=".core.BootReceiver" android:exported="false">
+        <receiver android:name=".core.domain.BootReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

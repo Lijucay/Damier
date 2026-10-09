@@ -19,6 +19,7 @@ import compose.icons.TablerIcons
 import compose.icons.tablericons.Bolt
 import de.lijucay.damier.BuildConfig
 import de.lijucay.damier.R
+import de.lijucay.damier.core.presentation.components.text.DefaultText
 import de.lijucay.damier.core.presentation.paddingWithSafeNavigationBar
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

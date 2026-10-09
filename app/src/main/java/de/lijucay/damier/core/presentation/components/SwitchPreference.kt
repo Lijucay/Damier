@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Check
 import compose.icons.tablericons.X
+import de.lijucay.damier.core.presentation.components.text.SmallText
+import de.lijucay.damier.core.presentation.components.text.TitleText
 
 @Composable
 fun SwitchPreference(

@@ -1,0 +1,13 @@
+package de.lijucay.damier.backup.domain.imports
+
+import android.net.Uri
+
+interface ImportUtil {
+    suspend fun importData(
+        fileUri: Uri,
+        onTotalCountUpdate: (Int) -> Unit,
+        onCurrentCountUpdate: (Int) -> Unit,
+        onComplete: (Boolean) -> Unit,
+        onIncompatibleVersion: () -> Unit
+    )
+}

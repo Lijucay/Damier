@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import de.lijucay.damier.core.presentation.components.SmallText
-import de.lijucay.damier.core.presentation.components.TitleText
+import de.lijucay.damier.core.presentation.components.text.SmallText
+import de.lijucay.damier.core.presentation.components.text.TitleText
 
 @Composable
 fun Preference(

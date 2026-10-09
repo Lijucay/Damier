@@ -1,8 +1,8 @@
 package de.lijucay.damier.debug
 
-import de.lijucay.damier.core.data.entities.ActivityInfo
-import de.lijucay.damier.core.data.entities.CheckInInfo
-import de.lijucay.damier.core.domain.ActivityRepository
+import de.lijucay.damier.activity.data.model.dto.ActivityInfo
+import de.lijucay.damier.check_in.data.model.dto.CheckInInfo
+import de.lijucay.damier.activity.domain.ActivityRepository
 import de.lijucay.damier.shared.ReferenceType
 import de.lijucay.damier.shared.UnitId
 import java.time.LocalDateTime

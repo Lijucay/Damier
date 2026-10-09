@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import de.lijucay.damier.core.DataPreferences
+import de.lijucay.damier.core.domain.DataPreferences
 import java.util.UUID
 
 class DamierWidgetState(

@@ -16,34 +16,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.room.Room
 import de.lijucay.damier.R
-import de.lijucay.damier.activity_details.presentation.screens.ActivityDetailsScreen
-import de.lijucay.damier.activity_details.presentation.viewmodels.ActivityDetailsViewModel
-import de.lijucay.damier.activity_details.presentation.viewmodels.CheckInFormViewModel
-import de.lijucay.damier.activity_details.presentation.screens.EditActivityScreen
-import de.lijucay.damier.activity_list.presentation.screens.ActivityListScreen
-import de.lijucay.damier.activity_list.presentation.viewmodels.ActivityListViewModel
-import de.lijucay.damier.activity_list.presentation.screens.AddActivityItemScreen
-import de.lijucay.damier.core.DataPreferences.dataStore
-import de.lijucay.damier.core.data.ActivityRepositoryImpl
+import de.lijucay.damier.activity.presentation.details.screens.ActivityDetailsScreen
+import de.lijucay.damier.activity.presentation.details.viewmodels.ActivityDetailsViewModel
+import de.lijucay.damier.activity.presentation.details.viewmodels.CheckInFormViewModel
+import de.lijucay.damier.activity.presentation.details.screens.EditActivityScreen
+import de.lijucay.damier.activity.presentation.list.screens.ActivityListScreen
+import de.lijucay.damier.activity.presentation.list.viewmodels.ActivityListViewModel
+import de.lijucay.damier.activity.presentation.list.screens.AddActivityItemScreen
+import de.lijucay.damier.core.domain.DataPreferences.dataStore
+import de.lijucay.damier.activity.data.ActivityRepositoryImpl
 import de.lijucay.damier.core.data.DamierDatabase
-import de.lijucay.damier.core.data.ExportUtilImpl
-import de.lijucay.damier.core.data.ImportUtilImpl
+import de.lijucay.damier.backup.data.exports.ExportUtilImpl
+import de.lijucay.damier.backup.data.imports.ImportUtilImpl
 import de.lijucay.damier.core.data.Migrations
-import de.lijucay.damier.core.data.StreakDataSourceImpl
-import de.lijucay.damier.core.domain.ActivityRepository
-import de.lijucay.damier.core.domain.ExportUtil
-import de.lijucay.damier.core.domain.ImportUtil
-import de.lijucay.damier.core.domain.StreakDataSource
+import de.lijucay.damier.streak.data.StreakDataSourceImpl
+import de.lijucay.damier.activity.domain.ActivityRepository
+import de.lijucay.damier.backup.domain.exports.ExportUtil
+import de.lijucay.damier.backup.domain.imports.ImportUtil
+import de.lijucay.damier.streak.domain.StreakDataSource
 import de.lijucay.damier.core.presentation.Destination
 import de.lijucay.damier.core.presentation.Navigator
-import de.lijucay.damier.core.presentation.viewmodels.ActivityFormViewModel
+import de.lijucay.damier.activity.presentation.ActivityFormViewModel
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
-import de.lijucay.damier.core.data.nfc.NfcManager
-import de.lijucay.damier.core.data.nfc.NfcViewModel
-import de.lijucay.damier.core.data.nfc.RecentNfcWriteTracker
-import de.lijucay.damier.core.data.nfc.read.CueReadManager
-import de.lijucay.damier.core.data.nfc.read.NfcReadManager
-import de.lijucay.damier.core.data.nfc.write.NfcWriteManager
+import de.lijucay.damier.nfc.domain.NfcManager
+import de.lijucay.damier.nfc.presentation.NfcViewModel
+import de.lijucay.damier.nfc.domain.RecentNfcWriteTracker
+import de.lijucay.damier.nfc.domain.read.CueReadManager
+import de.lijucay.damier.nfc.domain.read.NfcReadManager
+import de.lijucay.damier.nfc.domain.write.NfcWriteManager
+import de.lijucay.damier.notifications.NotificationHelper
 import de.lijucay.damier.settings.presentation.ReadLogsScreen
 import de.lijucay.damier.settings.presentation.SettingsScreen
 import de.lijucay.damier.widget.data.WidgetRepositoryImpl
@@ -72,7 +73,8 @@ val appModule = module {
             Migrations.Migration_2_3,
             Migrations.Migration_3_4,
             Migrations.Migration_4_5,
-            Migrations.MIGRATION_5_6
+            Migrations.MIGRATION_5_6,
+            Migrations.MIGRATION_6_7
         ).build()
     }
 
@@ -94,6 +96,8 @@ val appModule = module {
     singleOf(::ActivityRepositoryImpl).bind<ActivityRepository>()
     singleOf(::WidgetRepositoryImpl).bind<WidgetRepository>()
     singleOf(::DamierWidgetState)
+
+    singleOf(::NotificationHelper)
 
     singleOf(::RecentNfcWriteTracker)
 

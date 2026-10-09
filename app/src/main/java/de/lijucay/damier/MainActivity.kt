@@ -44,7 +44,7 @@ import de.lijucay.damier.core.presentation.adaptiveHorizontalCutoutPadding
 import de.lijucay.damier.core.presentation.dialogs.InfoDialog
 import de.lijucay.damier.core.presentation.viewmodels.UIViewModel
 import de.lijucay.damier.debug.DebugDataSeeder
-import de.lijucay.damier.core.data.nfc.NfcManager
+import de.lijucay.damier.nfc.domain.NfcManager
 import de.lijucay.damier.onboarding.OnBoarding
 import de.lijucay.damier.ui.theme.DamierTheme
 import kotlinx.coroutines.launch
@@ -67,15 +67,11 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        handleIntent(intent)
+        if (savedInstanceState == null) handleIntent(intent)
 
-        lifecycleScope.launch {
-            nfcManager.handleNfcIntent(intent)
-
-            if (BuildConfig.DEBUG) {
-                lifecycleScope.launch {
-                    DebugDataSeeder(get()).seed()
-                }
+        if (BuildConfig.DEBUG) {
+            lifecycleScope.launch {
+                DebugDataSeeder(get()).seed()
             }
         }
 
@@ -191,10 +187,6 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
         super.onNewIntent(intent)
         setIntent(intent)
 
-        lifecycleScope.launch {
-            nfcManager.handleNfcIntent(intent)
-        }
-
         handleIntent(intent)
     }
 
@@ -202,6 +194,11 @@ class MainActivity : ComponentActivity(), AndroidScopeComponent {
         when (val action = resolveIntentAction(intent)) {
             is IntentAction.OpenActivityDetails -> navigator.goToActivityDetailsFresh(action.id)
             is IntentAction.AddActivity -> navigator.goToAddActivity()
+            is IntentAction.NFCDetected -> {
+                lifecycleScope.launch {
+                    nfcManager.handleNfcIntent(action.intent)
+                }
+            }
             null -> Unit
         }
     }
