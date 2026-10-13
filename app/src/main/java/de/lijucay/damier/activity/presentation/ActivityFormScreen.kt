@@ -127,8 +127,14 @@ fun ActivityFormScreen(
         }
     )
     val timeState = rememberTimePickerState(
-        initialHour = state.reminderTime?.hour ?: 0,
-        initialMinute = state.reminderTime?.minute ?: 0
+        initialHour = when (mode) {
+            is ActivityFormMode.Edit -> mode.activity.reminderTime?.value?.hour ?: 0
+            else -> 0
+        },
+        initialMinute = when (mode) {
+            is ActivityFormMode.Edit -> mode.activity.reminderTime?.value?.minute ?: 0
+            else -> 0
+        }
     )
 
     var hasNotificationPermission = NotificationHandler.checkNotificationPermission(context)
