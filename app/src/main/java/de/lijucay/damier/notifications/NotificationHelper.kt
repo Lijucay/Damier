@@ -46,7 +46,7 @@ class NotificationHelper(private val context: Context) {
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             NotificationHandler.workName(activityId),
-            ExistingWorkPolicy.APPEND_OR_REPLACE,
+            ExistingWorkPolicy.REPLACE,
             request
         )
     }
